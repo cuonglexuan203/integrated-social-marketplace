@@ -1,0 +1,6 @@
+@Algolia.API_HostAddress = http://localhost:5204
+
+GET {{Algolia.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  post.api:
+    image: ${DOCKER_REGISTRY-}postapi
+    build:
+      context: .
+      dockerfile: Services/Post/Post.API/Dockerfile
