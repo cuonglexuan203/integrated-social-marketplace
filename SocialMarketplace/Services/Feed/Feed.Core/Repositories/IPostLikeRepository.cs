@@ -1,5 +1,4 @@
-﻿
-using Feed.Core.Entities;
+﻿using Feed.Core.Entities.JoinEntities;
 
 namespace Feed.Core.Repositories
 {

@@ -15,6 +15,7 @@ namespace Feed.Core.Entities
         public int LikesCount { get; set; }
         public int CommentsCount { get; set; }
         public string Link { get; set; }
+        public Post SharedPost { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public bool IsDeleted { get; set; }

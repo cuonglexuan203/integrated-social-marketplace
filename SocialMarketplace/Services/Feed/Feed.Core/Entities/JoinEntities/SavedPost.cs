@@ -3,9 +3,9 @@ using MongoDB.Bson;
 using Feed.Core.Entities.AuditProperties;
 using Feed.Core.Entities.BaseEntities;
 
-namespace Feed.Core.Entities
+namespace Feed.Core.Entities.JoinEntities
 {
-    public class PostLike : BaseEntity, ICreatedAt
+    public class SavedPost : BaseEntity, ICreatedAt, IUpdatedAt, IDeleted
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string PostId { get; set; }
@@ -14,6 +14,8 @@ namespace Feed.Core.Entities
         public string UserId { get; set; }
 
         public DateTimeOffset? CreatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTimeOffset? DeletedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
-
 }

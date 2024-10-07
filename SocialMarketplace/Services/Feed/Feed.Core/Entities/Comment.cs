@@ -13,8 +13,8 @@ namespace Feed.Core.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserID { get; set; }
         public List<string> MediaURL { get; set; }
-
         public string CommentText { get; set; }
+        public int LikesCount { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string? ParentCommentID { get; set; }

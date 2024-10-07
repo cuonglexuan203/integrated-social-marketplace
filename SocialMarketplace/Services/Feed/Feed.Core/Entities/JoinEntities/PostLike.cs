@@ -3,12 +3,12 @@ using MongoDB.Bson;
 using Feed.Core.Entities.AuditProperties;
 using Feed.Core.Entities.BaseEntities;
 
-namespace Feed.Core.Entities
+namespace Feed.Core.Entities.JoinEntities
 {
-    public class CommentLike : BaseEntity, ICreatedAt
+    public class PostLike : BaseEntity, ICreatedAt
     {
         [BsonRepresentation(BsonType.ObjectId)]
-        public string CommentId { get; set; }
+        public string PostId { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string UserId { get; set; }
