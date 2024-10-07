@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Post.Core\Post.Core.csproj" />
+    <ProjectReference Include="..\Feed.Core\Feed.Core.csproj" />
   </ItemGroup>
 
 </Project>

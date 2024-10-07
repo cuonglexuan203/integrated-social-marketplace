@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Post.API.Controllers
+namespace Feed.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

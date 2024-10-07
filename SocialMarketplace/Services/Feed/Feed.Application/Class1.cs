@@ -1,4 +1,4 @@
-﻿namespace Post.Application
+﻿namespace Feed.Application
 {
     public class Class1
     {

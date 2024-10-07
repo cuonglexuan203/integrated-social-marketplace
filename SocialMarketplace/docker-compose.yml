@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  post.api:
-    image: ${DOCKER_REGISTRY-}postapi
+  feed.api:
+    image: ${DOCKER_REGISTRY-}feedapi
     build:
       context: .
-      dockerfile: Services/Post/Post.API/Dockerfile
+      dockerfile: Services/Feed/Feed.API/Dockerfile

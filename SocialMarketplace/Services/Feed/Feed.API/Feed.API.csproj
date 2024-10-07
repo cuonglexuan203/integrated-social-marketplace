@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>eedda302-10b6-4f48-aaf5-9e48abdb2001</UserSecretsId>
+    <UserSecretsId>c81c175a-0466-4019-a660-c5a554d3122c</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Post.Infrastructure\Post.Infrastructure.csproj" />
+    <ProjectReference Include="..\Feed.Infrastructure\Feed.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

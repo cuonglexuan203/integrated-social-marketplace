@@ -1,4 +1,4 @@
-namespace Post.API
+namespace Feed.API
 {
     public class WeatherForecast
     {

@@ -1,4 +1,4 @@
-﻿namespace Post.Core
+﻿namespace Feed.Infrastructure
 {
     public class Class1
     {
