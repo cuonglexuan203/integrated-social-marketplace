@@ -37,7 +37,7 @@ namespace Feed.Infrastructure.Data
 
             #region populate seed data
             PostContextSeed.SeedData(Posts);
-            CommentContextSeed.SeedData(Comments);
+            //CommentContextSeed.SeedData(Comments);
             #endregion
         }
     }

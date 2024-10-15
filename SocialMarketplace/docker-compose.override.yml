@@ -1,14 +1,29 @@
 version: '3.4'
 
 services:
+  feeddb:
+    container_name: feeddb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+
   feed.api:
+    container_name: feed.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTP_PORTS=80
+      - DatabaseSettings__ConnectionString=mongodb://feeddb:27017
+      - DatabaseSettings__DatabaseName=FeedDb
+      - DatabaseSettings__PostsCollection=Posts
+      - DatabaseSettings__CommentsCollection=Comments
+      - DatabaseSettings__TagsCollection=Tags
+      - DatabaseSettings__CommentLikesCollection=CommentLikes
+      - DatabaseSettings__PostLikesCollection=PostLikes
+      - DatabaseSettings__PostTagsCollection=PostTags
+      - DatabaseSettings__SavedPostsCollection=SavedPosts
+    depends_on:
+      - feeddb
     ports:
-      - "8080"
-      - "8081"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - "9000:80"

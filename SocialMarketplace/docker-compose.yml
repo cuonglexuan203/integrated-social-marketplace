@@ -1,8 +1,13 @@
 version: '3.4'
 
 services:
+  feeddb:
+    image: mongo
   feed.api:
     image: ${DOCKER_REGISTRY-}feedapi
     build:
       context: .
       dockerfile: Services/Feed/Feed.API/Dockerfile
+
+volumes:
+  mongo_data:

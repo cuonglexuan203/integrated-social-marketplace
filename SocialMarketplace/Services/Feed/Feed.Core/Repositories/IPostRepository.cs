@@ -9,7 +9,7 @@ namespace Feed.Core.Repositories
         Task<Post> GetPost(string id);
         Task<IEnumerable<Post>> GetPostByUserId(string userId);
         Task<IEnumerable<Post>> GetPostByTitle(string title);
-        Task<bool> CreatePost(Post post);
+        Task<Post> CreatePost(Post post);
         Task<bool> UpdatePost(Post post);
         Task<bool> DeletePost(string id);
     }

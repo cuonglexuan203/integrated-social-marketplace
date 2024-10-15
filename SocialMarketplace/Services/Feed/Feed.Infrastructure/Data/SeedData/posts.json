@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "Id": "61616f1e4a9d5a1e5f9c35b1",
+    "Title": "First Post",
+    "UserID": "60d5ec49f9f7a9b6a1c7c2d5",
+    "ContentText": "This is the first post content.",
+    "MediaURL": [ "https://example.com/media1.jpg" ],
+    "LikesCount": 10,
+    "CommentsCount": 2,
+    "Link": "https://example.com/post1",
+    "SharedPost": null,
+    "CreatedAt": "2023-10-14T10:30:00Z",
+    "UpdatedAt": "2023-10-14T10:30:00Z",
+    "IsDeleted": false,
+    "DeletedAt": null
+  }
+]

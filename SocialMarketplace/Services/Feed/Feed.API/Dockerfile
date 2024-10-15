@@ -3,13 +3,16 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Feed/Feed.API/Feed.API.csproj", "Services/Feed/Feed.API/"]
+COPY ["Services/Feed/Feed.Infrastructure/Feed.Infrastructure.csproj", "Services/Feed/Feed.Infrastructure/"]
+COPY ["Services/Feed/Feed.Application/Feed.Application.csproj", "Services/Feed/Feed.Application/"]
+COPY ["Services/Feed/Feed.Core/Feed.Core.csproj", "Services/Feed/Feed.Core/"]
 RUN dotnet restore "./Services/Feed/Feed.API/Feed.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Feed/Feed.API"
