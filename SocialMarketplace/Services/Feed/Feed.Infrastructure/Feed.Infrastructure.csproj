@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Feed.Application\Feed.Application.csproj" />
-    <ProjectReference Include="..\Feed.Core\Feed.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

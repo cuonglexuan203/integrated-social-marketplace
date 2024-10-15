@@ -12,7 +12,11 @@ namespace Feed.Infrastructure.Data
             string path = Path.Combine("Data", "SeedData", "posts.json");
             if (!checkPost)
             {
+                // local 1
                 //var postData = File.ReadAllText("../Feed.Infrastructure/Data/SeedData/posts.json");
+                // local 2 ( debug mode )
+                //var postData = File.ReadAllText("../src/services/Feed/Feed.Infrastructure/Data/SeedData/posts.json");
+                //
                 var postData = File.ReadAllText(path);
                 var posts = JsonSerializer.Deserialize<List<Post>>(postData);
                 if (posts != null)
