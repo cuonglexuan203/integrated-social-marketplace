@@ -53,6 +53,8 @@
     border-radius: 50%;
     background-color: #e0e0e0;
     margin-right: 8px;
+    display:flex;
+    flex-shrink: 0
 }
 
 .button-action {

@@ -26,10 +26,11 @@
     gap: 20px !important;
     display: flex !important;
     flex-direction: column !important;
-    
 }
 
 .header{
     border: 1px solid #e8e1e1 !important;
-    border-radius: 20px !important;
+    border-radius: 0 0 20px 20px !important;
+    position: sticky !important;
+    top: 0 !important;
 }
