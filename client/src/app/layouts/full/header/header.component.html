@@ -1,0 +1,59 @@
+<div class="d-flex flex-row gap-3 justify-content-between" style="padding: 0 22px 0 22px; height: 100px; align-items: center;">
+    <div class="d-flex flex-row gap-3">
+        <div class="button-action color-primary-header-item" (click)="onToggleSidebar()">
+            <tui-icon 
+            icon="@tui.menu"
+            [style.color]="'#0095FF'"
+            >
+            </tui-icon>
+        </div>
+        <h2 class="color-primary-header-item">Social Marketplace</h2>
+    </div>
+    <div class="search-bar">
+        <tui-icon class="p-3 mx-3" 
+            [style.color]="'#0095FF'"
+            (click)="focusSearchInput()" icon="@tui.search">
+        </tui-icon>
+        <input #inputSearch class="input-search"  style="border: none; flex: 1;" [placeholder]="placeholder.search" type="search">
+    </div>
+    <div class="d-flex justify-content-center align-items-center gap-3">
+        <div class="d-flex justify-content-center align-items-center gap-3">
+            <div class="button-action">
+                <tui-icon class="" 
+                [style.color]="'#0095FF'"
+                icon="@tui.user">
+                </tui-icon>
+            </div>
+            <span>
+                <strong class="f-s-24">TrieuDoQuang</strong>
+            </span>
+        </div>
+        <div class="button-action">
+            <tui-badged-content [style.--tui-radius.%]="50">
+                <tui-badge-notification
+                    size="l"
+                    tuiSlot="top"
+                >
+                    99 
+                </tui-badge-notification>
+                    <tui-icon class="d-flex align-items-center mt-3" 
+                        [style.color]="'#0095FF'"
+                        icon="@tui.bell"
+                    
+                        >
+                    </tui-icon>
+                />
+            </tui-badged-content> 
+        </div>
+       	 
+        
+        <div class="align-items-center button-action">
+                <tui-icon 
+                [style.color]="'#0095FF'"
+                icon="@tui.log-out"
+            >
+        </tui-icon>
+    </div>
+  
+
+</div>

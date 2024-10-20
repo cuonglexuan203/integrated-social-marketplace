@@ -1,0 +1,45 @@
+@if(!isToggle) {
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        @if (item.iconName) {
+                <div class="button-action" 
+                    [tuiHint]="item.tooltip"
+                    tuiHintDirection="top-left"
+                    tuiHintPointer
+                >
+                    <tui-icon 
+                        [icon]="item.iconName"
+                        [style.color]="'#0095FF'"
+                        >
+                    </tui-icon>
+                </div>
+        }
+    </div>
+    
+
+}
+@else {
+    @if (item) {
+        <div class="sidenav-container">
+            <!-- @if (item.navCap) {
+                <h4 class="align-items-center d-flex justify-content-center" mat-subheader><strong>{{item.navCap}}</strong></h4>
+            } -->
+            <div class="d-flex flex-row nav-item gap-3" style="padding-left: 10px;">
+                @if (item.iconName) {
+                    <div class="button-action">
+                        <tui-icon 
+                            [icon]="item.iconName"
+                            [style.color]="'#0095FF'"
+                        >
+                    </tui-icon>
+                    </div>
+                }
+                @if (item.displayName) {
+                    <div class="nav-item-name">
+                        <span>{{item.displayName}}</span>
+                    </div>   
+                }
+            </div>
+        </div>
+    }
+}
+

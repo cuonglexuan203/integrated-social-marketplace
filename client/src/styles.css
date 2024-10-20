@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+.button-action {
+    background-color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: white;
+    item-align: center;
+    justify-content: center;
+    border: none;
+    display: flex;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    flex-shrink: 0; 
+    
+}
+
+.sidebar {
+    border-right: 1px solid #e8e1e1 !important;
+    transition: width 0.3s ease-in-out !important;
+    height: 100% !important;
+    border: 1px solid #e8e1e1 !important;
+    border-radius: 20px !important;
+    margin-right: 30px !important;
+  } 
+.sidebar-list {
+    gap: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    
+}
+
+.header{
+    border: 1px solid #e8e1e1 !important;
+    border-radius: 20px !important;
+}
