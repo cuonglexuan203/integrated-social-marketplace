@@ -1,1 +1,31 @@
-<p>full works!</p>
+<div class="position-relative d-flex flex-column" style="min-height: 100vh; padding: 24px;">
+  <!-- Fixed header -->
+    <app-header class="header position-fixed w-100" 
+                style="top: 0; left: 0; z-index: 1001;" 
+                (toggleSidebar)="handleToggle()">
+    </app-header>
+
+  <div class="d-flex flex-row" style="padding-top: 60px; min-height: calc(100vh - 84px);">
+    <!-- Fixed sidebar -->
+    <div class="sidebar position-fixed mt-4" 
+         style="top: 84px; height: calc(100vh - 84px); border-right: 1px solid #e8e1e1; z-index: 1000; overflow-y: auto;"
+         [ngStyle]="{'width': isToggled ? 'calc(15% - 24px)' : 'calc(5% - 24px)'}">
+      <app-sidebar></app-sidebar>
+      <div class="sidebar-content">
+        <div class="sidebar-list">
+          @for (item of navItems; track $index) {
+            <app-nav-item [item]="item" [isToggle]="isToggled"></app-nav-item>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content area -->
+    <div class="content-wrapper flex-grow-1 d-flex justify-content-center mt-4" 
+         [ngStyle]="{'margin-left': isToggled ? 'calc(15% - 24px)' : 'calc(5% - 24px)'}">
+      <div style="width: 100%; max-width: 1500px;">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>  

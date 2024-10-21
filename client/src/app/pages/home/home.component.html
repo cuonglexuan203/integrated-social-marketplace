@@ -1,1 +1,5 @@
-<p>home works!</p>
+<div class="d-flex flex-row flex-wrap justify-content-start align-items-start gap-3">
+    @for (item of mockData; track $index) {
+        <app-post-item [item]="item" ></app-post-item>
+    }
+</div>

@@ -1,0 +1,44 @@
+.sidenav-container {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.nav-item {
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.nav-item:before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    background-color: #f1f1f1;
+    z-index: -1; 
+    transition: transform 0.5s ease-in-out;
+    transform: scaleX(0); 
+    transform-origin: left; 
+}
+
+.nav-item:hover:before {
+    transform: scaleX(1); 
+}
+
+.nav-item-name {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-size: 20px;
+    font-weight: 500
+}
+
+.button-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}

@@ -1,0 +1,46 @@
+:host {
+    height: 100px;
+    background: white;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+.button-action {
+    border: none !important;
+    box-shadow: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-action:hover {
+    background-color: #f1f1f1;
+}
+.search-bar {
+    border-radius: 50px;
+    border: 1px solid #e6e6e6;
+    align-items: center; /* Fixed typo: changed `item-align` to `align-items` */
+    justify-content: center;
+    flex-direction: row;
+    display: flex;
+    padding: 5px;
+    transition: border 0.3s; 
+    flex: 1;
+    background-color: white;
+}
+
+.search-bar:focus-within {
+    border: 1px solid #007bff;
+}
+
+.input-search {
+    background-color: transparent;
+}
+
+.input-search:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.color-primary-header-item {
+    color: black;
+}
