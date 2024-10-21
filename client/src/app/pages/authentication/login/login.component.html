@@ -1,1 +1,60 @@
-<p>login works!</p>
+<div class="container">
+    <div class="card">
+        <div class="left-side w-50">
+            <div class="brand-name">
+                Social Marketplace
+            </div>
+            <div>
+                Connect, Buy, Sell, and Discover with AI-Powered Recommendations
+            </div>
+            <div class="d-flex justify-content-around align-items-center mt-3">
+                @for (item of logoLoginLeftSide; track $index) {
+                        <div class="d-flex flex-column align-items-center gap-3"> 
+                            <tui-icon 
+                                [icon]="item.iconName"
+                                [style.color]="item.color"
+                                >
+                            </tui-icon>
+                            <span>
+                                {{item.name}}
+                            </span>
+                        </div>
+                    }
+            </div>
+        </div>
+        <div class="right-side w-50">
+            <h1>Welcome Back !</h1>
+            <div>
+                <div class="d-flex flex-column gap-3">
+                    <tui-input
+                        tuiHintContent="Type 5 letters or more"
+                    >
+                    Email
+                    </tui-input>
+                    <tui-input-password >Input password</tui-input-password>
+
+                </div> 
+                <div class="social-login">
+                    <p>Or login with</p>
+                    <div class="social-icons">
+                        @for (item of logoLoginRightSide; track $index) {
+                            <div class="button-action">
+                                <tui-icon 
+                                    [icon]="item.iconName"
+                                    [style.color]="item.color"
+                                    [style.width.px]="item.width"
+                                    [style.height.px]="item.height"
+                                    >
+                                </tui-icon>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="switch">
+                    <p>Don't have an account? 
+                        <a class="register" (click)="onClickRegister()" id="toggleAuth">Register</a>
+                    </p>
+                </div>
+        </div>
+    </div>
+</div>
