@@ -1,1 +1,99 @@
-<p>register works!</p>
+<div class="container">
+    <div class="card">
+        <div class="left-side w-50">
+             <!-- <h1>Welcome Back !</h1>
+            <div>
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="d-flex flex-column gap-3">
+                        <tui-input 
+                        formControlName="email"
+                        tuiHintContent="Type 5 letters or more"
+                        [tuiTextfieldCleaner]="true"
+                        [tuiTextfieldCustomContent]="f['email'].valid ? success : ''"
+                    >
+                      Email
+                    </tui-input>
+                    <ng-template #success>
+                        <tui-icon
+                            icon="@tui.check"
+                            class="success tui-space_left-3"
+                            style="color: green;"
+                        ></tui-icon>
+                    </ng-template>
+                    @if (f['email'].touched && f['email'].invalid) {
+                        @if (f['email'].errors?.['required']) {
+                          <span class="error-message">{{f['email'].errors?.['required']['message']}}</span>
+                        }
+                        @if (f['email'].errors?.['email']) {
+                          <span class="error-message">{{f['email'].errors?.['email']['message']}}</span>
+                        }
+                      }
+                    
+                        <tui-input-password
+                        tuiHintContent="Please enter a value that is between 5 and 10 characters long, includes at least one digit, and contains at least one special character."
+                        [tuiTextfieldCleaner]="true"
+                        [tuiTextfieldCustomContent]="f['password'].valid ? success : ''"
+                        formControlName="password">
+                           password
+                        </tui-input-password>
+                        @if (f['password'].touched && f['password'].invalid) {
+                            @if (f['password'].errors?.['required']) {
+                              <span class="error-message">{{f['password'].errors?.['required']['message']}}</span>
+                            }
+                            @if (f['password'].errors?.['password']) {
+                              <span class="error-message">{{f['password'].errors?.['password']['message']}}</span>
+                            }
+                          }
+                    </div>
+                </form>
+                <button class="submit-button w-100 mt-3" (click)="onSubmit()" color="primary" [disabled]="!form.valid">
+                    Sign In
+                </button>
+                    
+                <div class="social-login">
+                    <p class="or-divider">Or login with</p>
+                    <div class="social-icons">
+                        @for (item of logoLoginRightSide; track $index) {
+                            <div class="button-action">
+                                <tui-icon 
+                                    [icon]="item.iconName"
+                                    [style.color]="item.color"
+                                    [style.width.px]="item.width"
+                                    [style.height.px]="item.height"
+                                    >
+                                </tui-icon>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="switch">
+                    <p>Don't have an account? 
+                        <a class="register" (click)="onClickRegister()" id="toggleAuth">Register</a>
+                    </p>
+                </div> -->
+        </div>
+        <div class="right-side w-50">
+            <img [src]="logoPath" alt="Marketplace Logo"  class="logo">
+            <div class="brand-name">
+                Connect, Buy, Sell, and Discover with AI-Powered Recommendations
+            </div>
+            <div>
+                Experience a smarter marketplace where AI transforms your shopping journey.
+                Seamlessly connect with like-minded individuals, receive personalized product suggestions tailored to your interests, and discover new opportunities effortlessly. Whether you're buying or selling, our AI-driven insights make every interaction more efficient and rewarding. Join us and unlock the future of commerce today!            </div>
+            <div class="d-flex justify-content-around align-items-center mt-3">
+                @for (item of logoLoginLeftSide; track $index) {
+                        <div class="d-flex flex-column align-items-center gap-3"> 
+                            <tui-icon 
+                                [icon]="item.iconName"
+                                [style.color]="item.color"
+                                >
+                            </tui-icon>
+                            <span>
+                                {{item.name}}
+                            </span>
+                        </div>
+                    }
+            </div>
+        </div>
+    </div>
+</div>

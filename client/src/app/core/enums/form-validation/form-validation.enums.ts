@@ -16,7 +16,7 @@ export enum FormValidationMessage {
   maxLength = 'Maximum length is {{1}} characters',
   maxNumber = 'Enter a value less than or equal to {{1}}',
   minNumber = 'Enter a value greater than or equal to {{1}}',
-  password = 'Password is not valid Ensure it meets all requirements',
+  password = 'Password is not valid. Ensure it meets all requirements',
   pattern = 'Please enter a valid pattern',
   range = 'Please enter a value between {{1}} and {{2}}',
   required = 'This field is required',

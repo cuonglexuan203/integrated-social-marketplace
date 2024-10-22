@@ -25,6 +25,7 @@
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
     "@ngxpert/hot-toast": "^3.0.2",
+    "@rxweb/reactive-form-validators": "^13.0.1",
     "@taiga-ui/cdk": "^4.11.0",
     "@taiga-ui/core": "^4.11.0",
     "@taiga-ui/icons": "^4.11.0",

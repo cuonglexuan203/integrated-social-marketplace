@@ -1,9 +1,17 @@
 import { Component } from '@angular/core';
 import { LOGO_LOGIN_LEFT_SIDE, LOGO_LOGIN_RIGHT_SIDE } from './login-icon-data';
-import { TuiIcon } from '@taiga-ui/core';
-import { TuiInputModule, TuiInputPasswordModule } from '@taiga-ui/legacy';
+import { TuiIcon, TuiHint } from '@taiga-ui/core';
+import { TuiInputModule, TuiInputPasswordModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { LoginModel } from '../../../core/models/login/login.model';
+import { RxFormBuilder, RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { NbAuthService } from '@nebular/auth';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AlertService } from '../../../core/services/alert/alert.service';
+import { TuiCheckbox } from '@taiga-ui/kit';
+
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -11,6 +19,13 @@ import { CommonModule } from '@angular/common';
     TuiInputModule,
     CommonModule,
     TuiInputPasswordModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RxReactiveFormsModule,
+    TuiCheckbox,
+    TuiTextfieldControllerModule,
+    TuiHint,
+
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -18,15 +33,35 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
   logoLoginLeftSide = LOGO_LOGIN_LEFT_SIDE;
   logoLoginRightSide = LOGO_LOGIN_RIGHT_SIDE;
+  form!: FormGroup;
+  logoPath = 'assets/images/icons/appicon.svg';
 
   constructor(
     private router: Router,
+    private authService: NbAuthService,
+    private formBuilder: RxFormBuilder,
+    private alertService: AlertService,
 
-  ) { }
-  ngOnInit() { }
+  ) {
+    this.form = this.formBuilder.formGroup(LoginModel, {});
+  }
+  ngOnInit() {
+  }
+
+  get f() {
+    return this.form.controls;
+  }
 
   onClickRegister() {
     this.router.navigate(['/register']);
+  }
+
+
+
+  onSubmit() {
+    if (this.form.valid) {
+
+    }
   }
 
 }
