@@ -10,6 +10,7 @@ import { NbAuthService } from '@nebular/auth';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import { TuiCheckbox } from '@taiga-ui/kit';
+import { HINT_LOGIN } from '../../../core/constances/hint-login';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class LoginComponent {
   logoLoginRightSide = LOGO_LOGIN_RIGHT_SIDE;
   form!: FormGroup;
   logoPath = 'assets/images/icons/appicon.svg';
-
+  hintLogin = HINT_LOGIN;
   constructor(
     private router: Router,
     private authService: NbAuthService,
@@ -52,7 +53,7 @@ export class LoginComponent {
     return this.form.controls;
   }
 
-  onClickRegister() {
+  onClickNavigateRegister() {
     this.router.navigate(['/register']);
   }
 

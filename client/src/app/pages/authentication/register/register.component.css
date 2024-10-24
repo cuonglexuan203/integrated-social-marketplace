@@ -64,7 +64,8 @@
     z-index: 1;
 }
 
-.right-side {
+
+.left-side {
     flex: 1;
     padding: 50px;
     display: flex;
@@ -135,6 +136,10 @@ h1 {
 }
 
 .register {
+    cursor: pointer;
+}
+
+.login {
     cursor: pointer;
 }
 
