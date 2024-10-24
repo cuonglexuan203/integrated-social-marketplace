@@ -1,1 +1,100 @@
-<p>register works!</p>
+<div class="container">
+    <div class="card">
+            <div class="left-side w-50">
+                <h1>Registration</h1>
+                    <div>
+                        <form [formGroup]="form" (ngSubmit)="onClickVerify()">
+                            <div class="d-flex flex-column gap-3">
+                                <tui-input 
+                                formControlName="email"
+                                [tuiHintContent]="hintRegister.email"
+                                [tuiTextfieldCleaner]="true"
+                                [tuiTextfieldCustomContent]="f['email'].valid ? success : ''"
+                                >
+                                Email
+                                </tui-input>
+                                <ng-template #success>
+                                    <tui-icon
+                                        icon="@tui.check"
+                                        class="success tui-space_left-3"
+                                        style="color: green;"
+                                    ></tui-icon>
+                                </ng-template>
+                                @if (f['email'].touched && f['email'].invalid) {
+                                    @if (f['email'].errors?.['required']) {
+                                        <span class="error-message">{{f['email'].errors?.['required']['message']}}</span>
+                                    }
+                                    @if (f['email'].errors?.['email']) {
+                                        <span class="error-message">{{f['email'].errors?.['email']['message']}}</span>
+                                    }
+                                }
+                                <tui-input
+                                    [tuiHintContent]="hintRegister.phoneNumber"
+                                    [tuiTextfieldCleaner]="true"
+                                    [tuiTextfieldCustomContent]="f['phoneNumber'].valid ? success : ''"
+                                    formControlName="phoneNumber">
+                                    Phone Number
+                                </tui-input>
+                                @if (f['phoneNumber'].touched && f['phoneNumber'].invalid) {
+                                    @if (f['phoneNumber'].errors?.['required']) {
+                                        <span class="error-message">{{f['phoneNumber'].errors?.['required']['message']}}</span>
+                                    }
+                                    @if (f['phoneNumber'].errors?.['phoneNumber']) {
+                                        <span class="error-message">{{f['phoneNumber'].errors?.['phoneNumber']['message']}}</span>
+                                    }
+                                }
+                                
+                                <tui-input-password
+                                    [tuiHintContent]="hintRegister.password"
+                                    [tuiTextfieldCleaner]="true"
+                                    [tuiTextfieldCustomContent]="f['password'].valid ? success : ''"
+                                    formControlName="password"
+                                    >
+                                    Password
+                                </tui-input-password>
+                                @if (f['password'].touched && f['password'].invalid) {
+                                    @if (f['password'].errors?.['required']) {
+                                    <span class="error-message">{{f['password'].errors?.['required']['message']}}</span>
+                                    }
+                                    @if (f['password'].errors?.['password']) {
+                                    <span class="error-message">{{f['password'].errors?.['password']['message']}}</span>
+                                    }
+                                }
+                            </div>
+                    </form>
+                    <button class="submit-button w-100 mt-3" (click)="onClickVerify()" color="primary" [disabled]="!form.valid">
+                        Verify Phone Number
+                    </button>
+                        
+                    <div class="switch">
+                        <p>Have an account? 
+                            <a class="login cursor-pointer" (click)="onClickNavigateLogin()">Login</a>
+                        </p>
+                    </div>
+            </div>
+        </div>
+        <div class="right-side w-50">
+            <img [src]="logoPath" alt="Marketplace Logo"  class="logo">
+            <div class="brand-name">
+                Connect, Buy, Sell, and Discover with AI-Powered Recommendations
+            </div>
+            <div>
+                Experience a smarter marketplace where AI transforms your shopping journey.
+                Seamlessly connect with like-minded individuals, receive personalized product suggestions tailored to your interests, and discover new opportunities effortlessly. Whether you're buying or selling, our AI-driven insights make every interaction more efficient and rewarding. Join us and unlock the future of commerce today!            </div>
+            <div class="d-flex justify-content-around align-items-center mt-3">
+                @for (item of logoLoginLeftSide; track $index) {
+                        <div class="d-flex flex-column align-items-center gap-3"> 
+                            <tui-icon 
+                                [icon]="item.iconName"
+                                [style.color]="item.color"
+                                >
+                            </tui-icon>
+                            <span>
+                                {{item.name}}
+                            </span>
+                        </div>
+                    }
+            </div>
+        </div>
+    </div>
+</div>

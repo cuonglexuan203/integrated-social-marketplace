@@ -1,0 +1,183 @@
+:host {
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-width: 100%;
+    height: 60%; 
+}
+.card {
+    width: 1000px;
+    max-width: 100%;
+    height: 800px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+}
+
+.right-side {
+    border-radius: 80px 20px 20px 80px;
+    justify-content: flex-end;
+    width: 50%;
+    height: 100%;
+    background: gray;
+    padding: 40px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    position: relative;
+
+}
+
+.right-side::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
+}
+
+.right-side > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+.left-side {
+    flex: 1;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    margin-bottom: 30px;
+    color: #333;
+    font-weight: 600;
+}
+
+.brand-name {
+    margin-bottom: 30px;
+    font-size: 24px;
+    line-height: 1.5;
+}
+
+.social-login {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.social-login p {
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.social-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    gap: 20px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+}
+
+.button-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+}
+
+.button-action:hover {
+    background-color: #e0e0e0;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.switch {
+    margin-top: 30px;
+    text-align: center;
+}
+.switch a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.switch a:hover {
+    color: #764ba2;
+}
+
+.register {
+    cursor: pointer;
+}
+
+.login {
+    cursor: pointer;
+}
+
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0095ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #0082df;
+}
+
+.submit-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.or-divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 14px;
+  margin-top: 4px;
+  display: block;
+  transition: all 0.2s ease;
+  padding-left: 4px;
+}

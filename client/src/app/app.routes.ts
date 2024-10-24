@@ -5,7 +5,17 @@ import { BlankComponent } from './layouts/blank/blank.component';
 import { ErrorComponent } from './pages/authentication/error/error.component';
 import { ChatComponent } from './pages/chat/chat.component';
 
-export const routes: Routes = [     
+export const routes: Routes = [  
+    {
+        path: '',
+        component: BlankComponent,
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('./pages/authentication/authentication.routes').then(m => m.AuthenticationRoutes),
+            }
+        ]
+    },   
     {
         path: '',
         component: FullComponent,
@@ -27,16 +37,7 @@ export const routes: Routes = [
             }
         ]
     },
-    {
-        path: '',
-        component: BlankComponent,
-        children: [
-            {
-                path: '',
-                loadChildren: () => import('./pages/authentication/authentication.routes').then(m => m.AuthenticationRoutes),
-            }
-        ]
-    },
+   
     {
         path: "error",
         component: ErrorComponent,
