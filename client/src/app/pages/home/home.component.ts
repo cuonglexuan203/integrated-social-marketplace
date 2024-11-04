@@ -1,17 +1,22 @@
 import { Component, Output } from '@angular/core';
 import { PostItemComponent } from "./post-item/post-item.component";
 import { MockDataPost } from '../../shared/mocks/mock-data-post';
-
+import { FilterComponent } from '../../shared/components/filter/filter.component';
+import { FilterData } from './filter-data';
+import { Filter } from '../../core/models/filter/filter.model';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [PostItemComponent],
+  imports: [
+    PostItemComponent,
+    FilterComponent
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
   @Output() mockData: MockDataPost[] = [];
-
+  filters: Filter[] = FilterData;
   constructor() { }
 
   ngOnInit() {
@@ -44,4 +49,5 @@ export class HomeComponent {
 
     return mockData;
   }
+
 }

@@ -21,5 +21,7 @@ export class PostItemComponent {
 
   ngOnInit() {
   }
+
+  
 }
   

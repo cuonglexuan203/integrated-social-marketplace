@@ -18,12 +18,19 @@
     </div>
     <div class="d-flex justify-content-center align-items-center gap-3">
         <div class="d-flex justify-content-center align-items-center gap-3">
-            <div class="button-action">
+            <div class="button-action"
+                tuiDropdownHover
+                [tuiDropdown]="userDialog"    
+            >
                 <tui-icon class="" 
-                [style.color]="'#0095FF'"
-                icon="@tui.user">
+                    [style.color]="'#0095FF'"
+                    icon="@tui.user">
                 </tui-icon>
             </div>
+            <ng-template #userDialog>
+                <app-user-dialog
+                ></app-user-dialog>
+            </ng-template>
             <span>
                 <strong class="f-s-24">TrieuDoQuang</strong>
             </span>

@@ -1,0 +1,33 @@
+.filter-container {
+    display: flex;
+    align-items: center;
+    max-width: 100%; /* Define your max width here */
+    overflow: hidden;
+    position: relative;
+}
+
+.filters-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0 30px; /* Space for scroll buttons */
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.scroll-btn.left {
+    left: 0;
+}
+
+.scroll-btn.right {
+    right: 0;
+}

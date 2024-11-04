@@ -1,5 +1,21 @@
-<div class="d-flex flex-row flex-wrap justify-content-start align-items-start gap-3">
-    @for (item of mockData; track $index) {
-        <app-post-item [item]="item" ></app-post-item>
-    }
-</div>
+<ng-container>
+    <div class="d-flex flex-column flex-wrap mt-3 justify-content-center align-items-center gap-3 border border-2"
+            style="padding: 20px; border-radius: 20px;
+            max-width: 83%; margin: auto;
+            "
+    >
+        <div style="margin-right: auto;">
+            <h5>Discovery</h5>
+        </div>
+        <div class="d-flex flex-row gap-3 flex-wrap align-items-center">
+            @for (item of filters; track $index) {  
+                <app-filter [filterItem]="item"></app-filter>
+            }
+        </div>
+    </div>
+    <div class="d-flex flex-row flex-wrap justify-content-center align-items-center gap-3">
+        @for (item of mockData; track $index) {
+            <app-post-item [item]="item" ></app-post-item>
+        }
+    </div>
+</ng-container>

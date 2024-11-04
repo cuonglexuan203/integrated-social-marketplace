@@ -4,9 +4,10 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { Placeholder } from '../../../core/enums/placehoder';
 import { BrandingComponent } from '../sidebar/branding.component';
 import { TooltipHeaderAction } from '../../../core/enums/tooltip';
-import { TuiIcon } from '@taiga-ui/core';
+import { TuiDataList, TuiDropdown, TuiIcon } from '@taiga-ui/core';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import {TuiAvatar, TuiBadge, TuiBadgedContent, TuiBadgeNotification} from '@taiga-ui/kit';
+import { UserDialogComponent } from '../../../shared/components/user-dialog/user-dialog.component';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -18,7 +19,10 @@ import {TuiAvatar, TuiBadge, TuiBadgedContent, TuiBadgeNotification} from '@taig
     TuiAvatar,
     TuiBadge,
     TuiBadgedContent,
-    TuiBadgeNotification
+    TuiBadgeNotification,
+    TuiDropdown,
+    TuiDataList,
+    UserDialogComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
