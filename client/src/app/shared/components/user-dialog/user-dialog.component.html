@@ -50,7 +50,7 @@
     <div class="divider"></div>
     <div>
         <h6>Convenient</h6>
-        @for (item of userDialogCartData; track $index) {
+        @for (item of userConvenientData; track $index) {
             <div class="d-flex flex-row gap-2 cart-user">
                 <tui-icon
                     [icon]="item.iconName"
@@ -68,8 +68,10 @@
     <div class="divider"></div>
     <div>
         <h6>More</h6>
-        @for (item of userDialogCartData; track $index) {
-            <div class="d-flex flex-row gap-2 cart-user">
+        @for (item of userDialogMoreData; track $index) {
+            <div class="d-flex flex-row gap-2 cart-user"
+                (click)="handleClickMore(item)"
+            >
                 <tui-icon
                     [icon]="item.iconName"
                     [style.width.px]="'18'"

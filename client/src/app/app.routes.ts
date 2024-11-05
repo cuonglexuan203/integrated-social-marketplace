@@ -34,6 +34,10 @@ export const routes: Routes = [
             {
                 path: 'chat',
                 component: ChatComponent,
+            },
+            {
+                path: 'user',
+                loadChildren: () => import('./pages/user-management/user-management.routes').then(m => m.UserManagementRoutes),
             }
         ]
     },

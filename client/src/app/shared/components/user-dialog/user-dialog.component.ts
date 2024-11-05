@@ -4,7 +4,8 @@ import { TuiRating } from '@taiga-ui/kit';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TuiIcon } from '@taiga-ui/core';
-import { UserDialogCardData } from './user-dialog.data';
+import { UserConvenientData, UserDialogCardData, UserDialogMoreData } from './user-dialog.data';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-dialog',
@@ -21,8 +22,26 @@ import { UserDialogCardData } from './user-dialog.data';
 })
 export class UserDialogComponent {
   userDialogCartData = UserDialogCardData;
-  value: number = 0;
-  constructor() { }
+  userConvenientData = UserConvenientData;
+  userDialogMoreData = UserDialogMoreData;
+  value: number = 4;
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit() { }
+
+  handleClickMore(item: any) {
+    if (item) {
+      switch (item.iconName) { 
+        case '@tui.settings':
+          this.router.navigate(['/user/account-settings']);
+          break;
+        case '@tui.badge-help':
+          break;
+        case '@tui.lightbulb':
+          break
+      }
+    }
+  }
 }

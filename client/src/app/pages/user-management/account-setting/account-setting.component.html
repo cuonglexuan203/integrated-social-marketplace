@@ -1,0 +1,37 @@
+<ng-container>
+    <tui-breadcrumbs
+        size="l"
+        class="tui-space_top-2"
+    >
+    <ng-container>
+        @for (item of breadcrumbs; track $index) {
+            <a
+                *tuiItem
+                tuiLink
+                (click)="onClickBreadcrumb(item.routerLink)"
+                [ngStyle]="{'color': item.currentColor}"
+            >
+                {{ item.caption }}
+            </a>
+        }
+    </ng-container>
+    </tui-breadcrumbs>
+    <nav
+        tuiTabs
+        vertical="left"
+        class="left mt-3"
+    >
+        @for (tab of tabs; track $index) {
+            <button
+            tuiTab
+            type="button"
+            (click)="onClickTab(tab.routerLink)"
+        >
+            {{tab.caption}}
+            
+        </button>
+        }
+    </nav>
+    <router-outlet></router-outlet>
+
+</ng-container>
