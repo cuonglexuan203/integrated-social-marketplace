@@ -1,5 +1,5 @@
 ﻿using Feed.Application.Queries;
-using Feed.Application.Responses;
+using Feed.Application.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

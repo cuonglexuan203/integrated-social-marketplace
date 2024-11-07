@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using System.Text.Json;
 
-namespace Feed.Infrastructure.Data
+namespace Feed.Infrastructure.Persistence.SeedData
 {
     public static class CommentContextSeed
     {

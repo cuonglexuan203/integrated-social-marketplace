@@ -1,10 +1,10 @@
 ﻿using Feed.Application.Mappers;
-using Feed.Application.Queries;
-using Feed.Application.Responses;
+using Feed.Application.Queries.Post;
+using Feed.Application.DTOs;
 using Feed.Core.Repositories;
 using MediatR;
 
-namespace Feed.Application.Handlers
+namespace Feed.Application.Handlers.Post
 {
     public class GetAllPostHandler : IRequestHandler<GetAllPostsQuery, IList<PostResponse>>
     {

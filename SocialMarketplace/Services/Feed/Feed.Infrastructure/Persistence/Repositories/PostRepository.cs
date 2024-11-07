@@ -1,10 +1,9 @@
 ﻿using Feed.Core.Entities;
 using Feed.Core.Repositories;
-using Feed.Infrastructure.Data;
-using MongoDB.Bson;
+using Feed.Infrastructure.Persistence.DbContext;
 using MongoDB.Driver;
 
-namespace Feed.Infrastructure.Repositories
+namespace Feed.Infrastructure.Persistence.Repositories
 {
     public class PostRepository : IPostRepository
     {
@@ -36,15 +35,6 @@ namespace Feed.Infrastructure.Repositories
                 .Posts
                 .Find(filter)
                 .FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<Post>> GetPostByTitle(string title)
-        {
-            FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Title, title);
-            return await _context
-                .Posts
-                .Find(filter)
-                .ToListAsync();
         }
 
         public async Task<IEnumerable<Post>> GetPostByUserId(string userId)

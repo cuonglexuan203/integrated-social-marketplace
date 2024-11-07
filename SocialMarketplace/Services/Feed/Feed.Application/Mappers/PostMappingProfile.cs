@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Feed.Application.Responses;
+using Feed.Application.DTOs;
 using Feed.Core.Entities;
 
 namespace Feed.Application.Mappers
