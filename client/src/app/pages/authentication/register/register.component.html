@@ -22,10 +22,16 @@
                                 </ng-template>
                                 @if (f['email'].touched && f['email'].invalid) {
                                     @if (f['email'].errors?.['required']) {
-                                        <span class="error-message">{{f['email'].errors?.['required']['message']}}</span>
+                                        <tui-error class="error-message"
+                                            [error]="f['email'].errors?.['required']"
+                                        >
+                                        </tui-error>
                                     }
                                     @if (f['email'].errors?.['email']) {
-                                        <span class="error-message">{{f['email'].errors?.['email']['message']}}</span>
+                                        <tui-error class="error-message"
+                                            [error]="f['email'].errors?.['email']"
+                                        >
+                                        </tui-error>
                                     }
                                 }
                                 <tui-input
@@ -37,10 +43,16 @@
                                 </tui-input>
                                 @if (f['phoneNumber'].touched && f['phoneNumber'].invalid) {
                                     @if (f['phoneNumber'].errors?.['required']) {
-                                        <span class="error-message">{{f['phoneNumber'].errors?.['required']['message']}}</span>
+                                        <tui-error class="error-message"
+                                            [error]="f['phoneNumber'].errors?.['required']"
+                                        >
+                                        </tui-error>
                                     }
                                     @if (f['phoneNumber'].errors?.['phoneNumber']) {
-                                        <span class="error-message">{{f['phoneNumber'].errors?.['phoneNumber']['message']}}</span>
+                                        <tui-error class="error-message"
+                                            [error]="f['phoneNumber'].errors?.['phoneNumber']"
+                                        >
+                                        </tui-error>
                                     }
                                 }
                                 
@@ -54,10 +66,16 @@
                                 </tui-input-password>
                                 @if (f['password'].touched && f['password'].invalid) {
                                     @if (f['password'].errors?.['required']) {
-                                    <span class="error-message">{{f['password'].errors?.['required']['message']}}</span>
+                                        <tui-error class="error-message"
+                                            [error]="f['password'].errors?.['required']"
+                                        >
+                                        </tui-error>
                                     }
                                     @if (f['password'].errors?.['password']) {
-                                    <span class="error-message">{{f['password'].errors?.['password']['message']}}</span>
+                                        <tui-error class="error-message"
+                                            [error]="f['password'].errors?.['password']"
+                                            >
+                                        </tui-error>
                                     }
                                 }
                             </div>

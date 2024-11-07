@@ -12,11 +12,11 @@ export const navItems: NavItem[] = [
         tooltip: 'Home'
     },
     {
-        displayName: 'User',
+        displayName: 'User Profile',
         iconName: '@tui.contact',
         bgColor: 'white',
-        route: '/user',
-        tooltip: 'User'
+        route: 'user/account-settings/profile',
+        tooltip: 'User Profile'
     },
     {
         displayName: 'Chat',

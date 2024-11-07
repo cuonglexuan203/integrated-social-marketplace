@@ -33,14 +33,8 @@ export class AccountSettingComponent {
   constructor(
     private router: Router,
   ) { }
-  ngOnInit() { }
-
-  onClickBreadcrumb(routerLink: string) {
-    this.router.navigate([routerLink]);
-  }
-
-  onClickTab(routerLink: string) {
-    this.router.navigate([routerLink]);
+  ngOnInit() {
+    this.router.navigate([this.tabs[0].routerLink]);
   }
 
 }

@@ -169,11 +169,3 @@ h1 {
   font-size: 14px;
 }
 
-.error-message {
-  color: #ff4d4f;
-  font-size: 14px;
-  margin-top: 4px;
-  display: block;
-  transition: opacity 0.2s ease; /* Only apply opacity transition */
-  text-align: right;
-}

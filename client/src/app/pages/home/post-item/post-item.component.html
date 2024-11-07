@@ -1,31 +1,126 @@
 @if(item) {
-        <div
-            class="custom-card mt-3"
-            tuiCardLarge
-            tuiSurface="floating"
-        >
-        <div class="card-header">
-            <h4>{{item.name}}</h4>
-            <div class="button-action">
-                <tui-icon
-                    icon="@tui.heart"
-                    [style.height.px]="24"
-                    [style.width.px]="24"
-                ></tui-icon>
+    <div class="post-item-containter">
+        <div class="post-header">
+            <div class="left-header">
+                <tui-avatar [size]="'l'">{{ 'TD' | uppercase }}</tui-avatar>
+                <div>
+                        <a class="primary-color"
+                            style="font-weight: bold;
+                            text-decoration: none;
+                            cursor: pointer;
+                            "
+                        >
+                            Trieu Do Quang
+                        </a>
+                        <div style="color: gray">
+                            3 Nov at 11:31 pm
+                        </div>
+                    </div>
             </div>
+            <div class="right-header">
+                <tui-icon class="follow-button"
+                    [style.height.px]="'18'"
+                    [style.width.px]="'18'"
+                    icon="@tui.user-round-plus">
+                </tui-icon>
+                <tui-icon class="more-button"
+                    icon="@tui.ellipsis">
+                </tui-icon>
+
+            </div>
+
         </div>
-        <div class="image-placeholder">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 5V19H5V5H19ZM19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM14.14 11.86L11.14 15.73L9 13.14L6 17H18L14.14 11.86Z" fill="#BDBDBD"/>
-            </svg>
+        <div class="post-description">
+            <span>
+                {{ item.description + item.description + item.description + item.description}}
+            </span>
+            <h5> {{item.name}}: {{item.price}}đ</h5>
         </div>
-        <div class="card-content">
-            <div class="card-title">{{item.description}}</div>
-            <div class="card-price">{{item.price}} - đ</div>
+        <div class="post-media-url"
+            tuiCarouselButtons
+        >
+            @if(item.mediaUrl){
+                <!-- @if(currentIndex != 0) { -->
+                    <button
+                    iconStart="@tui.chevron-left"
+                    tuiIconButton
+                    class="prev-button"
+                    type="button"
+                    size="s"
+                    (click)="carousel.prev()"
+                    >
+                    Previous
+                    </button>
+                <!-- } -->
+                <tui-carousel
+                    #carousel
+                    class="carousel"
+                    [style.--tui-carousel-padding]="0"
+                    (indexChange)="onCarouselChange($event)"
+                >
+                    @for (item of item.mediaUrl; track $index) {
+                        @if(item.imageUrl) {
+                            @for (item of item.imageUrl; track $index) {
+                                <img *tuiItem src="{{ item }}" alt="image" class="carousel-image">
+                            }
+                        }
+                        @if(item.videoUrl) {
+                            @for (item of item.videoUrl; track $index) {
+                                <video *tuiItem src="{{ item }}" controls class="carousel-video">
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+                        }
+                    }
+                </tui-carousel>
+                <!-- @if (currentIndex != item.mediaUrl.length - 1) {
+                    
+                } -->
+                <button
+                    iconStart="@tui.chevron-right"
+                    tuiIconButton
+                    type="button"
+                    class="next-button"
+                    size="s"
+                    (click)="carousel.next()"
+                    >
+                    Next
+                </button>
+            }
         </div>
-        <div class="card-footer">
-            <div class="avatar"></div>
-            <span>{{item.createdAt}} - {{item.updatedAt}}</span>
+
+        <div class="divider"></div>
+
+        <div class="post-footer">
+            <div class="item-footer-post">
+                <tui-icon class=""
+                    [style.height.px]="18"
+                    [style.width.px]="18"
+                    icon="@tui.heart">
+                </tui-icon>
+                <span>300</span>
+            </div>
+
+            <div class="item-footer-post">
+                <tui-icon class=""
+                    icon="@tui.message-circle"
+                    [style.height.px]="18"
+                    [style.width.px]="18"
+                    >
+                </tui-icon>
+                <span>255</span>
+            </div>
+
+            <div class="item-footer-post">
+                <tui-icon class=""
+                    icon="@tui.forward"
+                    [style.height.px]="18"
+                    [style.width.px]="18"
+                    >
+                </tui-icon>
+                <span>255</span>
+            </div>
+
         </div>
     </div>
 }

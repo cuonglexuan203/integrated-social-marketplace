@@ -6,7 +6,7 @@ export const AccountSettingBreadcrumbData: BreadcrumbModel[] = [
         caption: 'Home',
     },
     {
-        routerLink: '/user/account-settings',
+        routerLink: '/user/account-settings/profile',
         caption: 'Account Settings',
         currentColor: 'blue',
     },

@@ -1,1 +1,92 @@
-<p>profile works!</p>
+<ng-container>
+    <div class="header-profile">
+        <div class="d-flex flex-row align-items-center gap-3">
+            <tui-avatar [size]="'xl'">{{ 'TD' | uppercase }}</tui-avatar>
+            <div class="user-info d-flex flex-column">
+                <h4>
+                    Trieu Do Quang
+                </h4>
+                <div style="color: gray">
+                    quangtrieu&#64;gmail.com
+                </div>
+            </div>
+        </div>
+        <button
+            class="save-button"
+            tuiButton
+            type="button"
+            >
+            Save
+        </button>
+    </div>
+    <div class="divider"></div>
+    <div class="content-profile">
+        <form class="d-flex justify-content-center">
+            <div class="d-flex flex-column gap-3" style="width: 80%;">
+                <!-- bio -->
+                <tui-textarea>
+                    Bio
+                    <textarea
+                    maxlength="97"
+                    placeholder="Write a few words about yourself"
+                    tuiTextfieldLegacy
+                    ></textarea>
+                </tui-textarea>
+                <div class="d-flex gap-3 flex-row"> 
+                <!-- full name -->
+                    <tui-input
+                        tuiHintContent="A tooltip"
+                        class="w-100"
+                    >
+                    Full Name
+                        <input
+                            placeholder="Enter your full name"
+                            tuiTextfieldLegacy
+                        />
+                    </tui-input>
+                <!-- phone number  -->
+                    <tui-input
+                        tuiHintContent="A tooltip"
+                        class="w-100"
+
+                    >
+                    Phone Number
+                        <input
+                            placeholder="Enter your phone number"
+                            tuiTextfieldLegacy
+                        />
+                    </tui-input>
+                </div>
+
+                <div class="d-flex gap-3 flex-row"> 
+                    <!-- Email -->
+                    <tui-input
+                    tuiHintContent="A tooltip"
+                    class="w-100"
+
+                    >
+                    Email
+                        <input
+                            placeholder="Enter your email address"
+                            tuiTextfieldLegacy
+                        />
+                    </tui-input>
+                    <!-- Birthday  -->
+                        <tui-input-date
+                            tuiHintContent="A tooltip"
+                            class="w-100"
+
+                        >
+                        Birthday
+                            <input
+                                placeholder="Choose your Birthday"
+                                tuiTextfieldLegacy
+                            />
+                        </tui-input-date>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+</ng-container>
