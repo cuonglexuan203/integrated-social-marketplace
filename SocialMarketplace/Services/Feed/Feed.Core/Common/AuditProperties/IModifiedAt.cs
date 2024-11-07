@@ -1,4 +1,4 @@
-﻿namespace Feed.Core.Entities.AuditProperties
+﻿namespace Feed.Core.Common.AuditProperties
 {
     public interface IModifiedAt
     {

@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "_id": "ObjectId(\"649c4e2e4f4b2f40c4e96c7c\")",
+    "PostId": "ObjectId(\"649c4e2e4f4b2f40c4e96c7b\")",
+    "UserId": "user456",
+    "Username": "TechGuy_123",
+    "Media": [
+      {
+        "Url": "https://example.com/images/monitor_review.jpg",
+        "Type": "Image",
+        "ThumbnailUrl": "https://example.com/images/monitor_review_thumbnail.jpg",
+        "Duration": null
+      }
+    ],
+    "CommentText": "This monitor looks amazing! Can’t wait to get one for my setup. Does it support G-Sync?",
+    "LikesCount": 3,
+    "Reactions": [
+      {
+        "UserId": "user123",
+        "Type": "Like",
+        "CreatedAt": "2024-11-07T14:10:00Z"
+      }
+    ],
+    "ParentCommentID": null,
+    "CreatedAt": "2024-11-07T14:05:00Z",
+    "ModifiedAt": "2024-11-07T14:05:00Z",
+    "IsDeleted": false,
+    "DeletedAt": null
+  }
+]

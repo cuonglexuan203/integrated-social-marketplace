@@ -16,7 +16,7 @@ namespace Feed.Application.Handlers.Post
         }
         public async Task<IList<PostResponse>> Handle(GetAllPostsQuery request, CancellationToken cancellationToken)
         {
-            var postList = await _postRepository.GetPosts();
+            var postList = await _postRepository.GetAllPosts();
             var postResponseList = FeedMapper.Mapper.Map<IList<PostResponse>>(postList.ToList());
             return postResponseList;
         }

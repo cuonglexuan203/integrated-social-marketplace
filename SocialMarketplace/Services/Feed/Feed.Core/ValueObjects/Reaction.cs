@@ -1,5 +1,5 @@
-﻿using Feed.Core.Entities.AuditProperties;
-using Feed.Core.Entities.Enums;
+﻿using Feed.Core.Common.AuditProperties;
+using Feed.Core.Enums;
 
 namespace Feed.Core.ValueObjects
 {

@@ -9,9 +9,11 @@ namespace Feed.Infrastructure.Persistence.SeedData
         public static void SeedData(IMongoCollection<Comment> commentCollection)
         {
             bool checkPost = commentCollection.Find(p => true).Any();
-            string path = Path.Combine("Data", "SeedData", "comments.json");
+            string path = Path.Combine("Persistence", "SeedData", "Data", "comments.json");
             if (!checkPost)
             {
+                // local (debug)
+                //var commentData = File.ReadAllText("../src/services/Feed/Feed.Infrastructure/Persistence/SeedData/Data/comments.json");
                 var commentData = File.ReadAllText(path);
                 var comments = JsonSerializer.Deserialize<List<Comment>>(commentData);
                 if (comments != null)

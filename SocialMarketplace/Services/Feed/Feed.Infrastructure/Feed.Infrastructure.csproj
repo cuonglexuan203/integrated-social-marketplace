@@ -15,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\SeedData\comments.json">
+    <None Update="Persistence\SeedData\Data\comments.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Data\SeedData\posts.json">
+    <None Update="Persistence\SeedData\Data\posts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

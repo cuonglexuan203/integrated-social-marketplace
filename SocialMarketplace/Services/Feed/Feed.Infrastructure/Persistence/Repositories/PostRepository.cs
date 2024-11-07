@@ -46,7 +46,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Post>> GetPosts()
+        public async Task<IEnumerable<Post>> GetAllPosts()
         {
             return await _context
                 .Posts

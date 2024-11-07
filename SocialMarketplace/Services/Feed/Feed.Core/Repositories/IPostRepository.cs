@@ -5,7 +5,7 @@ namespace Feed.Core.Repositories
 {
     public interface IPostRepository
     {
-        Task<IEnumerable<Post>> GetPosts();
+        Task<IEnumerable<Post>> GetAllPosts();
         Task<Post> GetPost(string id);
         Task<IEnumerable<Post>> GetPostByUserId(string userId);
         Task<Post> CreatePost(Post post);

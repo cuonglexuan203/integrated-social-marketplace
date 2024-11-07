@@ -1,4 +1,4 @@
-﻿namespace Feed.Core.Entities.Enums
+﻿namespace Feed.Core.Enums
 {
     public enum MediaType
     {

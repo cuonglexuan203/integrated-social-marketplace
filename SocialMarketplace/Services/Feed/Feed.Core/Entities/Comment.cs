@@ -1,8 +1,8 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
-using Feed.Core.Entities.AuditProperties;
 using Feed.Core.ValueObjects;
-using Feed.Core.Entities.BaseEntities;
+using Feed.Core.Common.AuditProperties;
+using Feed.Core.Common.BaseEntities;
 
 namespace Feed.Core.Entities
 {

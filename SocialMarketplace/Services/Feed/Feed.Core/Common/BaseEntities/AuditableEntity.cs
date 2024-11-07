@@ -1,6 +1,6 @@
-﻿using Feed.Core.Entities.AuditProperties;
+﻿using Feed.Core.Common.AuditProperties;
 
-namespace Feed.Core.Entities.BaseEntities
+namespace Feed.Core.Common.BaseEntities
 {
     public abstract class AuditableEntity : ICreatedAt, IModifiedAt, IDeleted
     {

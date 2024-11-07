@@ -1,5 +1,5 @@
-﻿using Feed.Application.Queries;
-using Feed.Application.DTOs;
+﻿using Feed.Application.DTOs;
+using Feed.Application.Queries.Post;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -18,7 +18,7 @@ namespace Feed.API.Controllers
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<PostResponse>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IList<PostResponse>>> GetPosts()
+        public async Task<ActionResult<IList<PostResponse>>> GetAllPosts()
         {
             var query = new GetAllPostsQuery();
             var result = await _mediator.Send(query);

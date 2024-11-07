@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Feed.Core.Entities.AuditProperties
+namespace Feed.Core.Common.AuditProperties
 {
     public interface IIdentifier
     {

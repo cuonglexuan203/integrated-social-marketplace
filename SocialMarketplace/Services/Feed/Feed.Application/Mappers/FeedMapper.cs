@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Feed.Application.Mappers.Profiles;
 
 namespace Feed.Application.Mappers
 {
