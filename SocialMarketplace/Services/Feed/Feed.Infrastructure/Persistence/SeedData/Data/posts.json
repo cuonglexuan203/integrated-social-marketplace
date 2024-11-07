@@ -1,12 +1,12 @@
 [
   {
-    "_id": "ObjectId(\"649c4e2e4f4b2f40c4e96c7b\")",
-    "UserID": "user123",
+    "_id": "63ca5e40e0aa3968b549af53",
+    "UserID": "602d2149e773f2a3990b47f7",
     "ContentText": "Check out the new ultra-wide gaming monitor from XYZ Corp! It’s got a 240Hz refresh rate and supports 4K resolution. Perfect for those who want to level up their gaming experience.",
     "Media": [
       {
         "Url": "https://example.com/images/monitor.jpg",
-        "Type": "Image", // This corresponds to MediaType.Image enum value
+        "Type": 0,
         "ThumbnailUrl": "https://example.com/images/monitor_thumbnail.jpg",
         "Duration": null
       }
@@ -14,31 +14,26 @@
     "LikesCount": 25,
     "Reactions": [
       {
-        "UserId": "user456",
-        "Type": "Like", // This corresponds to ReactionType.Like enum value
+        "UserId": "602d2149e773f2a3990b47f7",
+        "Type": 0,
         "CreatedAt": "2024-11-07T14:00:00Z"
       },
       {
-        "UserId": "user789",
-        "Type": "Love", // This corresponds to ReactionType.Love enum value
+        "UserId": "602d2149e773f2a3990b47f8",
+        "Type": 1,
         "CreatedAt": "2024-11-07T14:05:00Z"
-      },
-      {
-        "UserId": "user321",
-        "Type": "Wow", // This corresponds to ReactionType.Wow enum value
-        "CreatedAt": "2024-11-07T14:10:00Z"
       }
     ],
     "CommentsCount": 2,
     "Comments": [
       {
-        "CommentId": "ObjectId(\"649c4e2e4f4b2f40c4e96c7c\")",
-        "UserId": "user456",
+        "CommentId": "602d2149e773f2a3990b47f5",
+        "UserId": "602d2149e773f2a3990b47f7",
         "Username": "TechGuy_123",
         "Media": [
           {
             "Url": "https://example.com/images/monitor_review.jpg",
-            "Type": "Image", // This corresponds to MediaType.Image enum value
+            "Type": 0,
             "ThumbnailUrl": "https://example.com/images/monitor_review_thumbnail.jpg",
             "Duration": null
           }
@@ -47,16 +42,16 @@
         "LikesCount": 3,
         "Reactions": [
           {
-            "UserId": "user123",
-            "Type": "Like", // This corresponds to ReactionType.Like enum value
+            "UserId": "602d2149e773f2a3990b47f7",
+            "Type": 1,
             "CreatedAt": "2024-11-07T14:10:00Z"
           }
         ],
         "ParentCommentID": null
       },
       {
-        "CommentId": "ObjectId(\"649c4e2e4f4b2f40c4e96c7d\")",
-        "UserId": "user789",
+        "CommentId": "602d2149e773f2a3990b47f9",
+        "UserId": "602d2149e773f2a3990b47f7",
         "Username": "GamingMaster99",
         "Media": [],
         "CommentText": "I’ve heard good things about XYZ monitors, but I’m still deciding between this one and the LG UltraGear.",
