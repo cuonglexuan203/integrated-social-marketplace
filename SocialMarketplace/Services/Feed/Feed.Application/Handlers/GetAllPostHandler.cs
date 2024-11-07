@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Feed.Application.Mappers;
+﻿using Feed.Application.Mappers;
 using Feed.Application.Queries;
 using Feed.Application.Responses;
 using Feed.Core.Repositories;

@@ -1,11 +1,11 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Feed.Core.Entities.BaseEntities
+namespace Feed.Core.Entities.AuditProperties
 {
-    public class BaseEntity
+    public interface IIdentifier
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string Id { get; set; } = null!;
+        public string Id { get; set; }
     }
 }
