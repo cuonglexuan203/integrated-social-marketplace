@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Feed.Core.Entities.JoinEntities
 {
-    public class PostTag : BaseEntity, ICreatedAt, IUpdatedAt, IDeleted
+    public class PostTag : BaseEntity, ICreatedAt, IModifiedAt, IDeleted
     {
 
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
@@ -17,7 +17,7 @@ namespace Feed.Core.Entities.JoinEntities
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string TagId { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }
-        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTimeOffset? ModifiedAt { get; set; }
         public DateTimeOffset? DeletedAt { get; set; }
         public bool IsDeleted { get; set; }
     }

@@ -5,7 +5,7 @@ using Feed.Core.Entities.BaseEntities;
 
 namespace Feed.Core.Entities
 {
-    public class Comment : BaseEntity, ICreatedAt, IUpdatedAt, IDeleted
+    public class Comment : BaseEntity, ICreatedAt, IModifiedAt, IDeleted
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string PostID { get; set; }
@@ -20,7 +20,7 @@ namespace Feed.Core.Entities
         public string? ParentCommentID { get; set; }
 
         public DateTimeOffset? CreatedAt { get; set; }
-        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTimeOffset? ModifiedAt { get; set; }
         public bool IsDeleted { get; set; }
         public DateTimeOffset? DeletedAt { get; set; }
     }

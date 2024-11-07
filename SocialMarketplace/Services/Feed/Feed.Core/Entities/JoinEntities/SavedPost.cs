@@ -5,7 +5,7 @@ using Feed.Core.Entities.BaseEntities;
 
 namespace Feed.Core.Entities.JoinEntities
 {
-    public class SavedPost : BaseEntity, ICreatedAt, IUpdatedAt, IDeleted
+    public class SavedPost : BaseEntity, ICreatedAt, IModifiedAt, IDeleted
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string PostId { get; set; }
@@ -14,7 +14,7 @@ namespace Feed.Core.Entities.JoinEntities
         public string UserId { get; set; }
 
         public DateTimeOffset? CreatedAt { get; set; }
-        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTimeOffset? ModifiedAt { get; set; }
         public DateTimeOffset? DeletedAt { get; set; }
         public bool IsDeleted { get; set; }
     }
