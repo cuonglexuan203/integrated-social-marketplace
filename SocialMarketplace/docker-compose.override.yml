@@ -25,11 +25,6 @@ services:
       - DatabaseSettings__DatabaseName=FeedDb
       - DatabaseSettings__PostsCollection=Posts
       - DatabaseSettings__CommentsCollection=Comments
-      - DatabaseSettings__TagsCollection=Tags
-      - DatabaseSettings__CommentLikesCollection=CommentLikes
-      - DatabaseSettings__PostLikesCollection=PostLikes
-      - DatabaseSettings__PostTagsCollection=PostTags
-      - DatabaseSettings__SavedPostsCollection=SavedPosts
     depends_on:
       - feeddb
     ports:
