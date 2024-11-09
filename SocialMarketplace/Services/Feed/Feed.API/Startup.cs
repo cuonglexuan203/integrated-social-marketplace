@@ -3,7 +3,10 @@ using Feed.Core.Repositories;
 using Feed.Infrastructure.Persistence.DbContext;
 using Feed.Infrastructure.Persistence.Repositories;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 
@@ -32,6 +35,21 @@ namespace Feed.API
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllPostHandler).Assembly));
             services.AddScoped<IFeedContext, FeedContext>();
             services.AddScoped<IPostRepository, PostRepository>();
+            //
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://locahost:9090";
+                    options.Audience = "feed";
+                });
+
+            var userPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+            services.AddControllers(config =>
+            {
+                config.Filters.Add(new AuthorizeFilter(userPolicy));
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -45,8 +63,9 @@ namespace Feed.API
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
+            app.UseAuthentication();
             app.UseStaticFiles();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
