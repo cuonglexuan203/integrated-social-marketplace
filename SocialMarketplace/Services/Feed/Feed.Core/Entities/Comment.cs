@@ -1,28 +1,25 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
-using Feed.Core.Entities.AuditProperties;
-using Feed.Core.Entities.BaseEntities;
+using Feed.Core.ValueObjects;
+using Feed.Core.Common.AuditProperties;
+using Feed.Core.Common.BaseEntities;
 
 namespace Feed.Core.Entities
 {
-    public class Comment : BaseEntity, ICreatedAt, IUpdatedAt, IDeleted
+    public class Comment : AuditableEntity, IIdentifier
     {
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string PostID { get; set; }
+        public string Id { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        public string UserID { get; set; }
-        public List<string> MediaURL { get; set; }
+        public string UserId { get; set; }
+        public string Username { get; set; }
+        public List<Media> Media { get; set; }
         public string CommentText { get; set; }
         public int LikesCount { get; set; }
+        public List<Reaction> Reactions { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string? ParentCommentID { get; set; }
-
-        public DateTimeOffset? CreatedAt { get; set; }
-        public DateTimeOffset? UpdatedAt { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTimeOffset? DeletedAt { get; set; }
     }
 
 }

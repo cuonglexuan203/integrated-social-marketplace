@@ -1,9 +1,9 @@
-﻿using Feed.Application.Responses;
+﻿using Feed.Application.DTOs;
 using MediatR;
 
 namespace Feed.Application.Commands
 {
-    internal class CreatePostCommand: IRequest<PostResponse>
+    public class CreatePostCommand: IRequest<PostResponse>
     {
     }
 }

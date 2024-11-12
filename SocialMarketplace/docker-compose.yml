@@ -2,8 +2,17 @@ services:
   portainer:
     image: portainer/portainer-ce
 
+  identitydb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
   feeddb:
     image: mongo
+  
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.API/Dockerfile
 
   feed.api:
     image: ${DOCKER_REGISTRY-}feedapi
@@ -19,4 +28,5 @@ services:
 
 volumes:
   mongo_data:
+  sqlserver_data:
   portainer_data:  

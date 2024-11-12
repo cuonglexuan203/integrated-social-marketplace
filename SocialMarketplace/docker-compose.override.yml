@@ -8,6 +8,18 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+  
+  identitydb:
+    container_name: identitydb
+    environment:
+      - ACCEPT_EULA="Y"
+      - SA_PASSWORD=YourSecurePassword123
+    restart: always
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/data/db
+  
   feeddb:
     container_name: feeddb
     restart: always
@@ -16,6 +28,17 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  identity.api:
+    container_name: identity.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+      - DatabaseSettings__ConnectionString=Server=identitydb;Database=IdentityDb;User Id=sa;Password=YourSecurePassword123;TrustServerCertificate=True;
+    depends_on:
+      - identitydb
+    ports:
+      - "9020:80"
+  
   feed.api:
     container_name: feed.api
     environment:
@@ -25,15 +48,11 @@ services:
       - DatabaseSettings__DatabaseName=FeedDb
       - DatabaseSettings__PostsCollection=Posts
       - DatabaseSettings__CommentsCollection=Comments
-      - DatabaseSettings__TagsCollection=Tags
-      - DatabaseSettings__CommentLikesCollection=CommentLikes
-      - DatabaseSettings__PostLikesCollection=PostLikes
-      - DatabaseSettings__PostTagsCollection=PostTags
-      - DatabaseSettings__SavedPostsCollection=SavedPosts
     depends_on:
       - feeddb
     ports:
       - "9000:80"
+
   ocelotapigw:
     container_name: ocelotapigw
     environment:

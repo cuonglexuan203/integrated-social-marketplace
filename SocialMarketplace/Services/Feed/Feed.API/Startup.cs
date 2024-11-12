@@ -1,7 +1,7 @@
-﻿using Feed.Application.Handlers;
+﻿using Feed.Application.Handlers.Post;
 using Feed.Core.Repositories;
-using Feed.Infrastructure.Data;
-using Feed.Infrastructure.Repositories;
+using Feed.Infrastructure.Persistence.DbContext;
+using Feed.Infrastructure.Persistence.Repositories;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
