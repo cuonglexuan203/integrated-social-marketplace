@@ -1,0 +1,29 @@
+.sidebar-chat-container {
+    border-right: 1px solid #e5e5e5;
+    height: 85vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.sidebar-chat-content {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.sidebar-chat-footer {
+    margin-top: auto;
+   
+}
+

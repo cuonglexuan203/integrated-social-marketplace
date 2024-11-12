@@ -1,0 +1,42 @@
+.filter-container {
+    display: flex;
+    align-items: center;
+    max-width: 100%; /* Define your max width here */
+    overflow: hidden;
+    position: relative;
+}
+
+.filters-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0 30px; /* Space for scroll buttons */
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.scroll-btn.left {
+    left: 0;
+}
+
+.scroll-btn.right {
+    right: 0;
+}
+
+
+.post-containter {
+    max-width: 700px;
+    border: 2px solid #e8e1e1;
+    border-radius: 10px;
+    gap: 10px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+}

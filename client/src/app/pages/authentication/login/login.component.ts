@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LOGO_LOGIN_LEFT_SIDE, LOGO_LOGIN_RIGHT_SIDE } from './login-icon-data';
-import { TuiIcon, TuiHint } from '@taiga-ui/core';
+import { TuiIcon, TuiHint, TuiError } from '@taiga-ui/core';
 import { TuiInputModule, TuiInputPasswordModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -26,7 +26,7 @@ import { HINT_LOGIN } from '../../../core/constances/hint-login';
     TuiCheckbox,
     TuiTextfieldControllerModule,
     TuiHint,
-
+    TuiError
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

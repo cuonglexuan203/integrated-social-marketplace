@@ -5,10 +5,11 @@
                     [tuiHint]="item.tooltip"
                     tuiHintDirection="top-left"
                     tuiHintPointer
+                    [routerLink]="item.route"
                 >
                     <tui-icon 
                         [icon]="item.iconName"
-                        [style.color]="'#0095FF'"
+                        class="primary-color"
                         >
                     </tui-icon>
                 </div>
@@ -23,13 +24,17 @@
             <!-- @if (item.navCap) {
                 <h4 class="align-items-center d-flex justify-content-center" mat-subheader><strong>{{item.navCap}}</strong></h4>
             } -->
-            <div class="d-flex flex-row nav-item gap-3" style="padding-left: 10px;">
+            <div class="d-flex flex-row nav-item gap-3" style="padding-left: 10px;"
+                [routerLink]="item.route"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{exact: true}"
+            >
                 @if (item.iconName) {
                     <div class="button-action">
                         <tui-icon 
                             [icon]="item.iconName"
-                            [style.color]="'#0095FF'"
-                        >
+                            class="primary-color"
+                            >
                     </tui-icon>
                     </div>
                 }

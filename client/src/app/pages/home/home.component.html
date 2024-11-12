@@ -1,5 +1,20 @@
-<div class="d-flex flex-row flex-wrap justify-content-start align-items-start gap-3">
-    @for (item of mockData; track $index) {
-        <app-post-item [item]="item" ></app-post-item>
-    }
+<div class="d-flex flex-row gap-3">
+    <div class="d-flex flex-column align-items-center gap-3" 
+        style="
+            width: 70%;
+            ">
+        @for (item of mockDataPost(); track $index) {
+            <div class="post-containter">
+                <app-post-item [item]="item" ></app-post-item>
+            </div>   
+        }
+    </div>
+
+    <div class="" 
+        style="
+            width: 30%;
+        ">
+        <app-tag-item></app-tag-item>
+        
+    </div>
 </div>

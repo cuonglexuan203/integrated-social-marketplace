@@ -1,0 +1,8 @@
+.container-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-b;
+    flex-direction: row;
+    gap: 10px;
+    border: 1px solid #e8e1e1;
+}

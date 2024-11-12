@@ -1,0 +1,28 @@
+@if (filterItem) {
+    <div class="d-flex flex-column justify-content-center align-items-center gap-2"
+        style="
+            flex-shrink: 0;
+            width: 150px;
+            "    
+    >
+        <button 
+                style="
+                    border: none;
+                    border-radius: 20px;
+                    max-width: fit-content;
+                    padding: 2px 8px;
+                    color: black;
+                    border: 1px solid #ced4da;
+                    ">
+            <tui-icon
+                [icon]="filterItem.icon"
+            >
+            </tui-icon>
+        </button>
+        <span style="font-size: 18px;
+                color:black;
+                ">
+                {{filterItem.name}}
+        </span>
+    </div>
+}

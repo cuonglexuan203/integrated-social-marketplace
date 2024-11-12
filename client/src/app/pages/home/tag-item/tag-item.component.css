@@ -1,0 +1,15 @@
+.tag-container {
+    display: flex;
+    gap: 10px;
+    border-radius: 15px;
+    border: 2px solid #e8e1e1;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    padding: 10px;
+    cursor: pointer;
+}
+.label-container
+{
+    border: 1px solid #e8e1e1;
+    border-radius: 15px;
+}

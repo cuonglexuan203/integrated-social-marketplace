@@ -1,0 +1,30 @@
+.button-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+        font-size: 16px;
+    }
+}
+
+.follow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+
+.cart-user {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 10px;
+}
+
+.cart-user:hover {
+    cursor: pointer;
+    background-color: #f5f5f5;
+    transition: width 0.3s ease-in-out !important;
+    width: 100%;
+}

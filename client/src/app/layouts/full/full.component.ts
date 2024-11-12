@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NavItemComponent } from './sidebar/nav-item/nav-item.component';
 import { NavItem } from './sidebar/nav-item/nav-item';
-import { navItems } from './sidebar/sidebar-data';
+import { navItems } from '../../core/data/sidebar-data';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { CommonModule } from '@angular/common';
 import { AppConfigService } from '../../core/services/app-config/app-config.service';
