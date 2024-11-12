@@ -1,4 +1,4 @@
-import { BreadcrumbModel } from "../../../core/models/breadscrumb/breadcrumb.model";
+import { BreadcrumbModel } from "../models/breadscrumb/breadcrumb.model";
 
 export const AccountSettingBreadcrumbData: BreadcrumbModel[] = [
     {

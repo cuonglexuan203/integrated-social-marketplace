@@ -1,0 +1,7 @@
+.more-dialog-item {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+.more-dialog-item:hover {
+    background-color: #f5f5f5;
+}

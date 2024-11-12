@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TuiBreadcrumbs, TuiTabs } from '@taiga-ui/kit';
-import { AccountSettingBreadcrumbData } from './account-setting-breadcrumb-data';
+import { AccountSettingBreadcrumbData } from '../../../core/data/account-setting-breadcrumb-data';
 import { Router, RouterModule } from '@angular/router';
 import { TuiItem } from '@taiga-ui/cdk';
 import { TuiLink } from '@taiga-ui/core';
-import { AccountSettingTabsData } from './account-setting-tabs-data';
+import { AccountSettingTabsData } from '../../../core/data/account-setting-tabs-data';
 import { ProfileComponent } from './profile/profile.component';
 import { SecurityComponent } from './security/security.component';
 import { SocialMediaComponent } from './social-media/social-media.component';

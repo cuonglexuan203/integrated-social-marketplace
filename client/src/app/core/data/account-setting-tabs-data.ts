@@ -1,4 +1,4 @@
-import { TabsModel } from "../../../core/models/tabs/tabs.model";
+import { TabsModel } from "../models/tabs/tabs.model";
 
 export const AccountSettingTabsData: TabsModel[] = [
     {

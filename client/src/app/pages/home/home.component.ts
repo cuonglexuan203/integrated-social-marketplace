@@ -2,13 +2,15 @@ import { Component, Output } from '@angular/core';
 import { PostItemComponent } from "./post-item/post-item.component";
 import { MockDataPost } from '../../shared/mocks/mock-data-post';
 import { FilterComponent } from '../../shared/components/filter/filter.component';
-import { FilterData } from './filter-data';
+import { FilterData } from '../../core/data/filter-data';
 import { Filter } from '../../core/models/filter/filter.model';
+import { TagItemComponent } from './tag-item/tag-item.component';
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    PostItemComponent
+    PostItemComponent,
+    TagItemComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'

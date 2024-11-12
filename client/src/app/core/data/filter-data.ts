@@ -1,4 +1,4 @@
-import { Filter } from "../../core/models/filter/filter.model";
+import { Filter } from "../models/filter/filter.model";
 
 export const FilterData: Filter[] = [
     {

@@ -3,6 +3,7 @@ import { AccountSettingComponent } from './account-setting/account-setting.compo
 import { ProfileComponent } from './account-setting/profile/profile.component';
 import { SecurityComponent } from './account-setting/security/security.component';
 import { SocialMediaComponent } from './account-setting/social-media/social-media.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 export const UserManagementRoutes: Routes = [
     {
@@ -34,5 +35,9 @@ export const UserManagementRoutes: Routes = [
                 }
             }
         ]
+    },
+    {
+        path: 'user-profile',
+        component: UserProfileComponent,
     }
 ]

@@ -1,0 +1,70 @@
+<div class="sidebar-chat-container">
+    <div class="sidebar-chat-header">
+        <div>
+            <h4 class="primary-color">Chats</h4>
+        </div>
+        <div class="d-flex flex-row gap-3">
+            @for (item of sidebarChatHeaderData; track $index) {
+                <tui-icon
+                    [icon]="item.iconName || ''"
+                    [style.width.px]="'18'"
+                    [style.height.px]="'18'"
+                    class="primary-color"
+                    style="cursor: pointer;"
+                >
+
+                </tui-icon>
+            }
+        </div>
+    </div>
+    <fieldset tuiTextfieldSize="m">
+
+        <tui-textfield iconStart="@tui.search" class="search-conversation">
+            <input
+                formControlName="search"
+                placeholder="Search"
+                tuiTextfield
+            />
+        </tui-textfield>
+    </fieldset>
+    <div class="sidebar-chat-content">
+        @for (userChat of userMockData; track $index) {
+            <div class="label-container"
+                (click)="handleClickUserChat(userChat)"
+            >
+                <label tuiCell
+                [ngStyle]="{'background-color': selectedUserChat?.id === userChat?.id ? '#0000000A' : '' }"
+
+                >
+                    <tui-badged-content>
+                        <tui-avatar
+                            size="l"
+                            src="@tui.user"
+                        />
+                    </tui-badged-content>
+                    <div class="d-flex flex-column gap-1">
+                        <div tuiTitle>{{userChat?.userName}}</div>
+                        <div tuiSubTitle>{{userChat?.lastMessage}}</div>
+                    </div>
+                </label>
+            </div>
+        }
+    </div>
+    <div class="divider"></div>
+    <div class="sidebar-chat-footer">
+        <label tuiCell>
+            <tui-badged-content>
+                <tui-avatar
+                    size="s"
+                    src="@tui.message-square-dot"
+                />
+            </tui-badged-content>
+            <div tuiTitle>Unread Only</div>
+            <input
+                tuiSwitch
+                type="checkbox"
+                [(ngModel)]="unRead"
+            />
+        </label>
+    </div>
+</div>

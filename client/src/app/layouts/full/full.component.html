@@ -9,7 +9,7 @@
     <!-- Fixed sidebar -->
     <div class="sidebar position-fixed mt-4" 
          style="top: 84px; height: calc(100vh - 84px); border-right: 1px solid #e8e1e1; z-index: 1000; overflow-y: auto;"
-         [ngStyle]="{'width': isToggled ? 'calc(15% - 24px)' : 'calc(5% - 24px)'}">
+         [ngStyle]="{'width': isToggled ? 'calc(15%)' : 'calc(5%)'}">
       <app-sidebar></app-sidebar>
       <div class="sidebar-content">
         <div class="sidebar-list">
@@ -22,7 +22,7 @@
 
     <!-- Main content area -->
     <div class="content-wrapper flex-grow-1 d-flex justify-content-center mt-4" 
-         [ngStyle]="{'margin-left': isToggled ? 'calc(15% - 24px)' : 'calc(5% - 24px)'}">
+         [ngStyle]="{'margin-left': isToggled ? 'calc(15%)' : 'calc(5%)'}">
       <div style="width: 100%; max-width: 1500px;">
         <router-outlet></router-outlet>
       </div>

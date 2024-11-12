@@ -1,0 +1,20 @@
+
+.reaction-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    gap: 10px;
+}
+
+.reaction-emoji:hover {
+    transform: scale(1.2);
+  }
+
+.reaction-emoji {
+    font-size: 24px;
+    transition: transform 0.3s ease-in-out; /* Add transition for smooth scaling */
+
+}

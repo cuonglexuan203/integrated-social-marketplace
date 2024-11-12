@@ -1,0 +1,23 @@
+<div class="share-container">
+    <h4>{{title}}</h4>
+    <div class="divider"></div>
+    <tui-radio-list
+      [(ngModel)]="selectedItem"     
+      size="m"
+      [items]="listSelection"
+      [style.flex-direction]="'column'"
+      [style.width]="'max-content'"
+      
+    ></tui-radio-list>
+
+    <button
+        tuiButton
+        type="button"
+        class="share-button"
+        size="s"
+    >
+        <tui-icon icon="@tui.forward"></tui-icon>
+        Share
+    </button>
+  </div>
+  

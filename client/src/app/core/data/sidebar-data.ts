@@ -1,4 +1,4 @@
-import { NavItem } from "./nav-item/nav-item";
+import { NavItem } from "../../layouts/full/sidebar/nav-item/nav-item";
 
 export const navItems: NavItem[] = [
     {
@@ -15,7 +15,7 @@ export const navItems: NavItem[] = [
         displayName: 'User Profile',
         iconName: '@tui.contact',
         bgColor: 'white',
-        route: 'user/account-settings/profile',
+        route: 'user/user-profile',
         tooltip: 'User Profile'
     },
     {

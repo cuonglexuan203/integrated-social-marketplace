@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 10px;
+    padding: 16px 20px;
 }
 
 .post-header {
@@ -31,9 +31,6 @@
     cursor: pointer;
 }
 
-.more-button:hover {
-    background-color: #f1f1f1;
-}
 
 .follow-button {
     color: red;
@@ -44,7 +41,9 @@
 }
 
 .post-media-url {
-
+    display: flex;
+    align-items: center;
+    /* width: 100%; */
 }
 
 
@@ -55,33 +54,29 @@
     border-radius: 5px !important;
     cursor: pointer !important;
     z-index: 9999;
-    transform: translateX(-50%);
-    transform: translateY(190px);
+    position: absolute;
 }
-
-/* .prev-button:hover {
-    background-color: #e1e1e1 !important;
-} */
-
 .next-button {
     color: #fff !important;
     border: none !important;
-    padding: none !important;
     border-radius: 5px !important;
     cursor: pointer !important;
-    transform: translate(80%,-207px);
-    left: 88%;
     z-index: 9999;
-
+    position: absolute;
+    transform: translateX(1950%);
 }
-/* 
-.next-button:hover {
-    background-color: #e1e1e1 !important;
-} */
-
+.carousel {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto; 
+    border-radius: 10px;
+}
 
   .carousel-image,
   .carousel-video {
+    display: block; 
+    max-width: 100%;
+    height: auto;
     border-radius: 10px;
   }
 
@@ -106,6 +101,7 @@
     display: flex;
     gap: 3px;
     align-items: center;
+    cursor: pointer;
 }
 
 .post-description {

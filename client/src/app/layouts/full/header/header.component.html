@@ -3,15 +3,15 @@
         <div class="button-action color-primary-header-item" (click)="onToggleSidebar()">
             <tui-icon 
             icon="@tui.menu"
-            [style.color]="'#0095FF'"
+            class="primary-color"
             >
             </tui-icon>
         </div>
         <h2 class="color-primary-header-item">Social Marketplace</h2>
     </div>
     <div class="search-bar">
-        <tui-icon class="p-3 mx-3" 
-            [style.color]="'#0095FF'"
+        <tui-icon class="p-3 mx-3 primary-color" 
+            
             (click)="focusSearchInput()" icon="@tui.search">
         </tui-icon>
         <input #inputSearch class="input-search"  style="border: none; flex: 1;" [placeholder]="placeholder.search" type="search">
@@ -22,8 +22,8 @@
                 tuiDropdownHover
                 [tuiDropdown]="userDialog"    
             >
-                <tui-icon class="" 
-                    [style.color]="'#0095FF'"
+                <tui-icon class="primary-color" 
+                    
                     icon="@tui.user">
                 </tui-icon>
             </div>
@@ -38,25 +38,25 @@
         <div class="button-action">
             <tui-badged-content [style.--tui-radius.%]="50">
                 <tui-badge-notification
-                    size="l"
+                    size="s"
                     tuiSlot="top"
+                    tuiBadge
+                    appearance="positive"
+                    style="background-color: red;"
                 >
-                    99 
+                    120
                 </tui-badge-notification>
-                    <tui-icon class="d-flex align-items-center mt-3" 
-                        [style.color]="'#0095FF'"
-                        icon="@tui.bell"
-                    
-                        >
-                    </tui-icon>
-                />
+                <tui-icon 
+                    class="d-flex align-items-center primary-color" 
+                    icon="@tui.bell">
+                </tui-icon>
             </tui-badged-content> 
         </div>
        	 
         
         <div class="align-items-center button-action">
                 <tui-icon 
-                [style.color]="'#0095FF'"
+                class="primary-color"
                 icon="@tui.log-out"
             >
         </tui-icon>
