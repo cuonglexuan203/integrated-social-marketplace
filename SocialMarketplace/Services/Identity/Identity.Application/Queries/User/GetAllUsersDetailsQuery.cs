@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Identity.Application.Queries.User
 {
-    public class GetAllUsersDetailsQuery : IRequest<List<UserDetailsResponseDTO>>
+    public class GetAllUsersDetailsQuery : IRequest<IList<UserDetailsResponseDTO>>
     {
         //public string UserId { get; set; }
     }

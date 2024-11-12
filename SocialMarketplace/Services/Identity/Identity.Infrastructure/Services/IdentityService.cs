@@ -52,6 +52,14 @@ namespace Identity.Infrastructure.Services
                 Email = email
             };
 
+            foreach (var role in roles)
+            {
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    throw new NotFoundException($"Role {role} not found");
+                }
+            }
+
             var result = await _userManager.CreateAsync(user, password);
 
             if (!result.Succeeded)
@@ -75,7 +83,7 @@ namespace Identity.Infrastructure.Services
                 throw new NotFoundException("Role not found");
             }
 
-            if (roleDetails.Name == "Administrator")
+            if (roleDetails.Name == "Admin")
             {
                 throw new BadRequestException("You can not delete Administrator Role");
             }

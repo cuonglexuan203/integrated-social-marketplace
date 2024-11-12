@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Identity.Core\Identity.Core.csproj" />
+  </ItemGroup>
+
 </Project>
