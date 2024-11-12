@@ -1,0 +1,8 @@
+Project runner:
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+
+
+Services:
+
+Identity:
+dotnet ef migrations add Init-db -s ./Identity.API/Identity.API.csproj -p ./Identity.Infrastructure/Identity.Infrastructure.csproj -o ./Persistence/Migrations

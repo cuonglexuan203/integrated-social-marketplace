@@ -41,19 +41,19 @@ namespace Identity.Infrastructure.Persistence.DbContext
                 password: "adminadmin",
                 email: "admin@gmail.com",
                 fullName: "Admin",
-                roles: new List<string>(){SMRole.Admin.ToString()}
+                roles: new List<string>(){SMRole.admin.ToString()}
             ),
              (
                 userName: "user",
                 password: "useruser",
                 email: "user@gmail.com",
                 fullName: "User",
-                roles: new List<string>(){ SMRole.User.ToString() }
+                roles: new List<string>(){ SMRole.user.ToString() }
             )
         ];
 
             private static IEnumerable<string> GetRoleSeeds()
-            => [SMRole.Admin.ToString(), SMRole.User.ToString()];
+            => [SMRole.admin.ToString(), SMRole.user.ToString()];
         }
         #endregion
 }
