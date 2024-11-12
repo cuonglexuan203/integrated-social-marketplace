@@ -2,6 +2,7 @@
 using Identity.Application.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Identity.API.Controllers
 {
@@ -16,7 +17,7 @@ namespace Identity.API.Controllers
 
 
         [HttpPost("Login")]
-        [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
+        [ProducesResponseType(typeof(AuthResponseDTO), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Login([FromBody] AuthCommand command)
         {
             return Ok(await _mediator.Send(command));
