@@ -2,9 +2,10 @@
 
 namespace Identity.API.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    public abstract class ApiController: ControllerBase
+    public class ApiController: ControllerBase
     {
     }
 }
