@@ -14,11 +14,11 @@ namespace Identity.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) {
 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration["DatabaseSettings:ConnectionString"],
-                ob => ob.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+            services.AddDbContext<IdentityContext>(options => options.UseSqlServer(configuration["DatabaseSettings:ConnectionString"],
+                ob => ob.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>

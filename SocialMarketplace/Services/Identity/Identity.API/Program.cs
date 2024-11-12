@@ -9,7 +9,10 @@ namespace Identity.API
         {
             CreateHostBuilder(args)
                 .Build()
-                .MigrateDatabase<ApplicationDbContext>()
+                .MigrateDatabase<IdentityContext>((context, services) =>
+                {
+                    IdentityContextSeed.SeedAsync(context, services).Wait();   
+                })
                 .Run();
         }
 

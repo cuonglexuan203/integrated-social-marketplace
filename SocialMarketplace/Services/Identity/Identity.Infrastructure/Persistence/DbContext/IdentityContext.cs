@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Infrastructure.Persistence.DbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions)
+        public IdentityContext(DbContextOptions<IdentityContext> dbContextOptions)
             : base(dbContextOptions)
         {
         }
