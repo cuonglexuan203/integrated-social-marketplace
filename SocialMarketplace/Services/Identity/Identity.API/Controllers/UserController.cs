@@ -4,12 +4,14 @@ using Identity.Application.Commands.User.Update;
 using Identity.Application.DTOs;
 using Identity.Application.Queries.User;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //[Authorize(Roles = "Admin, Management")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = "admin")]
     public class UserController : ApiController
     {
         private readonly IMediator _mediator;

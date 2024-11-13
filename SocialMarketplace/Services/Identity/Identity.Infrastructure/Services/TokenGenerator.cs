@@ -34,9 +34,9 @@ namespace Identity.Infrastructure.Services
                 new Claim(JwtRegisteredClaimNames.Sub, userName),
                 new Claim(JwtRegisteredClaimNames.Jti, userId),
                 new Claim(JwtRegisteredClaimNames.Name, userName),
-                new Claim("UserId", userId)
+                new Claim("userId", userId)
             };
-            claims.AddRange(roles.Select(role => new Claim("Role", role)));
+            claims.AddRange(roles.Select(role => new Claim("role", role)));
 
 
             var token = new JwtSecurityToken(
