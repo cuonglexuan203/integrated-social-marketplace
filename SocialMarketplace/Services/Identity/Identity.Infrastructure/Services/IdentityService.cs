@@ -1,5 +1,5 @@
-﻿using Identity.Application.Common.Exceptions;
-using Identity.Application.Common.Interfaces;
+﻿using Identity.Application.Exceptions;
+using Identity.Application.Interfaces;
 using Identity.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

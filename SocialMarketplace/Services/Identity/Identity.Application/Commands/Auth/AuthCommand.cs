@@ -1,6 +1,6 @@
-﻿using Identity.Application.Common.Exceptions;
-using Identity.Application.Common.Interfaces;
+﻿using Identity.Application.Exceptions;
 using Identity.Application.DTOs;
+using Identity.Application.Interfaces;
 using MediatR;
 
 namespace Identity.Application.Commands.Auth

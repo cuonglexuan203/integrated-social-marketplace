@@ -1,5 +1,6 @@
-﻿using Identity.Application.Common.Interfaces;
+﻿using Identity.API.Middlewares;
 using Identity.Application.Extensions;
+using Identity.Application.Interfaces;
 using Identity.Infrastructure.Extensions;
 using Identity.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +20,8 @@ namespace Identity.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
             services.AddControllers();
             services.AddApiVersioning();
             services.AddEndpointsApiExplorer();
@@ -76,6 +79,7 @@ namespace Identity.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.API v1"));
             }
+            app.UseExceptionHandler();
             app.UseHttpsRedirection();
             app.UseCors("AllowAnyPolicy");
             app.UseAuthentication();
