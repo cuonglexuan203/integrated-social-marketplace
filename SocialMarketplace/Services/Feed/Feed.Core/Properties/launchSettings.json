@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Feed.Core": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
