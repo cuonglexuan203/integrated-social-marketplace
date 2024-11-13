@@ -1,4 +1,4 @@
-﻿using Identity.Application.Common.Interfaces;
+﻿using Identity.Application.Interfaces;
 using Identity.Core.Enums;
 using Identity.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;

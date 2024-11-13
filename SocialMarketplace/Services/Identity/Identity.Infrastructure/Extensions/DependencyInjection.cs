@@ -1,4 +1,4 @@
-﻿using Identity.Application.Common.Interfaces;
+﻿using Identity.Application.Interfaces;
 using Identity.Infrastructure.Identity;
 using Identity.Infrastructure.Persistence.DbContext;
 using Identity.Infrastructure.Services;

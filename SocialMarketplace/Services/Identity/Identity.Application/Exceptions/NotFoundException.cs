@@ -1,4 +1,4 @@
-﻿namespace Identity.Application.Common.Exceptions
+﻿namespace Identity.Application.Exceptions
 {
     public class NotFoundException : Exception
     {

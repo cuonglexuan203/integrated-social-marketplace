@@ -1,4 +1,5 @@
-﻿using Identity.Application.Commands.User.Create;
+﻿using FluentValidation;
+using Identity.Application.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -11,8 +12,11 @@ namespace Identity.Application.Extensions
 
             services.AddMediatR(cfg =>
             {
-                cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly);
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
+            
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
         }

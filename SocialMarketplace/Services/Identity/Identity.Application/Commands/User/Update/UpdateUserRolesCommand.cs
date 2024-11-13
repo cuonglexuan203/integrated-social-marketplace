@@ -1,4 +1,4 @@
-﻿using Identity.Application.Common.Interfaces;
+﻿using Identity.Application.Interfaces;
 using MediatR;
 
 namespace Identity.Application.Commands.User.Update

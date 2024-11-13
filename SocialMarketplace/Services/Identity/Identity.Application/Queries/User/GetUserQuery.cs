@@ -1,5 +1,5 @@
-﻿using Identity.Application.Common.Interfaces;
-using Identity.Application.DTOs;
+﻿using Identity.Application.DTOs;
+using Identity.Application.Interfaces;
 using MediatR;
 
 namespace Identity.Application.Queries.User
