@@ -58,6 +58,17 @@ namespace Feed.API
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllPostHandler).Assembly));
             services.AddScoped<IFeedContext, FeedContext>();
             services.AddScoped<IPostRepository, PostRepository>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("sm-web-policy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -71,6 +82,7 @@ namespace Feed.API
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("sm-web-policy");
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseAuthorization();
