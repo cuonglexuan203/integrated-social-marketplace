@@ -3,12 +3,12 @@ using Identity.Application.Commands.Role.Update;
 using Identity.Application.DTOs;
 using Identity.Application.Queries.Role;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
 {
-    [Authorize(Roles = "admin")]
     public class RoleController : ApiController
     {
         public readonly IMediator _mediator;
@@ -20,12 +20,12 @@ namespace Identity.API.Controllers
 
         [HttpPost("Create")]
         [ProducesDefaultResponseType(typeof(int))]
-
         public async Task<ActionResult> CreateRoleAsync(RoleCreateCommand command)
         {
             return Ok(await _mediator.Send(command));
         }
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin")]
         [HttpGet("GetAll")]
         [ProducesDefaultResponseType(typeof(List<RoleResponseDTO>))]
         public async Task<IActionResult> GetRoleAsync()
