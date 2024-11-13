@@ -23,10 +23,10 @@ namespace Feed.API
             services.AddControllers();
             services.AddApiVersioning();
             services.AddHealthChecks()
-                .AddMongoDb(_configuration["DatabaseSettings:ConnectionString"], "Post MongoDB Health Check"
+                .AddMongoDb(_configuration["DatabaseSettings:ConnectionString"], "Feed MongoDB Health Check"
                 , HealthStatus.Degraded);
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Post.API", Version = "v1" }); });
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Feed.API", Version = "v1" }); });
             // DI
             services.AddAutoMapper(typeof(Startup));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllPostHandler).Assembly));
@@ -40,7 +40,7 @@ namespace Feed.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Post.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Feed.API v1"));
             }
 
             app.UseHttpsRedirection();
