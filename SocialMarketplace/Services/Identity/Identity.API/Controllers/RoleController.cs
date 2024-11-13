@@ -3,12 +3,12 @@ using Identity.Application.Commands.Role.Update;
 using Identity.Application.DTOs;
 using Identity.Application.Queries.Role;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
 {
-    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //[Authorize(Roles = "Admin, Management")]
+    [Authorize(Roles = "admin")]
     public class RoleController : ApiController
     {
         public readonly IMediator _mediator;

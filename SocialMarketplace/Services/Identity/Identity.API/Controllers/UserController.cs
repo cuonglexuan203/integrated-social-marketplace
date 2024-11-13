@@ -4,14 +4,13 @@ using Identity.Application.Commands.User.Update;
 using Identity.Application.DTOs;
 using Identity.Application.Queries.User;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "admin")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(Roles = "admin")]
     public class UserController : ApiController
     {
         private readonly IMediator _mediator;
@@ -28,6 +27,7 @@ namespace Identity.API.Controllers
             return Ok(await _mediator.Send(command));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("GetAll")]
         [ProducesDefaultResponseType(typeof(List<UserResponseDTO>))]
         public async Task<IActionResult> GetAllUserAsync()
@@ -59,6 +59,7 @@ namespace Identity.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("AssignRoles")]
         [ProducesDefaultResponseType(typeof(int))]
 
@@ -68,6 +69,7 @@ namespace Identity.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("EditUserRoles")]
         [ProducesDefaultResponseType(typeof(int))]
 
@@ -77,6 +79,7 @@ namespace Identity.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("GetAllUserDetails")]
         [ProducesDefaultResponseType(typeof(UserDetailsResponseDTO))]
         public async Task<IActionResult> GetAllUserDetails()
