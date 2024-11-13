@@ -9,21 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{44043349-CEBB-41D3-A169-671A95217B0C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{57BE5779-4800-4B9D-AB63-CA035B95FDCB}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chat", "Chat", "{838A4591-F871-4F31-BCBF-FB3E8982F968}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{FB687F2E-8A28-4AED-9026-95280A60E4D6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algolia", "Algolia", "{B2475C26-5226-403D-A4E9-5EDCFCDCE6D9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.API", "Services\User\User.API\User.API.csproj", "{A13E10C8-2BB8-41A7-B435-B8EEAC15D816}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Infrastructure", "Services\User\User.Infrastructure\User.Infrastructure.csproj", "{47027554-6893-4F0A-BD7E-619ED726E004}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Application", "Services\User\User.Application\User.Application.csproj", "{AAF2476E-7C01-4794-945A-41628B9FE049}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Core", "Services\User\User.Core\User.Core.csproj", "{95A06945-E395-4AE6-A138-C202A1DC5405}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification.API", "Services\Notification\Notification.API\Notification.API.csproj", "{72AB956A-502F-4D2E-8232-9E8DD9A6261C}"
 EndProject
@@ -61,13 +51,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ocelot.ApiGateway", "ApiGat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{AFC7DEDA-A0D1-453D-B372-376C8323C107}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Core", "Services\Identity\Identity.Core\Identity.Core.csproj", "{FC4F2C0F-B0A7-43B4-8F89-102DCD015878}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Core", "Services\Identity\Identity.Core\Identity.Core.csproj", "{FC4F2C0F-B0A7-43B4-8F89-102DCD015878}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "Services\Identity\Identity.Application\Identity.Application.csproj", "{1C29221E-33F6-4B7E-8710-188A2A3D039E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Application", "Services\Identity\Identity.Application\Identity.Application.csproj", "{1C29221E-33F6-4B7E-8710-188A2A3D039E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Infrastructure", "Services\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj", "{1B088D8E-1BC5-4876-8823-C483EF0E7AA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Infrastructure", "Services\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj", "{1B088D8E-1BC5-4876-8823-C483EF0E7AA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{2013661B-CD3F-4FB3-8BE0-C142DA4BBF06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{2013661B-CD3F-4FB3-8BE0-C142DA4BBF06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,22 +65,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A13E10C8-2BB8-41A7-B435-B8EEAC15D816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A13E10C8-2BB8-41A7-B435-B8EEAC15D816}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A13E10C8-2BB8-41A7-B435-B8EEAC15D816}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A13E10C8-2BB8-41A7-B435-B8EEAC15D816}.Release|Any CPU.Build.0 = Release|Any CPU
-		{47027554-6893-4F0A-BD7E-619ED726E004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47027554-6893-4F0A-BD7E-619ED726E004}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47027554-6893-4F0A-BD7E-619ED726E004}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47027554-6893-4F0A-BD7E-619ED726E004}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AAF2476E-7C01-4794-945A-41628B9FE049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AAF2476E-7C01-4794-945A-41628B9FE049}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AAF2476E-7C01-4794-945A-41628B9FE049}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AAF2476E-7C01-4794-945A-41628B9FE049}.Release|Any CPU.Build.0 = Release|Any CPU
-		{95A06945-E395-4AE6-A138-C202A1DC5405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95A06945-E395-4AE6-A138-C202A1DC5405}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95A06945-E395-4AE6-A138-C202A1DC5405}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95A06945-E395-4AE6-A138-C202A1DC5405}.Release|Any CPU.Build.0 = Release|Any CPU
 		{72AB956A-502F-4D2E-8232-9E8DD9A6261C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{72AB956A-502F-4D2E-8232-9E8DD9A6261C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72AB956A-502F-4D2E-8232-9E8DD9A6261C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -176,14 +150,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{57BE5779-4800-4B9D-AB63-CA035B95FDCB} = {C6C07E57-A39E-4DE7-9EE7-5AAB203A4875}
 		{838A4591-F871-4F31-BCBF-FB3E8982F968} = {C6C07E57-A39E-4DE7-9EE7-5AAB203A4875}
 		{FB687F2E-8A28-4AED-9026-95280A60E4D6} = {C6C07E57-A39E-4DE7-9EE7-5AAB203A4875}
 		{B2475C26-5226-403D-A4E9-5EDCFCDCE6D9} = {C6C07E57-A39E-4DE7-9EE7-5AAB203A4875}
-		{A13E10C8-2BB8-41A7-B435-B8EEAC15D816} = {57BE5779-4800-4B9D-AB63-CA035B95FDCB}
-		{47027554-6893-4F0A-BD7E-619ED726E004} = {57BE5779-4800-4B9D-AB63-CA035B95FDCB}
-		{AAF2476E-7C01-4794-945A-41628B9FE049} = {57BE5779-4800-4B9D-AB63-CA035B95FDCB}
-		{95A06945-E395-4AE6-A138-C202A1DC5405} = {57BE5779-4800-4B9D-AB63-CA035B95FDCB}
 		{72AB956A-502F-4D2E-8232-9E8DD9A6261C} = {FB687F2E-8A28-4AED-9026-95280A60E4D6}
 		{4ED35A08-7FBB-4AD8-B466-6CE562824D4C} = {FB687F2E-8A28-4AED-9026-95280A60E4D6}
 		{1B9FA825-0D59-4256-931F-FC3524806853} = {FB687F2E-8A28-4AED-9026-95280A60E4D6}

@@ -1,4 +1,5 @@
 {
+  // Feed
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/v1/Post/GetAllPosts",
@@ -12,6 +13,7 @@
       "UpstreamPathTemplate": "/Post/GetAllPosts",
       "UpstreamHttpMethod": [ "Get" ]
     },
+    // Identity
     {
       "DownstreamPathTemplate": "/api/v1/Auth/Login",
       "DownstreamScheme": "http",
