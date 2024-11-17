@@ -1,5 +1,7 @@
 ﻿using Identity.Application.Commands.Auth;
+using Identity.Application.Common.Models;
 using Identity.Application.DTOs;
+using Identity.Application.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -20,7 +22,17 @@ namespace Identity.API.Controllers
         [ProducesResponseType(typeof(AuthResponseDTO), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Login([FromBody] AuthCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            ReturnResult<AuthResponseDTO> result = new();
+            try
+            {
+                result.Result = await _mediator.Send(command);
+            }
+            catch(BadRequestException ex)
+            {
+                result.Message = ex.Message;
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         [HttpPost("Logout")]
