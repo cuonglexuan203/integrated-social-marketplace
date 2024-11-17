@@ -11,7 +11,7 @@ export class AlertService {
     this.alerts.open(message, {
       label: label,
       appearance: 'success',
-      autoClose: 3000
+      autoClose: 5000
     }).subscribe();
   }
 
@@ -19,7 +19,7 @@ export class AlertService {
     this.alerts.open(message, {
       label: label,
       appearance: 'warning',
-      autoClose: 3000
+      autoClose: 5000
     }).subscribe();
   }
 
@@ -27,7 +27,7 @@ export class AlertService {
     this.alerts.open(message, {
       label: label,
       appearance: 'error',
-      autoClose: 3000
+      autoClose: 5000
     }).subscribe();
   }
 

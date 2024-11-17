@@ -23,7 +23,6 @@ export class NavItemComponent {
   constructor() {}
 
   ngOnInit() {
-    console.log(this.item);
   }
   
 }

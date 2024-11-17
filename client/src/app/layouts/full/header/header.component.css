@@ -1,6 +1,7 @@
 :host {
     height: 100px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
 .button-action {
@@ -24,7 +25,7 @@
     padding: 5px;
     transition: border 0.3s; 
     flex: 1;
-    /* background-color: white; */
+    background-color: white;
 }
 
 .search-bar:focus-within {

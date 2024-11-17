@@ -53,7 +53,6 @@ export class SidebarChatComponent {
 
   handleClickUserChat(user: any) {
     this.selectedUserChat = user;
-    console.log('Selected User Chat:', this.selectedUserChat);
   }
 
   generateRandomId(): number {

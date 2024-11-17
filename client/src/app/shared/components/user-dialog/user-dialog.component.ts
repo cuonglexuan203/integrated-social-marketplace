@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word.pipe';
 import { TuiRating } from '@taiga-ui/kit';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { TuiIcon } from '@taiga-ui/core';
 import { UserConvenientData, UserDialogCardData, UserDialogMoreData } from './user-dialog.data';
 import { Router } from '@angular/router';
+import { UserResponseModel } from '../../../core/models/user/user.model';
 
 @Component({
   selector: 'app-user-dialog',
@@ -21,6 +22,7 @@ import { Router } from '@angular/router';
   styleUrl: './user-dialog.component.css'
 })
 export class UserDialogComponent {
+  @Input() user: UserResponseModel;
   userDialogCartData = UserDialogCardData;
   userConvenientData = UserConvenientData;
   userDialogMoreData = UserDialogMoreData;
