@@ -39,7 +39,7 @@ namespace Feed.Infrastructure.Services.HttpClients
         {
             try
             {
-                var response = await _client.GetAsync($"api/v1/User/GetUserDetails/{userId}");
+                var response = await _client.GetAsync($"User/GetUserDetails/{userId}");
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadFromJsonAsync<CompactUser>();
             }
