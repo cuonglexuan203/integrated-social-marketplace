@@ -22,5 +22,13 @@ namespace Identity.API.Controllers
         {
             return Ok(await _mediator.Send(command));
         }
+
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var command = new LogoutCommand();
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

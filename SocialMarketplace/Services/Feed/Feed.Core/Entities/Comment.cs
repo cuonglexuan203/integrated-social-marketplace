@@ -8,6 +8,8 @@ namespace Feed.Core.Entities
 {
     public class Comment : AuditableEntity, IIdentifier
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public CompactUser User { get; set; }
         public List<Media> Media { get; set; }

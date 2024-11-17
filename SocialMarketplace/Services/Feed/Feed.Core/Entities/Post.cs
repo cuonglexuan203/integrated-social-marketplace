@@ -1,11 +1,14 @@
 ﻿using Feed.Core.ValueObjects;
 using Feed.Core.Common.AuditProperties;
 using Feed.Core.Common.BaseEntities;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Feed.Core.Entities
 {
     public class Post: AuditableEntity, IIdentifier
     {
+        [BsonId]
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
         public CompactUser User { get; set; }
         public string ContentText { get; set; }

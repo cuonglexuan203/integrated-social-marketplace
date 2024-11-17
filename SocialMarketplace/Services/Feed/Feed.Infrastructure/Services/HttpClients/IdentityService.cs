@@ -8,7 +8,7 @@ using System.Net.Http.Json;
 
 namespace Feed.Infrastructure.Services.HttpClients
 {
-    public class IdentityService : IIdentityService,IDisposable
+    public class IdentityService : IIdentityService
     {
         private readonly HttpClient _client;
         private readonly ILogger<IdentityService> _logger;
@@ -33,7 +33,7 @@ namespace Feed.Infrastructure.Services.HttpClients
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
             }
         }
-        public void Dispose() => _client?.Dispose();
+        //public void Dispose() => _client?.Dispose();
 
         public async Task<CompactUser> GetUserDetails(string userId)
         {
