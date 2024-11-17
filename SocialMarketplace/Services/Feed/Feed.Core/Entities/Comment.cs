@@ -9,10 +9,7 @@ namespace Feed.Core.Entities
     public class Comment : AuditableEntity, IIdentifier
     {
         public string Id { get; set; }
-
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string UserId { get; set; }
-        public string Username { get; set; }
+        public CompactUser User { get; set; }
         public List<Media> Media { get; set; }
         public string CommentText { get; set; }
         public int LikesCount { get; set; }

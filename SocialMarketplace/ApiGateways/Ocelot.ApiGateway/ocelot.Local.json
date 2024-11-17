@@ -1,4 +1,5 @@
 {
+  // Feed
   "Routes": [
     {
       "DownstreamPathTemplate": "/api/v1/Post/GetAllPosts",
@@ -9,9 +10,10 @@
           "Port": 9000
         }
       ],
-      "UpstreamPathTemplate": "/Post/GetAllPosts",
+      "UpstreamPathTemplate": "/api/v1/Post/GetAllPosts",
       "UpstreamHttpMethod": [ "Get" ]
     },
+    // Identity
     {
       "DownstreamPathTemplate": "/api/v1/Auth/Login",
       "DownstreamScheme": "http",
@@ -21,9 +23,10 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/Identity/Login",
+      "UpstreamPathTemplate": "/api/v1/Auth/Login",
       "UpstreamHttpMethod": [ "Post" ]
-    }
+    },
+    // User
     {
       "DownstreamPathTemplate": "/api/v1/User/GetAll",
       "DownstreamScheme": "http",
@@ -33,9 +36,58 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/Identity/User/GetAll",
+      "UpstreamPathTemplate": "/api/v1/User/GetAll",
       "UpstreamHttpMethod": [ "Get" ]
-    }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/User/GetUserDetails/{userId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 9020
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/User/GetUserDetails/{userId}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/User/GetUserDetailsByUserName/{userName}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 9020
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/User/GetUserDetailsByUserName/{userName}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/User/Create",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 9020
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/User/Create",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/User/EditUserProfile/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 9020
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/User/EditUserProfile/{id}",
+      "UpstreamHttpMethod": [ "Put" ]
+    },
+    // Role
     {
       "DownstreamPathTemplate": "/api/v1/Role/GetAll",
       "DownstreamScheme": "http",
@@ -45,8 +97,20 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/Identity/Role/GetAll",
+      "UpstreamPathTemplate": "/api/v1/Role/GetAll",
       "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Role/Create",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 9020
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/Role/Create",
+      "UpstreamHttpMethod": [ "Post" ]
     }
   ],
   "GlobalConfiguration": {

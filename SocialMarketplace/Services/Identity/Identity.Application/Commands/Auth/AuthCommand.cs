@@ -32,7 +32,7 @@ namespace Identity.Application.Commands.Auth
                 throw new BadRequestException("Invalid username or password");
             }
 
-            var (userId, fullName, userName, email, roles) = await _identityService.GetUserDetailsAsync(await _identityService.GetUserIdAsync(request.UserName));
+            var (userId, fullName, userName, email, roles, profilePictureUrl, profileUrl) = await _identityService.GetUserDetailsAsync(await _identityService.GetUserIdAsync(request.UserName));
 
             string token = _tokenGenerator.GenerateJWTToken((userId, userName, roles));
 

@@ -59,16 +59,16 @@ namespace Identity.API
             services.AddInfrastructure(Configuration);
             services.AddApplicationServices();
 
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowAnyPolicy", builder =>
-            //    {
-            //        builder.AllowAnyOrigin()
-            //        .AllowAnyMethod()
-            //        .AllowAnyHeader()
-            //        .AllowCredentials();
-            //    });
-            //});
+            services.AddCors(options =>
+            {
+                options.AddPolicy("sm-web-policy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -81,7 +81,7 @@ namespace Identity.API
             }
             app.UseExceptionHandler();
             app.UseHttpsRedirection();
-            app.UseCors("AllowAnyPolicy");
+            app.UseCors("sm-web-policy");
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();

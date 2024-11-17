@@ -147,7 +147,7 @@ namespace Identity.Infrastructure.Services
             return roles.Select(role => (role.Id, role.Name)).ToList();
         }
 
-        public async Task<(string userId, string fullName, string UserName, string email, IList<string> roles)> GetUserDetailsAsync(string userId)
+        public async Task<(string userId, string fullName, string UserName, string email, IList<string> roles, string profilePictureUrl, string profileUrl)> GetUserDetailsAsync(string userId)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
             if (user == null)
@@ -155,10 +155,10 @@ namespace Identity.Infrastructure.Services
                 throw new NotFoundException("User not found");
             }
             var roles = await _userManager.GetRolesAsync(user);
-            return (user.Id, user.FullName, user.UserName, user.Email, roles);
+            return (user.Id, user.FullName, user.UserName, user.Email, roles, user.ProfilePictureUrl, user.ProfileUrl);
         }
 
-        public async Task<(string userId, string fullName, string UserName, string email, IList<string> roles)> GetUserDetailsByUserNameAsync(string userName)
+        public async Task<(string userId, string fullName, string UserName, string email, IList<string> roles, string profilePictureUrl, string profileUrl)> GetUserDetailsByUserNameAsync(string userName)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
             if (user == null)
@@ -166,7 +166,7 @@ namespace Identity.Infrastructure.Services
                 throw new NotFoundException("User not found");
             }
             var roles = await _userManager.GetRolesAsync(user);
-            return (user.Id, user.FullName, user.UserName, user.Email, roles);
+            return (user.Id, user.FullName, user.UserName, user.Email, roles, user.ProfilePictureUrl, user.ProfileUrl);
         }
 
         public async Task<string> GetUserIdAsync(string userName)

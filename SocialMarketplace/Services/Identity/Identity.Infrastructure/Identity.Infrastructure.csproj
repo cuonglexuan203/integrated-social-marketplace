@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Persistence\SeedData\" />
     <Folder Include="Persistence\Respositories\" />
   </ItemGroup>
 

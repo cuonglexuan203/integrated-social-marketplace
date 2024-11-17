@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-using Feed.Core.ValueObjects;
+﻿using Feed.Core.ValueObjects;
 using Feed.Core.Common.AuditProperties;
 using Feed.Core.Common.BaseEntities;
 
@@ -9,8 +7,7 @@ namespace Feed.Core.Entities
     public class Post: AuditableEntity, IIdentifier
     {
         public string Id { get; set; }
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string UserID { get; set; }
+        public CompactUser User { get; set; }
         public string ContentText { get; set; }
         public List<Media> Media { get; set; }
         public int LikesCount { get; set; }

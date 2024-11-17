@@ -10,6 +10,17 @@ namespace Ocelot.ApiGateway
         {
             services.AddOcelot()
                 .AddCacheManager(o => o.WithDictionaryHandle());
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("sm-web-policy", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                });
+            });
         }
         
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -20,6 +31,7 @@ namespace Ocelot.ApiGateway
             }
 
             app.UseRouting();
+            app.UseCors("sm-web-policy");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
