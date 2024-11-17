@@ -7,7 +7,7 @@ namespace Feed.Core.Entities
     public class Post: AuditableEntity, IIdentifier
     {
         public string Id { get; set; }
-        public User User { get; set; }
+        public CompactUser User { get; set; }
         public string ContentText { get; set; }
         public List<Media> Media { get; set; }
         public int LikesCount { get; set; }

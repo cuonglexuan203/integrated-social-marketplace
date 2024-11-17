@@ -1,10 +1,12 @@
-﻿using Feed.Application.Handlers.Post;
+﻿using Feed.Application.Handlers;
+using Feed.Application.Interfaces.HttpClients;
 using Feed.Application.Interfaces.Services;
 using Feed.Core.Repositories;
 using Feed.Infrastructure.Configurations;
 using Feed.Infrastructure.Persistence.DbContext;
 using Feed.Infrastructure.Persistence.Repositories;
 using Feed.Infrastructure.Services;
+using Feed.Infrastructure.Services.HttpClients;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -65,6 +67,8 @@ namespace Feed.API
             services.AddScoped<IPostRepository, PostRepository>();
             services.Configure<CloudinarySettings>(_configuration.GetSection("CloudinarySettings"));
             services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddHttpContextAccessor();
+            services.AddHttpClient<IIdentityService, IdentityService>();
             #endregion
 
             #region CORS registration
@@ -107,5 +111,6 @@ namespace Feed.API
                 });
             });
         }
+
     }
 }

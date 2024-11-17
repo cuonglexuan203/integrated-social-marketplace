@@ -5,4 +5,4 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 Services:
 
 Identity:
-dotnet ef migrations add Init-db -s ./Identity.API/Identity.API.csproj -p ./Identity.Infrastructure/Identity.Infrastructure.csproj -o ./Persistence/Migrations
+dotnet ef migrations add Init-db -s ./Services/Identity/Identity.API/Identity.API.csproj -p ./Services/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj -o ./Persistence/Migrations

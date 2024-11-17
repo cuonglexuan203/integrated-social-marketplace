@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Feed.Application.DTOs;
 using Feed.Core.Entities;
+using Feed.Core.ValueObjects;
 
 namespace Feed.Application.Mappers.Profiles
 {
@@ -8,7 +9,8 @@ namespace Feed.Application.Mappers.Profiles
     {
         public PostMappingProfile()
         {
-            CreateMap<Post, PostResponse>().ReverseMap();
+            CreateMap<Post, PostDto>().ReverseMap();
+            CreateMap<Media, MediaDto>().ReverseMap();
         }
     }
 }

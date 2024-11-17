@@ -1,12 +1,12 @@
 ﻿using Feed.Application.Mappers;
-using Feed.Application.Queries.Post;
 using Feed.Application.DTOs;
 using Feed.Core.Repositories;
 using MediatR;
+using Feed.Application.Queries;
 
-namespace Feed.Application.Handlers.Post
+namespace Feed.Application.Handlers
 {
-    public class GetAllPostHandler : IRequestHandler<GetAllPostsQuery, IList<PostResponse>>
+    public class GetAllPostHandler : IRequestHandler<GetAllPostsQuery, IList<PostDto>>
     {
         private readonly IPostRepository _postRepository;
 
@@ -14,10 +14,10 @@ namespace Feed.Application.Handlers.Post
         {
             _postRepository = postRepository;
         }
-        public async Task<IList<PostResponse>> Handle(GetAllPostsQuery request, CancellationToken cancellationToken)
+        public async Task<IList<PostDto>> Handle(GetAllPostsQuery request, CancellationToken cancellationToken)
         {
             var postList = await _postRepository.GetAllPosts();
-            var postResponseList = FeedMapper.Mapper.Map<IList<PostResponse>>(postList.ToList());
+            var postResponseList = FeedMapper.Mapper.Map<IList<PostDto>>(postList.ToList());
             return postResponseList;
         }
     }

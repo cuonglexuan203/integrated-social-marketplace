@@ -1,7 +1,7 @@
 ﻿
-namespace Feed.Core.ValueObjects
+namespace Feed.Application.DTOs
 {
-    public class Media
+    public class MediaDto
     {
         public string PublicId { get; set; }
         public string Url { get; set; }
@@ -13,5 +13,4 @@ namespace Feed.Core.ValueObjects
         public int? Width { get; set; }
         public int? Height { get; set; }
     }
-
 }
