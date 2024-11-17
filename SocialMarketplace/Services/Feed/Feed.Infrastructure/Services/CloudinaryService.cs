@@ -31,8 +31,11 @@ namespace Feed.Infrastructure.Services
                 {
                     File = new FileDescription(file.FileName, stream),
                     Transformation = new Transformation()
-                                        .Quality("Auto")
-                                        .FetchFormat("Auto")
+                                        .Width(500)
+                                        .Crop("scale")
+                                        .Quality("auto")
+                                        .FetchFormat("auto"),
+                    AssetFolder = "SocialMarketplace"
                 };
                 
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);

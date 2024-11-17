@@ -1,7 +1,6 @@
 ﻿using Feed.Application.DTOs;
 using Feed.Application.Queries.Post;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -16,7 +15,6 @@ namespace Feed.API.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Roles = "admin")]
         [HttpGet]
         [Route("[action]")]
         [ProducesResponseType(typeof(IList<PostResponse>), (int)HttpStatusCode.OK)]
@@ -26,5 +24,6 @@ namespace Feed.API.Controllers
             var result = await _mediator.Send(query);
             return Ok(result);
         }
+
     }
 }

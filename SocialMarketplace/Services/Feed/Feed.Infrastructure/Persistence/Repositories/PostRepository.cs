@@ -37,14 +37,14 @@ namespace Feed.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Post>> GetPostByUserId(string userId)
-        {
-            FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.UserID, userId);
-            return await _context
-                .Posts
-                .Find(filter)
-                .ToListAsync();
-        }
+        //public async Task<IEnumerable<Post>> GetPostByUserId(string userId)
+        //{
+        //    FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.UserID, userId);
+        //    return await _context
+        //        .Posts
+        //        .Find(filter)
+        //        .ToListAsync();
+        //}
 
         public async Task<IEnumerable<Post>> GetAllPosts()
         {
