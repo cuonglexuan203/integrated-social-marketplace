@@ -4,10 +4,13 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { Placeholder } from '../../../core/enums/placehoder';
 import { BrandingComponent } from '../sidebar/branding.component';
 import { TooltipHeaderAction } from '../../../core/enums/tooltip';
-import { TuiDataList, TuiDropdown, TuiIcon } from '@taiga-ui/core';
+import { TuiDataList, TuiDropdown, TuiIcon, TuiRoot } from '@taiga-ui/core';
 import { AlertService } from '../../../core/services/alert/alert.service';
-import {TuiAvatar, TuiBadge, TuiBadgedContent, TuiBadgeNotification} from '@taiga-ui/kit';
+import { TuiAvatar, TuiBadge, TuiBadgedContent, TuiBadgeNotification } from '@taiga-ui/kit';
 import { UserDialogComponent } from '../../../shared/components/user-dialog/user-dialog.component';
+import { WA_LOCAL_STORAGE, WA_WINDOW } from '@ng-web-apis/common';
+import { TUI_DARK_MODE, TUI_DARK_MODE_KEY, TuiButton, TuiOption } from '@taiga-ui/core';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -22,7 +25,8 @@ import { UserDialogComponent } from '../../../shared/components/user-dialog/user
     TuiBadgeNotification,
     TuiDropdown,
     TuiDataList,
-    UserDialogComponent
+    UserDialogComponent,
+    TuiRoot,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
@@ -33,6 +37,12 @@ export class HeaderComponent {
   placeholder = Placeholder;
   tooltipHeaderAction = TooltipHeaderAction;
 
+
+  private readonly key = inject(TUI_DARK_MODE_KEY);
+  private readonly storage = inject(WA_LOCAL_STORAGE);
+  private readonly media = inject(WA_WINDOW).matchMedia('(prefers-color-scheme: dark)');
+  protected readonly darkMode = inject(TUI_DARK_MODE);
+  
   constructor(
     private alertService: AlertService,
 
@@ -53,4 +63,8 @@ export class HeaderComponent {
     this.toggleSidebar.emit();
   }
 
+
+  setDarkMode() {
+    this.darkMode.set(!this.darkMode())
+  }
 }
