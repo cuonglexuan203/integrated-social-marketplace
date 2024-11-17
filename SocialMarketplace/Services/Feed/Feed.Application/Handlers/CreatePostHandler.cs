@@ -38,13 +38,14 @@ namespace Feed.Application.Handlers
                     User = userDetails,
                     Media = FeedMapper.Mapper.Map<List<Media>>(mediaResult),
                     ContentText = request.ContentText,
+                    Tags = request.Tags,
                 };
                 var result = await _postRepository.CreatePost(post);
                 return FeedMapper.Mapper.Map<PostDto>(result);
             }
             catch (Exception ex) {
                 _logger.LogError("An error occur while creating the Post: {ErrorMessage}", ex.Message);
-                return null; ;
+                throw ex;
             }
         }
     }

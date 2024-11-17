@@ -36,10 +36,20 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("Logout")]
+        [ProducesResponseType(typeof(Unit), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Logout()
         {
-            var command = new LogoutCommand();
-            var result = await _mediator.Send(command);
+            ReturnResult<Unit> result = new();
+            try
+            {
+                var command = new LogoutCommand();
+                result.Result = await _mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, result);
+            }
             return Ok(result);
         }
     }

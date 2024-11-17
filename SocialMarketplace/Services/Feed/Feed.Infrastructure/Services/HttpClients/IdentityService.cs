@@ -1,4 +1,5 @@
 ﻿
+using Feed.Application.Common.Models;
 using Feed.Application.Interfaces.HttpClients;
 using Feed.Core.Entities;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,6 @@ namespace Feed.Infrastructure.Services.HttpClients
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
             }
         }
-        //public void Dispose() => _client?.Dispose();
 
         public async Task<CompactUser> GetUserDetails(string userId)
         {
@@ -41,12 +41,13 @@ namespace Feed.Infrastructure.Services.HttpClients
             {
                 var response = await _client.GetAsync($"User/GetUserDetails/{userId}");
                 response.EnsureSuccessStatusCode();
-                return await response.Content.ReadFromJsonAsync<CompactUser>();
+                var result = await response.Content.ReadFromJsonAsync<ReturnResult<CompactUser>>();
+                return result.Result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting user details for userId: {UserId}", userId);
-                throw;
+                throw ex;
             }
         }
     }
