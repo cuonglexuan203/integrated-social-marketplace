@@ -10,7 +10,7 @@
           "Port": 9000
         }
       ],
-      "UpstreamPathTemplate": "/Post/GetAllPosts",
+      "UpstreamPathTemplate": "/api/v1/Post/GetAllPosts",
       "UpstreamHttpMethod": [ "Get" ]
     },
     // Identity
@@ -23,7 +23,7 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/Auth/Login",
+      "UpstreamPathTemplate": "/api/v1/Auth/Login",
       "UpstreamHttpMethod": [ "Post" ]
     },
     // User
@@ -36,7 +36,7 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/User/GetAll",
+      "UpstreamPathTemplate": "/api/v1/User/GetAll",
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
@@ -48,7 +48,7 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/User/GetUserDetails/{userId}",
+      "UpstreamPathTemplate": "/api/v1/User/GetUserDetails/{userId}",
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
@@ -60,7 +60,7 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/User/GetUserDetailsByUserName/{userName}",
+      "UpstreamPathTemplate": "/api/v1/User/GetUserDetailsByUserName/{userName}",
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
@@ -72,7 +72,7 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/User/Create",
+      "UpstreamPathTemplate": "/api/v1/User/Create",
       "UpstreamHttpMethod": [ "Post" ]
     },
     {
@@ -84,7 +84,7 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/User/EditUserProfile/{id}",
+      "UpstreamPathTemplate": "/api/v1/User/EditUserProfile/{id}",
       "UpstreamHttpMethod": [ "Put" ]
     },
     // Role
@@ -97,7 +97,7 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/Role/GetAll",
+      "UpstreamPathTemplate": "/api/v1/Role/GetAll",
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
@@ -109,7 +109,7 @@
           "Port": 9020
         }
       ],
-      "UpstreamPathTemplate": "/Role/Create",
+      "UpstreamPathTemplate": "/api/v1/Role/Create",
       "UpstreamHttpMethod": [ "Post" ]
     }
   ],
