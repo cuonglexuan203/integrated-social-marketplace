@@ -7,7 +7,6 @@ namespace Feed.Core.ValueObjects
         public string Url { get; set; }                       
         public MediaType Type { get; set; }                     
         public string? ThumbnailUrl { get; set; }             
-        public TimeSpan? Duration { get; set; }
     }
 
 }

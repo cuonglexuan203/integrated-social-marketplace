@@ -1,7 +1,10 @@
 ﻿using Feed.Application.Handlers.Post;
+using Feed.Application.Interfaces.Services;
 using Feed.Core.Repositories;
+using Feed.Infrastructure.Configurations;
 using Feed.Infrastructure.Persistence.DbContext;
 using Feed.Infrastructure.Persistence.Repositories;
+using Feed.Infrastructure.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -30,6 +33,9 @@ namespace Feed.API
                 , HealthStatus.Degraded);
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Feed.API", Version = "v1" }); });
+            services.AddAutoMapper(typeof(Startup));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllPostHandler).Assembly));
+
             #region jwt config
             services.AddAuthentication(options =>
             {
@@ -53,12 +59,15 @@ namespace Feed.API
                     };
                 });
             #endregion
-            // DI
-            services.AddAutoMapper(typeof(Startup));
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllPostHandler).Assembly));
+
+            #region service registration
             services.AddScoped<IFeedContext, FeedContext>();
             services.AddScoped<IPostRepository, PostRepository>();
+            services.Configure<CloudinarySettings>(_configuration.GetSection("CloudinarySettings"));
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+            #endregion
 
+            #region CORS registration
             services.AddCors(options =>
             {
                 options.AddPolicy("sm-web-policy", builder =>
@@ -69,6 +78,8 @@ namespace Feed.API
                     .AllowCredentials();
                 });
             });
+            #endregion
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
