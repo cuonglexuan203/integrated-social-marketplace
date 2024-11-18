@@ -44,10 +44,10 @@ namespace Feed.Infrastructure.Services.HttpClients
                 var result = await response.Content.ReadFromJsonAsync<ReturnResult<CompactUser>>();
                 return result.Result;
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, "Error getting user details for userId: {UserId}", userId);
-                throw ex;
+                throw;
             }
         }
     }

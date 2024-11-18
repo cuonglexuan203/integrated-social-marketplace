@@ -11,7 +11,6 @@ namespace Feed.Core.Entities
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string PostId { get; set; }
         public CompactUser User { get; set; }

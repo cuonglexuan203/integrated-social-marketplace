@@ -12,7 +12,7 @@ namespace Feed.API.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Authorize]
-    public class PostController: ApiController
+    public class PostController : ApiController
     {
         private readonly IMediator _mediator;
 
@@ -27,15 +27,8 @@ namespace Feed.API.Controllers
         public async Task<ActionResult<IList<PostDto>>> GetAllPosts()
         {
             ReturnResult<IList<PostDto>> result = new();
-            try
-            {
-                var query = new GetAllPostsQuery();
-                result.Result = await _mediator.Send(query);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, result);
-            }
+            var query = new GetAllPostsQuery();
+            result.Result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -44,15 +37,7 @@ namespace Feed.API.Controllers
         public async Task<IActionResult> CreatePost(CreatePostCommand post)
         {
             ReturnResult<PostDto> result = new();
-            try
-            {
-                result.Result = await _mediator.Send(post);
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return StatusCode(StatusCodes.Status500InternalServerError, result);
-            }
+            result.Result = await _mediator.Send(post);
             return Ok(result);
         }
     }

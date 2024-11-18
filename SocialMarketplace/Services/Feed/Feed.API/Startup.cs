@@ -1,4 +1,5 @@
-﻿using Feed.Application.Handlers;
+﻿using Feed.API.Middlewares;
+using Feed.Application.Extensions;
 using Feed.Application.Interfaces.HttpClients;
 using Feed.Application.Interfaces.Services;
 using Feed.Core.Repositories;
@@ -28,6 +29,14 @@ namespace Feed.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            #region add exception handlers
+            services.AddExceptionHandler<ValidationExceptionHandler>();
+            services.AddExceptionHandler<BadRequestExceptionHandler>();
+            services.AddExceptionHandler<NotFoundExceptionHandler>();
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            #endregion
+
+            services.AddProblemDetails();
             services.AddControllers();
             services.AddApiVersioning();
             services.AddHealthChecks()
@@ -35,9 +44,8 @@ namespace Feed.API
                 , HealthStatus.Degraded);
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Feed.API", Version = "v1" }); });
-            services.AddAutoMapper(typeof(Startup));
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllPostHandler).Assembly));
 
+            services.AddApplicationServices();
             #region jwt config
             services.AddAuthentication(options =>
             {
@@ -95,7 +103,7 @@ namespace Feed.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Feed.API v1"));
             }
-
+            app.UseExceptionHandler();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors("sm-web-policy");

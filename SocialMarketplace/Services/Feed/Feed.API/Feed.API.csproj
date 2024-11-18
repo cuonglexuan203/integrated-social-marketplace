@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Feed.Infrastructure\Feed.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
 </Project>
