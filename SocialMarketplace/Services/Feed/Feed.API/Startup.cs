@@ -65,6 +65,7 @@ namespace Feed.API
             #region service registration
             services.AddScoped<IFeedContext, FeedContext>();
             services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.Configure<CloudinarySettings>(_configuration.GetSection("CloudinarySettings"));
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddHttpContextAccessor();

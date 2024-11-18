@@ -12,5 +12,6 @@ namespace Feed.Core.Repositories
         Task<Post> CreatePost(Post post);
         Task<bool> UpdatePost(Post post);
         Task<bool> DeletePost(string id);
+        Task<bool> IsPostExistsAsync(string id);
     }
 }

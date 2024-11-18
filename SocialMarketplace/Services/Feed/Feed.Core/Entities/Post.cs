@@ -16,7 +16,7 @@ namespace Feed.Core.Entities
         public int LikesCount { get; set; }
         public List<Reaction> Reactions { get; set; } = new List<Reaction>();
         public int CommentsCount { get; set; }
-        public List<Comment> Comments { get; set; } = new List<Comment>();
+        public List<string> CommentIds { get; set; } = new List<string>();
         public string Link { get; set; }
         public string? SharedPostId { get; set; }
         public List<string> Tags { get; set; } = new List<string>();

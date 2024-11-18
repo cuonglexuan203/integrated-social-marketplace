@@ -1,5 +1,6 @@
 ﻿
 using Feed.Core.Entities;
+using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
 using Feed.Core.Specs;
 using Feed.Infrastructure.Persistence.DbContext;
@@ -47,11 +48,6 @@ namespace Feed.Infrastructure.Persistence.Repositories
             var builder = Builders<Comment>.Filter;
             var filter = builder.Empty;
 
-            if (string.IsNullOrEmpty(postId))
-            {
-                return builder.Where(_ => false);
-            }
-
             filter &= builder.Eq(x => x.PostId, postId);
 
             if (!string.IsNullOrEmpty(commentParams.Search))
@@ -72,6 +68,9 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
         public async Task<Pagination<Comment>> GetCommentsByPostId(string postId, CommentSpecParams commentParams)
         {
+            if(string.IsNullOrEmpty(postId))
+                throw new BadRequestException("PostId cannot be empty.");
+
             var filter = BuildFilter(commentParams, postId);
             var sort = BuildSort(commentParams);
 
