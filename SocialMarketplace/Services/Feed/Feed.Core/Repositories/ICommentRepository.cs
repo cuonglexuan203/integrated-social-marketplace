@@ -1,10 +1,11 @@
 ﻿using Feed.Core.Entities;
+using Feed.Core.Specs;
 
 namespace Feed.Core.Repositories
 {
     public interface ICommentRepository
     {
-        Task<IEnumerable<Comment>> GetComments();
+        Task<Pagination<Comment>> GetComments(CommentSpecParams commentParams);
         Task<Comment> GetComment(string id);
         Task<IEnumerable<Comment>> GetCommentByPostID(string postId);
         Task<bool> CreateComment(Comment post);

@@ -12,13 +12,13 @@ namespace Feed.Core.Entities
         public string Id { get; set; }
         public CompactUser User { get; set; }
         public string ContentText { get; set; }
-        public List<Media> Media { get; set; }
+        public List<Media> Media { get; set; } = new List<Media>();
         public int LikesCount { get; set; }
-        public List<Reaction> Reactions { get; set; }
+        public List<Reaction> Reactions { get; set; } = new List<Reaction>();
         public int CommentsCount { get; set; }
-        public List<Comment> Comments { get; set; }
+        public List<Comment> Comments { get; set; } = new List<Comment>();
         public string Link { get; set; }
         public string? SharedPostId { get; set; }
-        public List<string> Tags { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
     }
 }
