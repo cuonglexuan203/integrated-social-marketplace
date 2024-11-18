@@ -20,13 +20,20 @@ namespace Identity.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            #region add exception handlers
+            services.AddExceptionHandler<ValidationExceptionHandler>();
+            services.AddExceptionHandler<BadRequestExceptionHandler>();
+            services.AddExceptionHandler<NotFoundExceptionHandler>();
             services.AddExceptionHandler<GlobalExceptionHandler>();
+            #endregion
+
             services.AddProblemDetails();
             services.AddControllers();
             services.AddApiVersioning();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity.API", Version = "v1" }); });
             //
+            #region jwt config
             var _key = Configuration["Jwt:Key"];
             var _issuer = Configuration["Jwt:Issuer"];
             var _audience = Configuration["Jwt:Audience"];
@@ -54,11 +61,13 @@ namespace Identity.API
                         ClockSkew = TimeSpan.FromMinutes(Convert.ToDouble(_expirtyMinutes))
                     };
                 });
+            #endregion
+
             services.AddSingleton<ITokenGenerator>(new TokenGenerator(_key, _issuer, _audience, _expirtyMinutes));
             //
             services.AddInfrastructure(Configuration);
             services.AddApplicationServices();
-
+            #region Cors policies
             services.AddCors(options =>
             {
                 options.AddPolicy("sm-web-policy", builder =>
@@ -69,6 +78,7 @@ namespace Identity.API
                     .AllowCredentials();
                 });
             });
+            #endregion
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

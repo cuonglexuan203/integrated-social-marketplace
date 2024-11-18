@@ -7,31 +7,17 @@ namespace Identity.API.Middlewares
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            var problemDetails = new ProblemDetails();
-            problemDetails.Instance = httpContext.Request.Path;
 
-            if(exception is FluentValidation.ValidationException fluentException)
+            var problemDetails = new ProblemDetails()
             {
-                problemDetails.Title = "one or more validation errors occurred.";
-                problemDetails.Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1";
-                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                Status = StatusCodes.Status500InternalServerError,
+                Title = "Internal Server Error",
+                Detail = "An unexpected error occurred"
+            };
 
-                var validationErrors = new List<string>();
-                foreach(var error in fluentException.Errors)
-                {
-                    validationErrors.Add(error.ErrorMessage);
-                }
+            logger.LogError(exception, "An error occurred: {Message}", exception.Message);
 
-                problemDetails.Extensions.Add("errors", validationErrors);
-            }
-            else
-            {
-                problemDetails.Title = exception.Message;
-            }
-
-            logger.LogError("{ProblemDetailsTitle}", problemDetails.Title);
-            
-            problemDetails.Status = httpContext.Response.StatusCode;
+            httpContext.Response.StatusCode = problemDetails.Status.Value;
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken).ConfigureAwait(false);
             return true;
         }

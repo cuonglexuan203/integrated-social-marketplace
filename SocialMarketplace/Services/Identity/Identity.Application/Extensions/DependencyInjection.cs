@@ -14,6 +14,7 @@ namespace Identity.Application.Extensions
             {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                cfg.AddOpenBehavior(typeof(UnhandledExceptionBehavior<,>));
             });
             
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
