@@ -36,7 +36,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
             return await _comments.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Comment>> GetAllCommentsByPostID(string postId)
+        public async Task<IEnumerable<Comment>> GetAllCommentsByPostId(string postId)
         {
             var filter = Builders<Comment>.Filter.Eq(x => x.PostId, postId);
             var result = await _comments.Find(filter).ToListAsync();

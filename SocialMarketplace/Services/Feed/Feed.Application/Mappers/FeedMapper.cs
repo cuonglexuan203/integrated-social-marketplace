@@ -11,6 +11,8 @@ namespace Feed.Application.Mappers
             {
                 cfg.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
                 cfg.AddProfile<PostMappingProfile>();
+                cfg.AddProfile<CommentMappingProfile>();
+                cfg.AddProfile<UserMappingProfile>();
             });
             var mapper = config.CreateMapper();
             return mapper;
