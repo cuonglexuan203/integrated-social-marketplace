@@ -5,11 +5,10 @@ namespace Feed.Core.Repositories
 {
     public interface ICommentRepository
     {
-        Task<Pagination<Comment>> GetComments(CommentSpecParams commentParams);
-        Task<Comment> GetComment(string id);
-        Task<IEnumerable<Comment>> GetCommentByPostID(string postId);
-        Task<bool> CreateComment(Comment post);
-        Task<bool> UpdateComment(Comment post);
+        Task<IEnumerable<Comment>> GetAllCommentsByPostID(string postId);
+        Task<Pagination<Comment>> GetCommentsByPostId(string postId, CommentSpecParams commentParams);
+        Task<Comment> CreateComment(Comment comment);
+        Task<bool> UpdateComment(Comment comment);
         Task<bool> DeleteComment(string id);
     }
 }

@@ -3,6 +3,7 @@ using Feed.Core.Entities;
 using Feed.Core.Repositories;
 using Feed.Core.Specs;
 using Feed.Infrastructure.Persistence.DbContext;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Feed.Infrastructure.Persistence.Repositories
@@ -15,33 +16,47 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             _comments = context.Comments;
         }
-        public Task<bool> CreateComment(Comment post)
+        public async Task<Comment> CreateComment(Comment comment)
         {
-            throw new NotImplementedException();
+            await _comments.InsertOneAsync(comment);
+            return comment;
         }
 
-        public Task<bool> DeleteComment(string id)
+        public async Task<bool> DeleteComment(string id)
         {
-            throw new NotImplementedException();
+            var filter = Builders<Comment>.Filter.Eq(x => x.Id, id);
+            var result = await _comments.DeleteOneAsync(filter);
+            return result.IsAcknowledged && result.DeletedCount > 0;
         }
 
-        public Task<Comment> GetComment(string id)
+        public async Task<Comment> GetComment(string id)
         {
-            throw new NotImplementedException();
+            var filter = Builders<Comment>.Filter.Eq(x => x.Id, id);
+            return await _comments.Find(filter).FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Comment>> GetCommentByPostID(string postId)
+        public async Task<IEnumerable<Comment>> GetAllCommentsByPostID(string postId)
         {
-            throw new NotImplementedException();
+            var filter = Builders<Comment>.Filter.Eq(x => x.PostId, postId);
+            var result = await _comments.Find(filter).ToListAsync();
+            return result;
         }
 
-        private FilterDefinition<Comment> BuildFilter(CommentSpecParams commentParams)
+        private FilterDefinition<Comment> BuildFilter(CommentSpecParams commentParams, string postId)
         {
             var builder = Builders<Comment>.Filter;
             var filter = builder.Empty;
+
+            if (string.IsNullOrEmpty(postId))
+            {
+                return builder.Where(_ => false);
+            }
+
+            filter &= builder.Eq(x => x.PostId, postId);
+
             if (!string.IsNullOrEmpty(commentParams.Search))
             {
-                var searchFilter = builder.Regex(x => x.CommentText, new MongoDB.Bson.BsonRegularExpression(commentParams.Search));
+                var searchFilter = builder.Regex(x => x.CommentText, new BsonRegularExpression(commentParams.Search));
                 filter &= searchFilter;
             }
             return filter;
@@ -55,9 +70,9 @@ namespace Feed.Infrastructure.Persistence.Repositories
                 : sort.Ascending(x => x.CreatedAt);
         }
 
-        public async Task<Pagination<Comment>> GetComments(CommentSpecParams commentParams)
+        public async Task<Pagination<Comment>> GetCommentsByPostId(string postId, CommentSpecParams commentParams)
         {
-            var filter = BuildFilter(commentParams);
+            var filter = BuildFilter(commentParams, postId);
             var sort = BuildSort(commentParams);
 
             var countTask = _comments.CountDocumentsAsync(filter);
@@ -79,9 +94,11 @@ namespace Feed.Infrastructure.Persistence.Repositories
             };
         }
 
-        public Task<bool> UpdateComment(Comment post)
+        public async Task<bool> UpdateComment(Comment comment)
         {
-            throw new NotImplementedException();
+            var filter = Builders<Comment>.Filter.Eq(x => x.Id, comment.Id);
+            var result = await _comments.ReplaceOneAsync(filter, comment);
+            return result.IsAcknowledged && result.ModifiedCount > 0;
         }
     }
 }
