@@ -62,5 +62,28 @@ namespace Feed.Infrastructure.Persistence.Repositories
                 .ReplaceOneAsync(filter, post);
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
+
+        public async Task<bool> AddCommentToPostAsync(string postId, Comment comment)
+        {
+            if (string.IsNullOrWhiteSpace(postId) || comment == null)
+            {
+                throw new ArgumentException("Invalid postId or comment.");
+            }
+
+            try
+            {
+                var filter = Builders<Post>.Filter.Eq(x => x.Id, postId);
+                var updateDef = Builders<Post>.Update.Push(x => x.Comments, comment);
+
+                var result = await _context.Posts.UpdateOneAsync(filter, updateDef);
+
+                return result.IsAcknowledged && result.ModifiedCount > 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
     }
 }
