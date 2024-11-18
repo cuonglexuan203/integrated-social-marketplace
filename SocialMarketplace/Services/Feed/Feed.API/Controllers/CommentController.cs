@@ -20,7 +20,7 @@ namespace Feed.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{postId}")]
+        [HttpGet("[action]/{postId}")]
         public async Task<IActionResult> GetCommentsByPostId(string postId)
         {
             ReturnResult<IList<CommentDto>> result = new();
@@ -30,7 +30,7 @@ namespace Feed.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> CreateComment(CreateCommentCommand command)
         {
             ReturnResult<CommentDto> result = new();

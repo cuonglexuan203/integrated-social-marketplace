@@ -50,7 +50,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         //        .ToListAsync();
         //}
 
-        public async Task<IEnumerable<Post>> GetAllPosts()
+        public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
             return await _posts
                 .Find(_ => true)

@@ -21,7 +21,7 @@ namespace Feed.Application.Handlers
         }
         public async Task<IList<PostDto>> Handle(GetAllPostsQuery request, CancellationToken cancellationToken)
         {
-            var posts = await _postRepository.GetAllPosts();
+            var posts = await _postRepository.GetAllPostsAsync();
             var postDtos = FeedMapper.Mapper.Map<IList<PostDto>>(posts.ToList());
             foreach (var postDto in postDtos) {
                 try

@@ -5,7 +5,7 @@ namespace Feed.Core.Repositories
 {
     public interface IPostRepository
     {
-        Task<IEnumerable<Post>> GetAllPosts();
+        Task<IEnumerable<Post>> GetAllPostsAsync();
         Task<Post> GetPost(string id);
         Task<Comment> AddCommentToPostAsync(Comment comment);
         //Task<IEnumerable<Post>> GetPostByUserId(string userId);

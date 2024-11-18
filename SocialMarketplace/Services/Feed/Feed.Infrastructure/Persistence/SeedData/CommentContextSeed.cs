@@ -1,6 +1,6 @@
 ﻿using Feed.Core.Entities;
 using MongoDB.Driver;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace Feed.Infrastructure.Persistence.SeedData
 {
@@ -13,9 +13,9 @@ namespace Feed.Infrastructure.Persistence.SeedData
             if (!checkPost)
             {
                 // local (debug)
-                var commentData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/comments.json");
-                //var commentData = File.ReadAllText(path);
-                var comments = JsonSerializer.Deserialize<List<Comment>>(commentData);
+                //var commentData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/comments.json");
+                var commentData = File.ReadAllText(path);
+                var comments = JsonConvert.DeserializeObject<List<Comment>>(commentData);
                 if (comments != null)
                 {
                     commentCollection.InsertMany(comments);
