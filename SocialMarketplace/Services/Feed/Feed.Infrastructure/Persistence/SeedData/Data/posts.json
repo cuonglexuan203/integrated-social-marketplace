@@ -1,41 +1,46 @@
 [
   {
-    "_id": "673a363fe77919096dddb703",
-    "CreatedAt": "2024-11-18T01:36:58.4175481+07:00",
-    "ModifiedAt": null,
-    "IsDeleted": false,
-    "DeletedAt": null,
-    "User": {
-      "_id": "1c156c04-b10f-4776-a9a1-4225cd023051",
-      "FullName": "Admin",
-      "UserName": "admin",
-      "Email": "admin@gmail.com",
-      "Roles": [
+    "id": "673bbcdcef018c61223e7ef4",
+    "user": {
+      "id": "c507f68e-88d8-4e47-9b92-2f7cb17673c7",
+      "fullName": "Admin",
+      "userName": "admin",
+      "email": "admin@gmail.com",
+      "roles": [
         "admin"
       ],
-      "ProfilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
-      "ProfileUrl": null
+      "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+      "profileUrl": null
     },
-    "ContentText": "Hello 2222",
-    "Media": [
+    "contentText": "Hello 1231231",
+    "media": [
       {
-        "PublicId": "hdklpjlo2fv5w1yqlav7",
-        "Url": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731868221/hdklpjlo2fv5w1yqlav7.jpg",
-        "ContentType": "image",
-        "FileSize": 4094,
-        "Format": "jpg",
-        "Duration": null,
-        "ThumbnailUrl": null,
-        "Width": 500,
-        "Height": 500
+        "publicId": "zrxitdagyszycpdgkolu",
+        "url": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731968219/zrxitdagyszycpdgkolu.jpg",
+        "contentType": "image",
+        "fileSize": 73363,
+        "format": "jpg",
+        "duration": null,
+        "thumbnailUrl": null,
+        "width": 500,
+        "height": 749
       }
     ],
-    "LikesCount": 0,
-    "Reactions": null,
-    "CommentsCount": 0,
-    "Comments": null,
-    "Link": null,
-    "SharedPostId": null,
-    "Tags": null
+    "likesCount": 0,
+    "reactions": [],
+    "commentsCount": 0,
+    "commentIds": [
+      "673bc8c73e1c053211ec07e5"
+    ],
+    "link": null,
+    "sharedPostId": null,
+    "tags": [
+      "hello",
+      "2222"
+    ],
+    "createdAt": "2024-11-19T05:17:00.6550092+07:00",
+    "modifiedAt": null,
+    "isDeleted": false,
+    "deletedAt": null
   }
 ]

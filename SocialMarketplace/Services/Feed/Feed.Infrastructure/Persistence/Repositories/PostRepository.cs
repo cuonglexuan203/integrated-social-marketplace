@@ -65,9 +65,9 @@ namespace Feed.Infrastructure.Persistence.Repositories
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
-        public async Task<bool> AddCommentToPostAsync(string postId, Comment comment)
+        public async Task<Comment> AddCommentToPostAsync(Comment comment)
         {
-            if (string.IsNullOrWhiteSpace(postId))
+            if (string.IsNullOrWhiteSpace(comment.PostId))
                 throw new BadRequestException("PostId cannot be empty.");
 
             if (comment is null)
@@ -75,20 +75,20 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
             try
             {
-                if(!(await IsPostExistsAsync(postId))) 
-                    throw new PostNotFoundException(postId);
+                if(!(await IsPostExistsAsync(comment.PostId))) 
+                    throw new PostNotFoundException(comment.PostId);
 
                 var addedComment = await _commentRepository.CreateComment(comment);
 
-                var filter = Builders<Post>.Filter.Eq(x => x.Id, postId);
+                var filter = Builders<Post>.Filter.Eq(x => x.Id, comment.PostId);
                 var updateDef = Builders<Post>.Update.Push(x => x.CommentIds, addedComment.Id);
-                var result = await _posts.UpdateOneAsync(filter, updateDef);
+                await _posts.UpdateOneAsync(filter, updateDef);
 
-                return result.IsAcknowledged && result.ModifiedCount > 0;
+                return comment;
             }
             catch (PostNotFoundException)
             {
-                _logger.LogWarning($"Cannot add comment to non-existent post: {postId}");
+                _logger.LogWarning($"Cannot add comment to non-existent post: {comment.PostId}");
                 throw;
             }
             catch (Exception ex)

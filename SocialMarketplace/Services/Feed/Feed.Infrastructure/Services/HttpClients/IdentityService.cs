@@ -35,7 +35,7 @@ namespace Feed.Infrastructure.Services.HttpClients
             }
         }
 
-        public async Task<CompactUser> GetUserDetails(string userId)
+        public async Task<CompactUser> GetUserDetailsAsync(string userId)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Feed.Infrastructure.Services.HttpClients
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, "Error getting user details for userId: {UserId}", userId);
-                throw;
+                return null;
             }
         }
     }

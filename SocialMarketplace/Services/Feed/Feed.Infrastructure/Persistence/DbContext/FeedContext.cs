@@ -21,7 +21,7 @@ namespace Feed.Infrastructure.Persistence.DbContext
 
             #region populate seed data
             //CommentContextSeed.SeedData(Comments);
-            PostContextSeed.SeedData(Posts);
+            //PostContextSeed.SeedData(Posts);
             #endregion
         }
     }

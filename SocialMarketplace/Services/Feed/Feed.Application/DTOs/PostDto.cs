@@ -13,7 +13,7 @@ namespace Feed.Application.DTOs
         public int LikesCount { get; set; }
         public List<Reaction> Reactions { get; set; }
         public int CommentsCount { get; set; }
-        public List<Comment> Comments { get; set; }
+        public IList<CommentDto> Comments { get; set; }
         public string Link { get; set; }
         public string? SharedPostId { get; set; }
         public List<string> Tags { get; set; }

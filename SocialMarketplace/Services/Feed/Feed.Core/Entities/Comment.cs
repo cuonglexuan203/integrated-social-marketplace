@@ -14,10 +14,10 @@ namespace Feed.Core.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string PostId { get; set; }
         public CompactUser User { get; set; }
-        public List<Media> Media { get; set; } = new List<Media>();
+        public IEnumerable<Media> Media { get; set; } = new List<Media>();
         public string CommentText { get; set; }
         public int LikesCount { get; set; }
-        public List<Reaction> Reactions { get; set; } = new List<Reaction>();
+        public IEnumerable<Reaction> Reactions { get; set; } = new List<Reaction>();
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string? ParentCommentID { get; set; }

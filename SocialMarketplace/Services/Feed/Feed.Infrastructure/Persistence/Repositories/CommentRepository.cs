@@ -99,5 +99,10 @@ namespace Feed.Infrastructure.Persistence.Repositories
             var result = await _comments.ReplaceOneAsync(filter, comment);
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
+
+        public async Task<IEnumerable<Comment>> GetAllCommentsAsync()
+        {
+            return await _comments.Find(_ => true).ToListAsync();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Feed.Application.Common.Models;
+﻿using Feed.Application.Commands;
+using Feed.Application.Common.Models;
 using Feed.Application.DTOs;
 using Feed.Application.Queries;
 using MediatR;
@@ -8,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Feed.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize]
     public class CommentController: ApiController
     {
         private readonly IMediator _mediator;
@@ -25,6 +26,16 @@ namespace Feed.API.Controllers
             ReturnResult<IList<CommentDto>> result = new();
             var query = new GetCommentsByPostIdQuery { PostId = postId };
             result.Result = await _mediator.Send(query);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateComment(CreateCommentCommand command)
+        {
+            ReturnResult<CommentDto> result = new();
+            result.Result = await _mediator.Send(command);
+
             return Ok(result);
         }
     }

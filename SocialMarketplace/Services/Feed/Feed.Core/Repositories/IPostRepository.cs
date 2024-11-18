@@ -7,7 +7,7 @@ namespace Feed.Core.Repositories
     {
         Task<IEnumerable<Post>> GetAllPosts();
         Task<Post> GetPost(string id);
-        Task<bool> AddCommentToPostAsync(string postId, Comment comment);
+        Task<Comment> AddCommentToPostAsync(Comment comment);
         //Task<IEnumerable<Post>> GetPostByUserId(string userId);
         Task<Post> CreatePost(Post post);
         Task<bool> UpdatePost(Post post);
