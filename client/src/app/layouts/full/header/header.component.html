@@ -1,4 +1,4 @@
-<div [attr.tuiTheme]="darkMode() ? 'dark' : null"  class="d-flex flex-row gap-3 justify-content-between" style="padding: 0 22px 0 22px; height: 100px; align-items: center;">
+<div class="d-flex flex-row gap-3 justify-content-between" style="padding: 0 22px 0 22px; height: 100px; align-items: center;">
     <div class="d-flex flex-row gap-3">
         <div class="button-action color-primary-header-item" (click)="onToggleSidebar()">
             <tui-icon 
@@ -39,7 +39,6 @@
             </div>
         }
         <div class="button-action"
-            (click)="setDarkMode()"
         >
             <tui-badged-content [style.--tui-radius.%]="50">
                 <tui-badge-notification

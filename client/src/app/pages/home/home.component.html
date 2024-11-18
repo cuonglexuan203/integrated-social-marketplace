@@ -3,9 +3,9 @@
         style="
             width: 70%;
             ">
-        @for (item of mockDataPost(); track $index) {
+        @for (post of posts; track $index) {
             <div class="post-containter">
-                <app-post-item [item]="item" ></app-post-item>
+                <app-post-item [post]="post" ></app-post-item>
             </div>   
         }
     </div>

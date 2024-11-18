@@ -1,0 +1,53 @@
+<div class="tui-container">
+    <h4>{{title}}</h4>
+    <div class="divider"></div>
+    <div class="stepper">
+        <tui-stepper
+        orientation="horizontal"
+        [activeItemIndex]="activeTabIndex"
+        class="gap-3"
+        >
+            <button
+                *ngFor="let step of steps"
+                tuiStep
+                [stepState]="step?.isPassed ? 'pass' : 'normal'"
+                type="button"
+            >
+                {{ step.title }}
+            </button>
+        </tui-stepper>
+    </div>
+
+    <form [formGroup]="form">
+        <div class="form-container">
+            <div *ngFor="let step of steps; let i = index">
+                <div *ngIf="activeTabIndex === i">
+                    <ng-container [ngTemplateOutlet]="step.template"></ng-container>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="post-button">
+        @if(activeTabIndex === steps.length - 1) {
+            <button
+                class="submit-button"
+                tuiButton
+                (click)="onSubmit()"    
+            >
+                Submit
+            </button>
+        }
+        @else {
+            <button
+                class="next-button"
+                tuiButton
+                (click)="onNextStep()"    
+            >
+                Next
+            </button>
+        }
+    </div>
+
+</div>
+  

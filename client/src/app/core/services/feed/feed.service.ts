@@ -3,6 +3,7 @@ import { environment } from '../../../../environments/endpoint';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FeedPost } from '../../models/feed/feed.model';
+import { MarketplaceResponse } from '../../models/marketplace/marketplace-response.model';
 
 
 @Injectable({
@@ -14,8 +15,8 @@ export class FeedService {
     private http: HttpClient
   ) { }
 
-  getFeed(): Observable<FeedPost> {
-    return this.http.get<FeedPost>(`${this.apiBase}/feed`);
+  getAllPosts(): Observable<MarketplaceResponse<FeedPost[]>> {
+    return this.http.get<MarketplaceResponse<FeedPost[]>>(`${this.apiBase}/GetAllPosts`);
   }
 
 }

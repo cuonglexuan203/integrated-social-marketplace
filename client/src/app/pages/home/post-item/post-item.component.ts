@@ -8,6 +8,9 @@ import { MoreDialogComponent } from '../../../shared/components/more-dialog/more
 import { ShareDialogComponent } from '../../../shared/components/share-dialog/share-dialog.component';
 import {PolymorpheusComponent} from '@taiga-ui/polymorpheus';
 import { ReactionDialogComponent } from '../../../shared/components/reaction-dialog/reaction-dialog.component';
+import { FeedService } from '../../../core/services/feed/feed.service';
+import { AlertService } from '../../../core/services/alert/alert.service';
+import { FeedPost } from '../../../core/models/feed/feed.model';
 
 @Component({
   selector: 'app-post-item',
@@ -30,15 +33,15 @@ export class PostItemComponent {
   private readonly injector = inject(INJECTOR);
   private readonly dialogs = inject(TuiDialogService);
 
-  @Input() item: MockDataPost;
+  @Input() post: FeedPost;
   currentIndex: number = 0;
 
   constructor(
-  ) {
-  }
+    private _feedService: FeedService,
+    private alertService: AlertService,
+  ) {}
 
   ngOnInit() {
-
   }
 
   onCarouselChange(index: number) {
@@ -60,6 +63,8 @@ export class PostItemComponent {
         console.log(data);
       });
   }
+
+  
   
   
 }

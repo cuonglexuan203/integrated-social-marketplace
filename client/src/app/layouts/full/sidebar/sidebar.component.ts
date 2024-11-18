@@ -15,5 +15,6 @@ import { BrandingComponent } from './branding.component';
 export class SidebarComponent {
   constructor() { }
 
+
   ngOnInit() {}
 }

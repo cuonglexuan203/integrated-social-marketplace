@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
 import { FormValidationMessage } from './core/enums/form-validation/form-validation.enums';
-import { TUI_DARK_MODE, TuiRoot } from '@taiga-ui/core';
-import { TuiCardLarge } from '@taiga-ui/layout';
+import { TuiRoot } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +15,6 @@ import { TuiCardLarge } from '@taiga-ui/layout';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  protected readonly darkMode = inject(TUI_DARK_MODE);
 
 
   title = 'Social Marketplace';

@@ -1,4 +1,4 @@
-@if(item) {
+@if(post) {
     <div class="post-item-containter">
         <div class="post-header">
             <div class="left-header">
@@ -10,10 +10,10 @@
                             cursor: pointer;
                             "
                         >
-                            Trieu Do Quang
+                            {{post.user.fullName}}
                         </a>
                         <div style="color: gray">
-                            yesterday at 11:19 pm from QuangTrieu
+                            {{post.createdAt | date: 'dd/MM/yyyy'}}
                         </div>
                     </div>
             </div>
@@ -38,14 +38,14 @@
         </div>
         <div class="post-description">
             <span>
-                {{ item.description + item.description + item.description + item.description}}
+                {{post.contentText}}
             </span>
-            <h5> {{item.name}}: {{item.price}}đ</h5>
+            <!-- <h5> {{item.name}}: {{item.price}}đ</h5> -->
         </div>
         <div class="post-media-url"
             tuiCarouselButtons
         >
-            @if(item.mediaUrl){
+            @if(post.media){
                 <!-- @if(currentIndex != 0) { -->
                     <button
                     iconStart="@tui.chevron-left"
@@ -65,19 +65,19 @@
                     [style.--tui-carousel-padding]="0"
                     (indexChange)="onCarouselChange($event)"
                 >
-                    @for (item of item.mediaUrl; track $index) {
-                        @if(item.imageUrl) {
-                            @for (item of item.imageUrl; track $index) {
-                                <img *tuiItem src="{{ item }}" alt="image" class="carousel-image">
-                            }
-                        }
-                        @if(item.videoUrl) {
+                    @for (item of post.media; track $index) {
+                        <!-- @if(item.imageUrl) { -->
+                            <!-- @for (item of item.imageUrl; track $index) { -->
+                                <img *tuiItem src="{{ item.url }}" alt="image" class="carousel-image">
+                            <!-- } -->
+                        <!-- } -->
+                        <!-- @if(item.videoUrl) {
                             @for (item of item.videoUrl; track $index) {
                                 <video *tuiItem src="{{ item }}" controls class="carousel-video">
                                     Your browser does not support the video tag.
                                 </video>
                             }
-                        }
+                        } -->
                     }
                 </tui-carousel>
                 <button
@@ -98,45 +98,47 @@
         </div>
 
         <div class="post-footer">
-            <div class="item-footer-post"
-                tuiDropdownHover
-                [tuiDropdown]="reactionDialog"
-            >
-                <tui-icon class=""
-                    [style.height.px]="18"
-                    [style.width.px]="18"
+            <div class="d-flex gap-3">
+                <div class="item-footer-post"
+                    tuiDropdownHover
+                    [tuiDropdown]="reactionDialog"
+                >
+                    <tui-icon class=""
+                        [style.height.px]="18"
+                        [style.width.px]="18"
 
-                    icon="@tui.heart">
-                </tui-icon>
-                <span>300</span>
+                        icon="@tui.heart">
+                    </tui-icon>
+                    <span>{{post.likesCount}}</span>
+                </div>
+
+                <ng-template #reactionDialog>
+                    <app-reaction-dialog></app-reaction-dialog>
+                </ng-template>
+
+                <div class="item-footer-post">
+                    <tui-icon class=""
+                        icon="@tui.message-circle"
+                        [style.height.px]="18"
+                        [style.width.px]="18"
+                        >
+                    </tui-icon>
+                    <span>{{post.commentsCount}}</span>
+                </div>
             </div>
 
-            <ng-template #reactionDialog>
-                <app-reaction-dialog></app-reaction-dialog>
-            </ng-template>
-
-            <div class="item-footer-post">
-                <tui-icon class=""
-                    icon="@tui.message-circle"
-                    [style.height.px]="18"
-                    [style.width.px]="18"
-                    >
-                </tui-icon>
-                <span>255</span>
+            <div>
+                <div class="item-footer-post"
+                    (click)="onShare()"
+                >
+                    <tui-icon class=""
+                        icon="@tui.forward"
+                        [style.height.px]="18"
+                        [style.width.px]="18"
+                        >
+                    </tui-icon>
+                </div>
             </div>
-
-            <div class="item-footer-post"
-                (click)="onShare()"
-            >
-                <tui-icon class=""
-                    icon="@tui.forward"
-                    [style.height.px]="18"
-                    [style.width.px]="18"
-                    >
-                </tui-icon>
-                <span>255</span>
-            </div>
-
         </div>
     </div>
 }

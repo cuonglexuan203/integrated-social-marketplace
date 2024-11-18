@@ -1,0 +1,27 @@
+.stepper {
+    margin-bottom: 2rem;
+}
+
+.next-button 
+{
+    padding: 0 1rem;
+    background-color: #007bff;
+}
+
+.next-button:hover {
+    background-color: #0056b3;
+}
+
+.submit-button {
+    background-color: #007bff;
+
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+.post-button {
+    display: flex;
+    justify-content: flex-end;
+}
