@@ -79,6 +79,7 @@ export class HeaderComponent {
       next: (res) => {
         if(res) {
           this.user = res.result;
+          localStorage.setItem('user', JSON.stringify(this.user));
         }
       },
       error: (error) => {

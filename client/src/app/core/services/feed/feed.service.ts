@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FeedPost } from '../../models/feed/feed.model';
 import { MarketplaceResponse } from '../../models/marketplace/marketplace-response.model';
+import { CreatePostModel } from '../../models/feed/post.model';
 
 
 @Injectable({
@@ -17,6 +18,10 @@ export class FeedService {
 
   getAllPosts(): Observable<MarketplaceResponse<FeedPost[]>> {
     return this.http.get<MarketplaceResponse<FeedPost[]>>(`${this.apiBase}/GetAllPosts`);
+  }
+
+  createPost(post: any): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/CreatePost`, post);
   }
 
 }

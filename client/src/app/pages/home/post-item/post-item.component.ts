@@ -1,6 +1,6 @@
 import { Component, inject, INJECTOR, Input } from '@angular/core';
 import { TuiButton, TuiDialogService, TuiDropdown, TuiIcon, TuiRoot } from '@taiga-ui/core';
-import { TuiAvatar, TuiCarousel } from '@taiga-ui/kit';
+import { TuiAvatar, TuiCarousel, TuiSkeleton } from '@taiga-ui/kit';
 import { TuiCardLarge } from '@taiga-ui/layout';
 import { MockDataPost } from '../../../shared/mocks/mock-data-post';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,7 @@ import { ReactionDialogComponent } from '../../../shared/components/reaction-dia
 import { FeedService } from '../../../core/services/feed/feed.service';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import { FeedPost } from '../../../core/models/feed/feed.model';
+import { DateFilterPipe } from '../../../core/pipes/date-filter/date-filter.pipe';
 
 @Component({
   selector: 'app-post-item',
@@ -24,7 +25,9 @@ import { FeedPost } from '../../../core/models/feed/feed.model';
     MoreDialogComponent,
     TuiDropdown,
     ShareDialogComponent,
-    ReactionDialogComponent
+    ReactionDialogComponent,
+    TuiSkeleton,
+    DateFilterPipe
   ],
   templateUrl: './post-item.component.html',
   styleUrl: './post-item.component.css'
@@ -32,13 +35,14 @@ import { FeedPost } from '../../../core/models/feed/feed.model';
 export class PostItemComponent {
   private readonly injector = inject(INJECTOR);
   private readonly dialogs = inject(TuiDialogService);
-
+  @Input() isLoading: boolean;
   @Input() post: FeedPost;
   currentIndex: number = 0;
 
   constructor(
     private _feedService: FeedService,
     private alertService: AlertService,
+
   ) {}
 
   ngOnInit() {

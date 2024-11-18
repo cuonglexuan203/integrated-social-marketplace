@@ -42,7 +42,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       }),
       catchError((error: HttpErrorResponse) => {
         console.error(error);
-        if (error.status === 401 || error.status === 0 || error.status === 400) {
+        if (error.status === 401 || error.status === 0) {
           if (error.status === 401) {
             this.router.navigate(['/login']);
             this.alert.showError(error.status == 401 ? 'Your Username or Password is incorrect. Please try again' : 'Sorry, the system has an unexpected technical issue.', 'Error');

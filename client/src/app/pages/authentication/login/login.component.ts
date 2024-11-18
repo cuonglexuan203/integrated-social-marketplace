@@ -66,7 +66,6 @@ export class LoginComponent {
       Helper.clearLocalStorage();
       this.isLoading = true;
       this.authService.authenticate('email', this.form.value).subscribe(result => {
-        console.log(result);
         if(result.isSuccess()) {
           this.isLoading = false;
           this.alertService.showSuccess('Success','Login Successfully');

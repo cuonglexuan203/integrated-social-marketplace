@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word.pipe';
+import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word/first-letter-word.pipe';
 import { TuiRating } from '@taiga-ui/kit';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

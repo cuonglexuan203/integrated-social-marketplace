@@ -1,11 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RxFormBuilder, RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
-import { TuiButton, TuiDialogContext, TuiIcon } from '@taiga-ui/core';
-import { TuiStepper } from '@taiga-ui/kit';
+import { TuiButton, TuiDialogContext, TuiIcon, TuiLink } from '@taiga-ui/core';
+import { TuiAvatar, TuiFiles, TuiStepper } from '@taiga-ui/kit';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import { CreatePostModel } from '../../../core/models/feed/post.model';
+import { Helper } from '../../../core/utils/helper';
+import { AlertService } from '../../../core/services/alert/alert.service';
+import { TuiInputTagModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { FeedService } from '../../../core/services/feed/feed.service';
 
 @Component({
   selector: 'app-create-post-dialog',
@@ -16,59 +20,136 @@ import { CreatePostModel } from '../../../core/models/feed/post.model';
     RxReactiveFormsModule,
     TuiButton,
     TuiIcon,
-    TuiStepper,
     CommonModule,
+    TuiAvatar,
+    TuiFiles,
+    TuiLink,
+    TuiInputTagModule,
+    TuiTextfieldControllerModule
   ],
   templateUrl: './create-post-dialog.component.html',
   styleUrl: './create-post-dialog.component.css'
 })
 export class CreatePostDialogComponent {
+  @ViewChild('textArea') textArea: ElementRef;
+
+  isLoading: boolean = false;
+
   form!: FormGroup;
-  public readonly context = injectContext<TuiDialogContext<any>>();
+  user: any;
   data: any;
   title: string = '';
-  steps: any[] = [
-    {
-      steps: 'Step 1',
-      title: 'Enter Post Details, Tags',
-      isPassed: false,
-      template: 'step1',
-    },
-    {
-      steps: 'Step 2',
-      title: 'Upload Images, Videos',
-      isPassed: false,
-      template: 'step2',
-    }
-  ];
-  activeTabIndex = 0;
+  currentTime: Date = new Date();
+  showFileInput = false;
+  timeUpdateInterval: any;
+  uploadedFile: File[] = [];
+  formData: FormData = new FormData();
+
+  public readonly context = injectContext<TuiDialogContext<any>>();
+
   constructor(
     private formBuilder: RxFormBuilder,
     private cdr: ChangeDetectorRef,
+    private alertService: AlertService,
+    private _feedService: FeedService
   ) {
     this.data = this.context.data;
     this.form = this.formBuilder.formGroup(CreatePostModel, {});
+  }
+  ngOnInit() {
+    this.title = this.data.title;
+    this.getUser();
+    this.startTimeUpdate();
+  }
+
+  ngOnDestroy() {
+    if (this.timeUpdateInterval) {
+      clearInterval(this.timeUpdateInterval);
+    }
   }
 
   ngAfterContentChecked() {
     this.cdr.detectChanges();
   }
 
-  ngOnInit() {
-    this.title = this.data.title;
+  getUser() {
+    this.user = Helper.getUserFromLocalStorage();
+    this.form.get('userId')?.setValue(this.user?.id);
+
   }
+
+  getCurrentTime() {
+    this.currentTime = new Date(Helper.getCurrentTime());
+  }
+
+  startTimeUpdate() {
+    // Update time every second
+    this.timeUpdateInterval = setInterval(() => {
+      this.getCurrentTime();
+    }, 60000);
+  }
+
 
   get f() {
     return this.form.controls;
   }
 
 
-  onSubmit() {
-    
+  toggleFileInput() {
+    this.showFileInput = !this.showFileInput;
   }
 
-  onNextStep() {
-    this.activeTabIndex++;
+  onFileUpload(event: Event) {
+    const files = (event.target as HTMLInputElement).files;
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg', '.webp'];
+        const allowedVideoExtensions = ['.mp4', '.mkv', '.avi', '.mov', '.webm', '.flv', '.3gp', '.3g2'];
+        if (allowedImageExtensions.includes(files[i].name.substring(files[i].name.lastIndexOf('.'))) || allowedVideoExtensions.includes(files[i].name.substring(files[i].name.lastIndexOf('.')))) {
+          this.uploadedFile.push(files[i]);
+        }
+        else {
+          this.alertService.showError('Only image and video files are allowed', 'Error');
+        }
+      }
+      this.form.get('files')?.setValue(this.uploadedFile);
+    }
+  }
+
+  removeFile(file: File) {
+    this.uploadedFile = this.uploadedFile.filter(f => f !== file);
+  }
+
+  setupDataForPost() {
+      this.uploadedFile.forEach(file => {
+        this.formData.append('files', file);
+      });
+      this.formData.append('userId', this.user?.id);
+      this.formData.append('contentText', this.form.get('contentText')?.value);
+      this.formData.append('tags', this.form.get('tags')?.value);
+  }
+
+  onPost() {
+    this.setupDataForPost();
+    this.isLoading = true;
+    if (this.form.valid) {
+      this._feedService.createPost(this.formData).subscribe({
+        next: (res) => {
+          if (res){
+            this.isLoading = false;
+            this.alertService.showSuccess('Create a new post successfully', 'Success');
+            this.context.completeWith(this.form.value);
+          }
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.alertService.showError(error.error.message, 'Error');
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      })
+    }
   }
 
 }
