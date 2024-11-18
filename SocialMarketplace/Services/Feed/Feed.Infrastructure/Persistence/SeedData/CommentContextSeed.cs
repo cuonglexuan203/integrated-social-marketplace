@@ -13,8 +13,8 @@ namespace Feed.Infrastructure.Persistence.SeedData
             if (!checkPost)
             {
                 // local (debug)
-                //var commentData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/comments.json");
-                var commentData = File.ReadAllText(path);
+                var commentData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/comments.json");
+                //var commentData = File.ReadAllText(path);
                 var comments = JsonSerializer.Deserialize<List<Comment>>(commentData);
                 if (comments != null)
                 {

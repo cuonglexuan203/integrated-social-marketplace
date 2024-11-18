@@ -226,6 +226,19 @@ namespace Identity.Infrastructure.Services
 
         }
 
+        //public async Task<bool> SignOutAsync()
+        //{
+        //    try
+        //    {
+        //        await _signInManager.SignOutAsync();
+        //        return true;
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
+
         public async Task<bool> UpdateUserProfile(string id, string fullName, string email, IList<string> roles)
         {
             var user = await _userManager.FindByIdAsync(id);
