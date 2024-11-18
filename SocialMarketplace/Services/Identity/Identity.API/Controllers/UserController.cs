@@ -1,6 +1,7 @@
 ﻿using Identity.Application.Commands.User.Create;
 using Identity.Application.Commands.User.Delete;
 using Identity.Application.Commands.User.Update;
+using Identity.Application.Common.Models;
 using Identity.Application.DTOs;
 using Identity.Application.Queries.User;
 using MediatR;
@@ -25,7 +26,17 @@ namespace Identity.API.Controllers
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<ActionResult> CreateUser(CreateUserCommand command)
         {
-            return Ok(await _mediator.Send(command));
+            ReturnResult<int> result = new();
+            try
+            {
+                result.Result = await _mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -49,7 +60,17 @@ namespace Identity.API.Controllers
         [ProducesDefaultResponseType(typeof(UserDetailsResponseDTO))]
         public async Task<IActionResult> GetUserDetails(string userId)
         {
-            var result = await _mediator.Send(new GetUserDetailsQuery() { UserId = userId });
+            ReturnResult<UserDetailsResponseDTO> result = new();
+            try
+            {
+                var query = new GetUserDetailsQuery() { UserId = userId };
+                result.Result = await _mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 
@@ -57,7 +78,17 @@ namespace Identity.API.Controllers
         [ProducesDefaultResponseType(typeof(UserDetailsResponseDTO))]
         public async Task<IActionResult> GetUserDetailsByUserName(string userName)
         {
-            var result = await _mediator.Send(new GetUserDetailsByUserNameQuery() { UserName = userName });
+            ReturnResult<UserDetailsResponseDTO> result = new();
+            try
+            {
+                var query = new GetUserDetailsByUserNameQuery() { UserName = userName };
+                result.Result = await _mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 
@@ -83,7 +114,17 @@ namespace Identity.API.Controllers
         [ProducesDefaultResponseType(typeof(UserDetailsResponseDTO))]
         public async Task<IActionResult> GetAllUserDetails()
         {
-            var result = await _mediator.Send(new GetAllUsersDetailsQuery());
+            ReturnResult<IList<UserDetailsResponseDTO>> result = new();
+            try
+            {
+                var query = new GetAllUsersDetailsQuery();
+                result.Result = await _mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 

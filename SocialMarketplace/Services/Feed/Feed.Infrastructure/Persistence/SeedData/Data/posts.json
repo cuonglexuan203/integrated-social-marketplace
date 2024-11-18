@@ -1,2 +1,41 @@
 [
+  {
+    "_id": "673a363fe77919096dddb703",
+    "CreatedAt": "2024-11-18T01:36:58.4175481+07:00",
+    "ModifiedAt": null,
+    "IsDeleted": false,
+    "DeletedAt": null,
+    "User": {
+      "_id": "1c156c04-b10f-4776-a9a1-4225cd023051",
+      "FullName": "Admin",
+      "UserName": "admin",
+      "Email": "admin@gmail.com",
+      "Roles": [
+        "admin"
+      ],
+      "ProfilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+      "ProfileUrl": null
+    },
+    "ContentText": "Hello 2222",
+    "Media": [
+      {
+        "PublicId": "hdklpjlo2fv5w1yqlav7",
+        "Url": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731868221/hdklpjlo2fv5w1yqlav7.jpg",
+        "ContentType": "image",
+        "FileSize": 4094,
+        "Format": "jpg",
+        "Duration": null,
+        "ThumbnailUrl": null,
+        "Width": 500,
+        "Height": 500
+      }
+    ],
+    "LikesCount": 0,
+    "Reactions": null,
+    "CommentsCount": 0,
+    "Comments": null,
+    "Link": null,
+    "SharedPostId": null,
+    "Tags": null
+  }
 ]
