@@ -5,6 +5,6 @@ namespace Feed.Application.Interfaces.HttpClients
 {
     public interface IIdentityService
     {
-        Task<CompactUser> GetUserDetailsAsync(string userId);
+        Task<User> GetUserDetailsAsync(string userId);
     }
 }

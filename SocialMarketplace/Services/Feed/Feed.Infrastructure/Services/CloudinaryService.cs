@@ -3,6 +3,7 @@ using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Feed.Application.DTOs;
 using Feed.Application.Interfaces.Services;
+using Feed.Core.Exceptions;
 using Feed.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -174,7 +175,7 @@ namespace Feed.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error uploading image {file.FileName}");
-                return null;
+                throw;
             }
         }
 
@@ -225,7 +226,7 @@ namespace Feed.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error uploading video {file.FileName}");
-                return null;
+                throw;
             }
         }
 
@@ -341,29 +342,21 @@ namespace Feed.Infrastructure.Services
 
         public async Task<MediaDto> UploadSingleFileAsync(IFormFile file, string folder = "")
         {
-            try
+            folder = string.IsNullOrEmpty(folder) ? MediaLibraryFolder : folder;
+
+            if (!IsFileValid(file, out string errorMessage))
             {
-                folder = string.IsNullOrEmpty(folder) ? MediaLibraryFolder : folder;
-
-                if (!IsFileValid(file, out string errorMessage))
-                {
-                    _logger.LogWarning($"Invalid file: {file.FileName}. {errorMessage}");
-                    return null;
-                }
-
-                if (IsImage(file.ContentType))
-                {
-                    return await UploadSingleImageAsync(file, folder);
-                }
-                else // Video
-                {
-                    return await UploadSingleVideoAsync(file, folder);
-                }
+                _logger.LogError($"Invalid file: {file.FileName}. {errorMessage}");
+                throw new BadRequestException($"Invalid file: {file.FileName}. {errorMessage}");
             }
-            catch (Exception ex)
+
+            if (IsImage(file.ContentType))
             {
-                _logger.LogError(ex, $"Error uploading file {file.FileName}");
-                return null;
+                return await UploadSingleImageAsync(file, folder);
+            }
+            else // Video
+            {
+                return await UploadSingleVideoAsync(file, folder);
             }
         }
 

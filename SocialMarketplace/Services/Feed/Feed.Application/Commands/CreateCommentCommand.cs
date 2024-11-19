@@ -8,7 +8,7 @@ namespace Feed.Application.Commands
     {
         public string PostId { get; set; } = default!;
         public string UserId { get; set; } = default!;
-        public List<IFormFile> Media { get; set; }
-        public string CommentText { get; set; }
+        public IFormFile? Media { get; set; }
+        public string? CommentText { get; set; }
     }
 }

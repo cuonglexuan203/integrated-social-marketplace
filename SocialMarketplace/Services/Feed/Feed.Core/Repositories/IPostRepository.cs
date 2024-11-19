@@ -15,6 +15,6 @@ namespace Feed.Core.Repositories
         Task<bool> DeletePost(string id);
         Task<bool> IsPostExistsAsync(string id);
         Task<Reaction> AddReacionToPostAsync(string postId, Reaction reaction, CancellationToken cancellationToken = default);
-        Task<IList<Reaction>> GetAllReactionsByPostId(string postId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Reaction>> GetAllReactionsByPostId(string postId, CancellationToken cancellationToken = default);
     }
 }

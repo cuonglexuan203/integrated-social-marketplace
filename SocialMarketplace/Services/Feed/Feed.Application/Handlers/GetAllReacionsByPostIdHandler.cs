@@ -21,7 +21,7 @@ namespace Feed.Application.Handlers
         public async Task<IList<ReactionDto>> Handle(GetAllReacionsByPostIdQuery request, CancellationToken cancellationToken)
         {
             var reactions = await _postRepo.GetAllReactionsByPostId(request.PostId);
-            return FeedMapper.Mapper.Map<IList<ReactionDto>>(reactions);
+            return FeedMapper.Mapper.Map<IList<ReactionDto>>(reactions.ToList());
             
         }
     }

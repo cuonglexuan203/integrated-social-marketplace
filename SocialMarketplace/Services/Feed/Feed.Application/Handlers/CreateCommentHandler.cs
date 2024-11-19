@@ -33,14 +33,19 @@ namespace Feed.Application.Handlers
             if(!await _postRepo.IsPostExistsAsync(request.PostId))
                 throw new PostNotFoundException(request.PostId);
 
-            var mediaResult = await _cloudinaryService.UploadMultipleFilesAsync(request.Media, "SocialMarketplace");
             var comment = new Comment()
             {
                 PostId = request.PostId,
                 CommentText = request.CommentText,
-                Media = FeedMapper.Mapper.Map<IEnumerable<Media>>(mediaResult),
-                CompactUser = userDetails
+                User = userDetails
             };
+
+            if (request.Media is not null)
+            {
+                var mediaResult = await _cloudinaryService.UploadSingleFileAsync(request.Media);
+                comment.Media = new List<Media>() { FeedMapper.Mapper.Map<Media>(mediaResult) };
+            }
+
             var result = await _postRepo.AddCommentToPostAsync(comment);
 
             return FeedMapper.Mapper.Map<CommentDto>(result);
