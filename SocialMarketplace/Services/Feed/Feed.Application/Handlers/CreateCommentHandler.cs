@@ -39,7 +39,7 @@ namespace Feed.Application.Handlers
                 PostId = request.PostId,
                 CommentText = request.CommentText,
                 Media = FeedMapper.Mapper.Map<IEnumerable<Media>>(mediaResult),
-                User = userDetails
+                CompactUser = userDetails
             };
             var result = await _postRepo.AddCommentToPostAsync(comment);
 

@@ -14,11 +14,11 @@ namespace Feed.Infrastructure.Persistence.SeedData
             if (!checkPost)
             {
                 // local 1
-                //var postData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/posts.json");
+                var postData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/posts.json");
                 // local 2 ( debug mode )
                 //var postData = File.ReadAllText("../src/services/Feed/Feed.Infrastructure/Persistence/SeedData/Data/posts.json");
                 //
-                var postData = File.ReadAllText(path);
+                //var postData = File.ReadAllText(path);
                 var posts = JsonConvert.DeserializeObject<List<Post>>(postData);
                 if (posts != null)
                 {

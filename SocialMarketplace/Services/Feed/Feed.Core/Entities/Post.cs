@@ -2,6 +2,8 @@
 using Feed.Core.Common.AuditProperties;
 using Feed.Core.Common.BaseEntities;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Feed.Core.Entities
 {
@@ -10,7 +12,10 @@ namespace Feed.Core.Entities
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
-        public CompactUser User { get; set; }
+        [BsonElement("User")]
+        [JsonPropertyName("user")]
+        [JsonProperty("user")]
+        public CompactUser CompactUser { get; set; }
         public string ContentText { get; set; }
         public List<Media> Media { get; set; } = new List<Media>();
         public int LikesCount { get; set; }
