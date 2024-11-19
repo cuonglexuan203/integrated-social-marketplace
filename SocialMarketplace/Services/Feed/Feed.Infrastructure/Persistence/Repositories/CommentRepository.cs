@@ -62,8 +62,8 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             var sort = Builders<Comment>.Sort;
             return commentParams.Sort?.ToLower() == "desc"
-                ? sort.Descending(x => x.CreatedAt)
-                : sort.Ascending(x => x.CreatedAt);
+                ? sort.Descending(x => x.ModifiedAt)
+                : sort.Ascending(x => x.ModifiedAt);
         }
 
         public async Task<Pagination<Comment>> GetCommentsByPostId(string postId, CommentSpecParams commentParams)

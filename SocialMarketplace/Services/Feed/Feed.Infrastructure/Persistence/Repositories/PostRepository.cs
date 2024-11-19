@@ -1,6 +1,7 @@
 ﻿using Feed.Core.Entities;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
+using Feed.Core.ValueObjects;
 using Feed.Infrastructure.Persistence.DbContext;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -101,6 +102,82 @@ namespace Feed.Infrastructure.Persistence.Repositories
         public async Task<bool> IsPostExistsAsync(string id)
         {
             return await _posts.Find(x => x.Id == id).AnyAsync();
+        }
+
+        public async Task<Reaction> AddReacionToPostAsync(string postId, Reaction reaction, CancellationToken cancellationToken = default)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(postId, nameof(postId));
+            ArgumentNullException.ThrowIfNull(reaction, nameof(reaction));
+
+            try
+            {
+                // Check if user already reacted
+                var filter = Builders<Post>.Filter.And(
+                    Builders<Post>.Filter.Eq(x => x.Id, postId),
+                    Builders<Post>.Filter.ElemMatch(x => x.Reactions,
+                        r => r.User.Id == reaction.User.Id)
+                );
+
+                var existingPost = await _posts.Find(filter)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                if (existingPost != null)
+                {
+                    _logger.LogWarning(
+                        "User {UserId} has already reacted to post {PostId}",
+                        reaction.User.Id,
+                        postId);
+                    throw new BadRequestException("User has already reacted to this post");
+                }
+
+                // Add new reaction
+                var updateFilter = Builders<Post>.Filter.Eq(x => x.Id, postId);
+                var updateDef = Builders<Post>.Update.Push(x => x.Reactions, reaction);
+
+                var result = await _posts.UpdateOneAsync(
+                    updateFilter,
+                    updateDef,
+                    new UpdateOptions { IsUpsert = false },
+                    cancellationToken);
+
+                if (result.MatchedCount == 0)
+                {
+                    _logger.LogWarning("Cannot add reaction to non-existent post: {PostId}", postId);
+                    throw new PostNotFoundException(postId);
+                }
+
+                if (result.ModifiedCount == 0)
+                {
+                    _logger.LogError("Failed to add reaction to post: {PostId}", postId);
+                    throw new DatabaseException($"Failed to add reaction to post {postId}");
+                }
+
+                return reaction;
+            }
+            catch (MongoException ex)
+            {
+                _logger.LogError(ex, "MongoDB error occurred while adding reaction to post: {PostId}", postId);
+                throw new DatabaseException("Failed to add reaction to database", ex);
+            }
+        }
+
+        public async Task<IList<Reaction>> GetAllReactionsByPostId(string postId, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(postId))
+                throw new BadRequestException("PostId cannot be empty.");
+
+            var filter = Builders<Post>.Filter.Eq(x => x.Id, postId);
+            var reactions = await _posts.Find(filter)
+                .Project(x => x.Reactions)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (reactions == null)
+            {
+                _logger.LogWarning("Cannot get reactions of non-existent post: {PostId}", postId);
+                throw new PostNotFoundException(postId);
+            }
+
+            return reactions;
         }
     }
 }

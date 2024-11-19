@@ -11,6 +11,7 @@ namespace Feed.Application.Mappers.Profiles
         {
             CreateMap<Post, PostDto>().ReverseMap();
             CreateMap<Media, MediaDto>().ReverseMap();
+            CreateMap<Reaction, ReactionDto>().ReverseMap();
         }
     }
 }

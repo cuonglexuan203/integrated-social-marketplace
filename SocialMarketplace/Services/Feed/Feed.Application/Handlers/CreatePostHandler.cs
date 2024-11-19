@@ -35,7 +35,7 @@ namespace Feed.Application.Handlers
                 var mediaResult = await _cloudinaryService.UploadMultipleFilesAsync(request.Files, "SocialMarketplace");
                 var post = new Post()
                 {
-                    User = userDetails,
+                    CompactUser = userDetails,
                     Media = FeedMapper.Mapper.Map<List<Media>>(mediaResult),
                     ContentText = request.ContentText,
                     Tags = request.Tags,

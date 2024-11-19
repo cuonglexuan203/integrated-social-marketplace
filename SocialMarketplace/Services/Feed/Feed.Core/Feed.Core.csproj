@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="8.1.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.29.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

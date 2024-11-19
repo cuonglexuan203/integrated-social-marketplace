@@ -27,11 +27,10 @@
       }
     ],
     "commentText": "For modern C# projects, prefer a is not null for null checks unless you have a specific reason to respect custom != operator overloads. It ensures clarity, avoids unintended behavior, and aligns with contemporary C# coding standards.",
-    "likesCount": 0,
     "reactions": [],
     "parentCommentID": null,
     "createdAt": "2024-11-19T06:07:50.1340924+07:00",
-    "modifiedAt": null,
+    "modifiedAt": "2024-11-19T06:07:50.1340924+07:00",
     "isDeleted": false,
     "deletedAt": null
   },
@@ -96,11 +95,10 @@
       }
     ],
     "commentText": "The [JsonPropertyName] attributes will ensure that the JSON properties are correctly mapped to your C# properties, regardless of the casing. Choose either the case-insensitive option or the attribute approach based on your needs:\n\nUse PropertyNameCaseInsensitive = true if you want a quick solution and don't mind case-insensitive matching\nUse [JsonPropertyName] attributes if you want explicit control over property mapping and better performance\n\nWould you like me to explain any part of these solutions in more detail?",
-    "likesCount": 0,
     "reactions": [],
     "parentCommentID": null,
     "createdAt": "2024-11-19T06:49:01.4062142+07:00",
-    "modifiedAt": null,
+    "modifiedAt": "2024-11-19T06:49:01.4062142+07:00",
     "isDeleted": false,
     "deletedAt": null
   }

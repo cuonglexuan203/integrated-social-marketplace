@@ -8,7 +8,7 @@ namespace Feed.Core.ValueObjects
     {
         public CompactUser User { get; set; }
         public ReactionType Type { get; set; }
-        public DateTimeOffset? CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; } = DateTimeOffset.Now;
     }
 
 }

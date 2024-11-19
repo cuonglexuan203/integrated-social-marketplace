@@ -1,6 +1,4 @@
-﻿
-using Feed.Core.Entities;
-using Feed.Core.ValueObjects;
+﻿using Feed.Core.Entities;
 
 namespace Feed.Application.DTOs
 {
@@ -11,7 +9,7 @@ namespace Feed.Application.DTOs
         public string ContentText { get; set; }
         public List<MediaDto> Media { get; set; }
         public int LikesCount { get; set; }
-        public List<Reaction> Reactions { get; set; }
+        public List<ReactionDto> Reactions { get; set; }
         public int CommentsCount { get; set; }
         public IList<CommentDto> Comments { get; set; }
         public string Link { get; set; }
