@@ -27,15 +27,8 @@ namespace Identity.API.Controllers
         public async Task<ActionResult> CreateUser(CreateUserCommand command)
         {
             ReturnResult<int> result = new();
-            try
-            {
-                result.Result = await _mediator.Send(command);
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return BadRequest(result);
-            }
+            result.Result = await _mediator.Send(command);
+
             return Ok(result);
         }
 
@@ -48,6 +41,8 @@ namespace Identity.API.Controllers
             return Ok(await _mediator.Send(new Application.Queries.User.GetUserQuery()));
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin")]
         [HttpDelete("Delete/{userId}")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<IActionResult> DeleteUser(string userId)
@@ -61,16 +56,9 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> GetUserDetails(string userId)
         {
             ReturnResult<UserDetailsResponseDTO> result = new();
-            try
-            {
-                var query = new GetUserDetailsQuery() { UserId = userId };
-                result.Result = await _mediator.Send(query);
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return BadRequest(result);
-            }
+            var query = new GetUserDetailsQuery() { UserId = userId };
+            result.Result = await _mediator.Send(query);
+
             return Ok(result);
         }
 
@@ -79,16 +67,9 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> GetUserDetailsByUserName(string userName)
         {
             ReturnResult<UserDetailsResponseDTO> result = new();
-            try
-            {
-                var query = new GetUserDetailsByUserNameQuery() { UserName = userName };
-                result.Result = await _mediator.Send(query);
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return BadRequest(result);
-            }
+            var query = new GetUserDetailsByUserNameQuery() { UserName = userName };
+            result.Result = await _mediator.Send(query);
+
             return Ok(result);
         }
 
