@@ -28,12 +28,6 @@ namespace Feed.Application.Handlers
             var userDetails = await _identityService.GetUserDetailsAsync(request.UserId) 
                 ?? throw new BadRequestException($"User with id {request.UserId} does not exist");
 
-            if (!await _postRepo.IsPostExistsAsync(request.PostId))
-            {
-                _logger.LogError("Cannot add reaction to non-existent post: {postId}", request.PostId);
-                throw new PostNotFoundException(request.PostId);
-            }
-
             var reaction = new Reaction()
             {
                 User = userDetails,

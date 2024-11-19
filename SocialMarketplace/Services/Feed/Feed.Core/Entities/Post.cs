@@ -18,7 +18,7 @@ namespace Feed.Core.Entities
         public CompactUser CompactUser { get; set; }
         public string ContentText { get; set; }
         public List<Media> Media { get; set; } = new List<Media>();
-        public List<Reaction> Reactions {  get; set; } = new List<Reaction>();
+        public IList<Reaction> Reactions {  get; set; } = new List<Reaction>();
         public List<string> CommentIds { get; set; } = new List<string>();
         public string Link { get; set; }
         public string? SharedPostId { get; set; }

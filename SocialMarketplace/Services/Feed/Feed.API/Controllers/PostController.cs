@@ -48,5 +48,13 @@ namespace Feed.API.Controllers
             result.Result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpPost("[action]/{postId}")]
+        public async Task<IActionResult> GetReactionsByPostId(string postId)
+        {
+            ReturnResult<IList<ReactionDto>> result = new();
+            result.Result = await _mediator.Send(new GetAllReacionsByPostIdQuery() { PostId = postId });
+            return Ok(result);
+        }
     }
 }
