@@ -35,13 +35,13 @@ namespace Feed.Infrastructure.Services.HttpClients
             }
         }
 
-        public async Task<CompactUser> GetUserDetailsAsync(string userId)
+        public async Task<User> GetUserDetailsAsync(string userId)
         {
             try
             {
                 var response = await _client.GetAsync($"User/GetUserDetails/{userId}");
                 response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadFromJsonAsync<ReturnResult<CompactUser>>();
+                var result = await response.Content.ReadFromJsonAsync<ReturnResult<User>>();
                 return result.Result;
             }
             catch (HttpRequestException ex)

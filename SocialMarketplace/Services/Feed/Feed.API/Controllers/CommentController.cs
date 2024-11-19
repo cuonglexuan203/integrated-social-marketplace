@@ -31,7 +31,7 @@ namespace Feed.API.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateComment(CreateCommentCommand command)
+        public async Task<IActionResult> CreateComment([FromForm] CreateCommentCommand command)
         {
             ReturnResult<CommentDto> result = new();
             result.Result = await _mediator.Send(command);

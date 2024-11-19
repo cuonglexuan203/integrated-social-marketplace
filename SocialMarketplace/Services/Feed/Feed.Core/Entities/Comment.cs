@@ -13,11 +13,10 @@ namespace Feed.Core.Entities
         public string Id { get; set; }
         [BsonRepresentation(BsonType.ObjectId)]
         public string PostId { get; set; }
-        public CompactUser User { get; set; }
-        public IEnumerable<Media> Media { get; set; } = new List<Media>();
+        public User User { get; set; }
+        public ICollection<Media> Media { get; set; } = new List<Media>();
         public string CommentText { get; set; }
-        public int LikesCount { get; set; }
-        public IEnumerable<Reaction> Reactions { get; set; } = new List<Reaction>();
+        public ICollection<Reaction> Reactions {  get; set; } = new List<Reaction>();
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string? ParentCommentID { get; set; }

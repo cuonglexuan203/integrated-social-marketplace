@@ -6,5 +6,6 @@ namespace Feed.Infrastructure.Configurations
         public string CloudName { get; set; }
         public string ApiKey { get; set; }
         public string ApiSecret { get; set; }
+        public string MediaLibrary { get; set; }
     }
 }
