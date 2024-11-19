@@ -8,7 +8,7 @@
             <app-user-new-post></app-user-new-post>
         </div>
         @for (post of posts; track $index) {
-            <div class="post-containter">
+            <div class="post-containter" [tuiSkeleton]="isLoading">
                 <app-post-item [isLoading]="isLoading" [post]="post" ></app-post-item>
             </div>   
         }

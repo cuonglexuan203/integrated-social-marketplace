@@ -49,7 +49,6 @@ export class NavItemComponent {
       }
     ).subscribe({
       next: (data) => {
-        console.log(data);
       },
       error: (error) => {
         console.error(error);

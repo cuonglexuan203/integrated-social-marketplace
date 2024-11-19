@@ -16,7 +16,8 @@ import { UserNewPostComponent } from './user-new-post/user-new-post.component';
   imports: [
     PostItemComponent,
     TagItemComponent,
-    UserNewPostComponent
+    UserNewPostComponent,
+    TuiSkeleton,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -31,7 +32,10 @@ export class HomeComponent {
 
   ngOnInit() {
     this.getAllPosts();
+    
+  }
 
+  ngOnChanges() {
   }
 
   getAllPosts() {

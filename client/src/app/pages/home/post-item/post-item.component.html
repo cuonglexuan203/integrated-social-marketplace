@@ -1,20 +1,20 @@
 @if(post) {
-    <div class="post-item-containter">
-        <div class="post-header">
+    <div class="post-item-containter"
+    >
+        <div class="post-header"> 
             <div class="left-header">
-                <tui-avatar [tuiSkeleton]="isLoading" [size]="'l'">{{ 'TD' | uppercase }}</tui-avatar>
+                <tui-avatar [size]="'l'">{{ 'TD' | uppercase }}</tui-avatar>
                 <div>
                         <a class="primary-color"
+                            *ngIf="post.user"
                             style="font-weight: bold;
                             text-decoration: none;
                             cursor: pointer;
                             "
-                            [tuiSkeleton]="isLoading"
                         >
                             {{post.user.fullName}}
                         </a>
                         <div style="color: gray"
-                            [tuiSkeleton]="isLoading"
                         >
                             {{post.createdAt | date: 'dd/MM/yyyy: HH:mm'}}
                         </div>
@@ -25,14 +25,14 @@
                     [style.height.px]="'18'"
                     [style.width.px]="'18'"
                     icon="@tui.user-round-plus"
-                    [tuiSkeleton]="isLoading"
+                
                     >
                 </tui-icon>
                 <tui-icon class="more-button"
                     icon="@tui.ellipsis"
                     tuiDropdownHover
                     [tuiDropdown]="moreDialog"
-                    [tuiSkeleton]="isLoading"
+                
                     >
                 </tui-icon>
                 <ng-template #moreDialog>
@@ -44,20 +44,18 @@
         </div>
         <div class="post-description">
             <span
-            [tuiSkeleton]="isLoading"
+        
             >
                 {{post.contentText}}
             </span>
-            <!-- <h5> {{item.name}}: {{item.price}}đ</h5> -->
         </div>
         <div class="post-media-url"
             tuiCarouselButtons
-            [tuiSkeleton]="isLoading"
-
-        >
+        >   
             @if(post.media){
-                <!-- @if(currentIndex != 0) { -->
+                @if(currentIndex != 0) {
                     <button
+                    *ngIf="post.media.length > 1"
                     iconStart="@tui.chevron-left"
                     tuiIconButton
                     class="prev-button"
@@ -68,18 +66,25 @@
                     Previous
                     </button>
                    
-                <!-- } -->
+                }
                 <tui-carousel
                     #carousel
                     class="carousel"
+                    [tuiSkeleton]="isLoading"
+                    [(index)]="currentIndex"
                     [style.--tui-carousel-padding]="0"
                     (indexChange)="onCarouselChange($event)"
                 >
                     @for (item of post.media; track $index) {
-                        <!-- @if(item.imageUrl) { -->
-                            <!-- @for (item of item.imageUrl; track $index) { -->
-                                <img [tuiSkeleton]="isLoading" *tuiItem src="{{ item.url }}" alt="image" class="carousel-image">
-                            <!-- } -->
+                        @if(item?.contentType === 'image') {
+                                <img *tuiItem src="{{ item?.url }}" class="carousel-image">
+                        }
+                        @if(item?.contentType === 'video') {
+                            <video *tuiItem src="{{ item?.url }}" controls class="carousel-video">
+                                Your browser does not support the video tag.
+                            </video>
+                        }
+                    
                         <!-- } -->
                         <!-- @if(item.videoUrl) {
                             @for (item of item.videoUrl; track $index) {
@@ -90,52 +95,68 @@
                         } -->
                     }
                 </tui-carousel>
-                <button
-                iconEnd="@tui.chevron-right"
+                
+                @if (currentIndex != post.media.length - 1) {
+                    <button
+                    iconEnd="@tui.chevron-right"
                     tuiIconButton
                     type="button"
                     class="next-button"
                     size="s"
                     (click)="carousel.next()"
-                >
-                Next
+                    *ngIf="post.media.length > 1"
+                    >
+                    Next
                 </button>
-                <!-- @if (currentIndex != item.mediaUrl.length - 1) {
-                    
-                } -->
-               
+                }
             }
+          
         </div>
-
+        <tui-pagination
+                size="s"
+                class="pagination"
+                [length]="post.media.length"
+                [(index)]="currentIndex"
+                *ngIf="post.media.length > 1"
+            />
         <div class="post-footer"
-            [tuiSkeleton]="isLoading"
+        
         >
             <div class="d-flex gap-3">
                 <div class="item-footer-post"
                     tuiDropdownHover
                     [tuiDropdown]="reactionDialog"
+                    [ngStyle]="{'background-color': isReacted && reactionsType[reactionType] ? '#71AAEB': ''}"
                 >
-                    <tui-icon class=""
-                        [style.height.px]="18"
-                        [style.width.px]="18"
-
-                        icon="@tui.heart">
-                    </tui-icon>
-                    <span>{{post.likesCount}}</span>
+                <tui-icon *ngIf="!isReacted"
+                    icon="@tui.heart"
+                    [style.height.px]="18"
+                    [style.width.px]="18"
+                    >
+                </tui-icon>
+                    <span *ngIf="isReacted && reactionsType[reactionType]?.emoji"
+                    >
+                        {{reactionsType[reactionType].emoji}}
+                      </span>
+                    <span
+                      [ngStyle]="{'color': isReacted && reactionsType[reactionType] ? 'white': ''}"
+                    >{{post.reactions.length}}</span>
                 </div>
 
                 <ng-template #reactionDialog>
-                    <app-reaction-dialog></app-reaction-dialog>
+                    <app-reaction-dialog (onReaction)="getReactionReacted($event)" [postItem]="post"></app-reaction-dialog>
                 </ng-template>
 
-                <div class="item-footer-post">
+                <div class="item-footer-post"
+                    (click)="onComment(post)"
+                >
                     <tui-icon class=""
                         icon="@tui.message-circle"
                         [style.height.px]="18"
                         [style.width.px]="18"
                         >
                     </tui-icon>
-                    <span>{{post.commentsCount}}</span>
+                    <span>{{post.comments.length}}</span>
                 </div>
             </div>
 

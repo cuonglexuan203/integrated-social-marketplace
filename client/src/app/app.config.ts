@@ -42,9 +42,9 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true
     },
-    {
-      provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true
+    // },
     {
       provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, useValue: (req: HttpRequest<any>) => {
         if (req.url.includes(`${environment.apiAuth}/login`)) {

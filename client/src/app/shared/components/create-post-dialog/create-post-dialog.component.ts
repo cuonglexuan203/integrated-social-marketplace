@@ -103,10 +103,15 @@ export class CreatePostDialogComponent {
     const files = (event.target as HTMLInputElement).files;
     if (files) {
       for (let i = 0; i < files.length; i++) {
-        const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg', '.webp'];
-        const allowedVideoExtensions = ['.mp4', '.mkv', '.avi', '.mov', '.webm', '.flv', '.3gp', '.3g2'];
+        const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+        const allowedVideoExtensions = ['.mp4', '.mpeg', '.quicktime'];
         if (allowedImageExtensions.includes(files[i].name.substring(files[i].name.lastIndexOf('.'))) || allowedVideoExtensions.includes(files[i].name.substring(files[i].name.lastIndexOf('.')))) {
-          this.uploadedFile.push(files[i]);
+          if(files[i].size < 10000000) {
+            this.uploadedFile.push(files[i]);
+          }
+          else {
+            this.alertService.showError('File size is too large', 'Error');
+          }
         }
         else {
           this.alertService.showError('Only image and video files are allowed', 'Error');
@@ -143,7 +148,7 @@ export class CreatePostDialogComponent {
         },
         error: (error) => {
           this.isLoading = false;
-          this.alertService.showError(error.error.message, 'Error');
+          this.alertService.showError('Cannot create a new post', 'Error');
         },
         complete: () => {
           this.isLoading = false;

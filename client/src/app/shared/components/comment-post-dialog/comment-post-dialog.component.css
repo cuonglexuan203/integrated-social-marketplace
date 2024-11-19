@@ -1,0 +1,129 @@
+.container {
+    width: 90vw !important;
+    height: 80vh !important;
+    display: flex;
+}
+
+  .prev-button {
+    color: #fff !important;
+    border: none !important;
+    padding: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    z-index: 9999;
+    position: absolute;
+}
+.next-button {
+    color: #fff !important;
+    border: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    z-index: 9999;
+    position: absolute;
+    transform: translateX(1950%);
+}
+
+.right-header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.comment-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    align-items: center;
+    color: gray;    
+}
+
+.comment-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 50vh;
+    overflow-y: auto;
+}
+
+.leave-comment {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    flex-direction: row;
+    position: sticky;
+    bottom: 80px;
+}
+
+.input-comment {
+    max-width: 300px;
+    width: 100%;
+    min-height: 36px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 18px;
+    background-color: #f0f2f5;
+    font-size: 14px;
+    line-height: 1.4;
+    resize: none;
+    overflow-y: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    flex: 1;
+
+}
+
+.input-comment:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.comment-content {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    max-height: 60vh;
+}
+
+.comment-user {
+    display: flex;
+}
+
+.comment-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.carousel {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto; 
+    border-radius: 10px;
+}
+
+.post-media-url {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.carousel-image,
+.carousel-video {
+    display: block; 
+    width: fit-content;
+    height: fit-content;
+}
+
+.carousel-video {
+    height: 50vh !important;
+}
+
+
+
+
+.image-toggle {
+    cursor: pointer;
+}

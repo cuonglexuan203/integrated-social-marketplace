@@ -1,11 +1,11 @@
 @if(reactions) {
     <div class="reaction-item">
-    @for (item of reactions; track $index) {
-        <span class="reaction-emoji"
-            [tuiHint]="item.label"
-        >
-            {{item.emoji}}
-        </span>
+        @for (item of reactions; track $index) {
+            <span (click)="onClickReaction(item.reactionType)" class="reaction-emoji"
+                [tuiHint]="item.label"
+            >
+                {{item.emoji}}
+            </span>
         }
     </div>
 }

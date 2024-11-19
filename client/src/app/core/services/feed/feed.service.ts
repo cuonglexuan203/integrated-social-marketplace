@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { FeedPost } from '../../models/feed/feed.model';
 import { MarketplaceResponse } from '../../models/marketplace/marketplace-response.model';
 import { CreatePostModel } from '../../models/feed/post.model';
+import { CommentRequestModel } from '../../models/comment/comment-request.model';
+import { ReactionRequestModel } from '../../models/reaction/reaction.model';
 
 
 @Injectable({
@@ -22,6 +24,18 @@ export class FeedService {
 
   createPost(post: any): Observable<MarketplaceResponse<any>> {
     return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/CreatePost`, post);
+  }
+
+  createComment(commentData: any): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/CreateComment`, commentData);
+  }
+
+  addReaction(reactionData: ReactionRequestModel): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/AddReaction`, reactionData);
+  }
+
+  getReactionsByPostId(postId: string): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/GetReactionsByPostId/${postId}`, null);
   }
 
 }
