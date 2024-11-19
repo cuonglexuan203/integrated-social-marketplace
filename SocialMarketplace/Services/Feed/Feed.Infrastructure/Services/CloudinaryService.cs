@@ -18,11 +18,13 @@ namespace Feed.Infrastructure.Services
         private const int MaxVideoSizeInMB = 100;
         private readonly string[] AllowedImageTypes = { "image/jpeg", "image/jpg", "image/png", "image/gif" };
         private readonly string[] AllowedVideoTypes = { "video/mp4", "video/mpeg", "video/quicktime" };
+        private readonly string MediaLibraryFolder;
         public CloudinaryService(IOptions<CloudinarySettings> config, ILogger<CloudinaryService> logger)
         {
             var account = new Account(config.Value.CloudName, config.Value.ApiKey, config.Value.ApiSecret);
             _cloudinary = new Cloudinary(account);
             _logger = logger;
+            MediaLibraryFolder = config.Value.MediaLibrary ?? "";
         }
         public async Task<ImageUploadResult> UploadImageAsync(IFormFile file)
         {
@@ -313,6 +315,8 @@ namespace Feed.Infrastructure.Services
 
         public async Task<List<MediaDto>> UploadMultipleFilesAsync(IList<IFormFile> files, string folder = "")
         {
+            folder = string.IsNullOrEmpty(folder) ? MediaLibraryFolder : folder;
+
             var uploadResults = new List<MediaDto>();
             var uploadTasks = new List<Task<MediaDto>>();
 
@@ -335,17 +339,17 @@ namespace Feed.Infrastructure.Services
             return uploadResults;
         }
 
-        private async Task<MediaDto> UploadSingleFileAsync(IFormFile file, string folder)
+        public async Task<MediaDto> UploadSingleFileAsync(IFormFile file, string folder = "")
         {
             try
             {
+                folder = string.IsNullOrEmpty(folder) ? MediaLibraryFolder : folder;
+
                 if (!IsFileValid(file, out string errorMessage))
                 {
                     _logger.LogWarning($"Invalid file: {file.FileName}. {errorMessage}");
                     return null;
                 }
-
-                using var stream = file.OpenReadStream();
 
                 if (IsImage(file.ContentType))
                 {

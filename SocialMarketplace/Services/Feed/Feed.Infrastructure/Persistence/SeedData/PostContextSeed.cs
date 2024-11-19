@@ -13,12 +13,12 @@ namespace Feed.Infrastructure.Persistence.SeedData
             string path = Path.Combine("Persistence", "SeedData", "Data", "posts.json");
             if (!checkPost)
             {
-                // local 1
-                //var postData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/posts.json");
-                // local 2 ( debug mode )
+                // run local
+                var postData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/posts.json");
+                // run by docker file
                 //var postData = File.ReadAllText("../src/services/Feed/Feed.Infrastructure/Persistence/SeedData/Data/posts.json");
-                //
-                var postData = File.ReadAllText(path);
+                // run by docker compose
+                //var postData = File.ReadAllText(path);
                 var posts = JsonConvert.DeserializeObject<List<Post>>(postData);
                 if (posts != null)
                 {
