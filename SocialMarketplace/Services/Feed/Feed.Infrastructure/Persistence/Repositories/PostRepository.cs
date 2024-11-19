@@ -1,9 +1,11 @@
 ﻿using Feed.Core.Entities;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
+using Feed.Core.ValueObjects;
 using Feed.Infrastructure.Persistence.DbContext;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using System.Xml.Linq;
 
 namespace Feed.Infrastructure.Persistence.Repositories
 {
@@ -101,6 +103,37 @@ namespace Feed.Infrastructure.Persistence.Repositories
         public async Task<bool> IsPostExistsAsync(string id)
         {
             return await _posts.Find(x => x.Id == id).AnyAsync();
+        }
+
+        public async Task<Reaction> AddReacionToPostAsync(string postId, Reaction reaction)
+        {
+            if (string.IsNullOrWhiteSpace(postId))
+                throw new BadRequestException("PostId cannot be empty.");
+
+            if (reaction is null)
+                throw new BadRequestException("Reaction cannot be null.");
+
+            try
+            {
+                if (!(await IsPostExistsAsync(postId)))
+                    throw new PostNotFoundException(postId);
+
+                var filter = Builders<Post>.Filter.Eq(x => x.Id, postId);
+                var updateDef = Builders<Post>.Update.Push(x => x.Reactions, reaction);
+                await _posts.UpdateOneAsync(filter, updateDef);
+
+                return reaction;
+            }
+            catch (PostNotFoundException)
+            {
+                _logger.LogWarning($"Cannot add reaction to non-existent post: {postId}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding reaction to post");
+                throw;
+            }
         }
     }
 }

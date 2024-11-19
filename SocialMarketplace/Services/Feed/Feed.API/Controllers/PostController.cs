@@ -10,8 +10,8 @@ using System.Net;
 
 namespace Feed.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize]
     public class PostController : ApiController
     {
         private readonly IMediator _mediator;
@@ -38,6 +38,14 @@ namespace Feed.API.Controllers
         {
             ReturnResult<PostDto> result = new();
             result.Result = await _mediator.Send(post);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddReaction(AddReactionToPostCommand command)
+        {
+            ReturnResult<ReactionDto> result = new();
+            result.Result = await _mediator.Send(command);
             return Ok(result);
         }
     }

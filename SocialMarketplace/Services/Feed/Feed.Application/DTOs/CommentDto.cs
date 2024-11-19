@@ -9,7 +9,7 @@ namespace Feed.Application.DTOs
         public string Id { get; set; }
         public string PostId { get; set; }
         public CompactUser User { get; set; }
-        public List<Media> Media { get; set; }
+        public List<MediaDto> Media { get; set; }
         public string CommentText { get; set; }
         public int LikesCount { get; set; }
         public List<Reaction> Reactions { get; set; }
