@@ -1,6 +1,7 @@
-﻿using Feed.Core.Entities;
+﻿using Feed.Application.DTOs;
+using Feed.Core.Entities;
 using MongoDB.Driver;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace Feed.Infrastructure.Persistence.SeedData
 {
@@ -18,7 +19,7 @@ namespace Feed.Infrastructure.Persistence.SeedData
                 //var postData = File.ReadAllText("../src/services/Feed/Feed.Infrastructure/Persistence/SeedData/Data/posts.json");
                 //
                 var postData = File.ReadAllText(path);
-                var posts = JsonSerializer.Deserialize<List<Post>>(postData);
+                var posts = JsonConvert.DeserializeObject<List<Post>>(postData);
                 if (posts != null)
                 {
                     postCollection.InsertMany(posts);

@@ -31,7 +31,7 @@ namespace Feed.Application.Handlers
         {
             try
             {
-                var userDetails = await _identityService.GetUserDetails(request.UserId);
+                var userDetails = await _identityService.GetUserDetailsAsync(request.UserId);
                 var mediaResult = await _cloudinaryService.UploadMultipleFilesAsync(request.Files, "SocialMarketplace");
                 var post = new Post()
                 {
@@ -45,7 +45,7 @@ namespace Feed.Application.Handlers
             }
             catch (Exception ex) {
                 _logger.LogError("An error occur while creating the Post: {ErrorMessage}", ex.Message);
-                throw ex;
+                throw;
             }
         }
     }

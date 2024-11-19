@@ -33,10 +33,11 @@ namespace Identity.Infrastructure.Services
 
         public async Task<bool> CreateRoleAsync(string roleName)
         {
+            throw new BadRequestException();
             var result = await _roleManager.CreateAsync(new ApplicationRole(roleName));
             if (!result.Succeeded)
             {
-                throw new ValidationException(result.Errors);
+                throw new CustomValidationException(result.Errors);
             }
             return result.Succeeded;
         }
@@ -64,13 +65,13 @@ namespace Identity.Infrastructure.Services
 
             if (!result.Succeeded)
             {
-                throw new ValidationException(result.Errors);
+                throw new CustomValidationException(result.Errors);
             }
 
             var addUserRole = await _userManager.AddToRolesAsync(user, roles);
             if (!addUserRole.Succeeded)
             {
-                throw new ValidationException(addUserRole.Errors);
+                throw new CustomValidationException(addUserRole.Errors);
             }
             return (result.Succeeded, user.Id);
         }
@@ -90,7 +91,7 @@ namespace Identity.Infrastructure.Services
             var result = await _roleManager.DeleteAsync(roleDetails);
             if (!result.Succeeded)
             {
-                throw new ValidationException(result.Errors);
+                throw new CustomValidationException(result.Errors);
             }
             return result.Succeeded;
         }

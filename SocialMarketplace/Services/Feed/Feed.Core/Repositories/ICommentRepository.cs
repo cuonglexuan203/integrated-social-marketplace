@@ -1,14 +1,15 @@
 ﻿using Feed.Core.Entities;
+using Feed.Core.Specs;
 
 namespace Feed.Core.Repositories
 {
     public interface ICommentRepository
     {
-        Task<IEnumerable<Comment>> GetComments();
-        Task<Comment> GetComment(string id);
-        Task<IEnumerable<Comment>> GetCommentByPostID(string postId);
-        Task<bool> CreateComment(Comment post);
-        Task<bool> UpdateComment(Comment post);
+        Task<IEnumerable<Comment>> GetAllCommentsAsync();
+        Task<IEnumerable<Comment>> GetAllCommentsByPostId(string postId);
+        Task<Pagination<Comment>> GetCommentsByPostId(string postId, CommentSpecParams commentParams);
+        Task<Comment> CreateComment(Comment comment);
+        Task<bool> UpdateComment(Comment comment);
         Task<bool> DeleteComment(string id);
     }
 }
