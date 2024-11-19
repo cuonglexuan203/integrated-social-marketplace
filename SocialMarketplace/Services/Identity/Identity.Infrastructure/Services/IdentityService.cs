@@ -33,7 +33,6 @@ namespace Identity.Infrastructure.Services
 
         public async Task<bool> CreateRoleAsync(string roleName)
         {
-            throw new BadRequestException();
             var result = await _roleManager.CreateAsync(new ApplicationRole(roleName));
             if (!result.Succeeded)
             {
