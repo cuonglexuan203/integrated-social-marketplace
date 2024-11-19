@@ -21,8 +21,17 @@ namespace Feed.Core.Entities
         public CompactUser CompactUser { get; set; }
         public IEnumerable<Media> Media { get; set; } = new List<Media>();
         public string CommentText { get; set; }
-        public int LikesCount { get; set; }
-        public IEnumerable<Reaction> Reactions { get; set; } = new List<Reaction>();
+        public long TotalReactions { get; private set; }
+        private List<Reaction> _reactions = new List<Reaction>();
+        public List<Reaction> Reactions
+        {
+            get => _reactions;
+            set
+            {
+                _reactions = value;
+                TotalReactions = value.Count;
+            }
+        }
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string? ParentCommentID { get; set; }
