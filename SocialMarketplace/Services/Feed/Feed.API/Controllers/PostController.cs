@@ -34,7 +34,7 @@ namespace Feed.API.Controllers
 
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(PostDto), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CreatePost(CreatePostCommand post)
+        public async Task<IActionResult> CreatePost([FromForm] CreatePostCommand post)
         {
             ReturnResult<PostDto> result = new();
             result.Result = await _mediator.Send(post);

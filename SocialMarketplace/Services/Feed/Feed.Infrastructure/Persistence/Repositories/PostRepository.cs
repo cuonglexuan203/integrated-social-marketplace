@@ -161,7 +161,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
             }
         }
 
-        public async Task<IList<Reaction>> GetAllReactionsByPostId(string postId, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Reaction>> GetAllReactionsByPostId(string postId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(postId))
                 throw new BadRequestException("PostId cannot be empty.");

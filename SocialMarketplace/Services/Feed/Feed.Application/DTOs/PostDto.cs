@@ -5,7 +5,7 @@ namespace Feed.Application.DTOs
     public class PostDto
     {
         public string Id { get; set; }
-        public CompactUser User { get; set; }
+        public User User { get; set; }
         public string ContentText { get; set; }
         public List<MediaDto> Media { get; set; }
         public int LikesCount { get; set; }

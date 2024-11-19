@@ -3,6 +3,7 @@ using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Feed.Application.DTOs;
 using Feed.Application.Interfaces.Services;
+using Feed.Core.Exceptions;
 using Feed.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -18,11 +19,13 @@ namespace Feed.Infrastructure.Services
         private const int MaxVideoSizeInMB = 100;
         private readonly string[] AllowedImageTypes = { "image/jpeg", "image/jpg", "image/png", "image/gif" };
         private readonly string[] AllowedVideoTypes = { "video/mp4", "video/mpeg", "video/quicktime" };
+        private readonly string MediaLibraryFolder;
         public CloudinaryService(IOptions<CloudinarySettings> config, ILogger<CloudinaryService> logger)
         {
             var account = new Account(config.Value.CloudName, config.Value.ApiKey, config.Value.ApiSecret);
             _cloudinary = new Cloudinary(account);
             _logger = logger;
+            MediaLibraryFolder = config.Value.MediaLibrary ?? "";
         }
         public async Task<ImageUploadResult> UploadImageAsync(IFormFile file)
         {
@@ -172,7 +175,7 @@ namespace Feed.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error uploading image {file.FileName}");
-                return null;
+                throw;
             }
         }
 
@@ -223,7 +226,7 @@ namespace Feed.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error uploading video {file.FileName}");
-                return null;
+                throw;
             }
         }
 
@@ -313,6 +316,8 @@ namespace Feed.Infrastructure.Services
 
         public async Task<List<MediaDto>> UploadMultipleFilesAsync(IList<IFormFile> files, string folder = "")
         {
+            folder = string.IsNullOrEmpty(folder) ? MediaLibraryFolder : folder;
+
             var uploadResults = new List<MediaDto>();
             var uploadTasks = new List<Task<MediaDto>>();
 
@@ -335,31 +340,23 @@ namespace Feed.Infrastructure.Services
             return uploadResults;
         }
 
-        private async Task<MediaDto> UploadSingleFileAsync(IFormFile file, string folder)
+        public async Task<MediaDto> UploadSingleFileAsync(IFormFile file, string folder = "")
         {
-            try
+            folder = string.IsNullOrEmpty(folder) ? MediaLibraryFolder : folder;
+
+            if (!IsFileValid(file, out string errorMessage))
             {
-                if (!IsFileValid(file, out string errorMessage))
-                {
-                    _logger.LogWarning($"Invalid file: {file.FileName}. {errorMessage}");
-                    return null;
-                }
-
-                using var stream = file.OpenReadStream();
-
-                if (IsImage(file.ContentType))
-                {
-                    return await UploadSingleImageAsync(file, folder);
-                }
-                else // Video
-                {
-                    return await UploadSingleVideoAsync(file, folder);
-                }
+                _logger.LogError($"Invalid file: {file.FileName}. {errorMessage}");
+                throw new BadRequestException($"Invalid file: {file.FileName}. {errorMessage}");
             }
-            catch (Exception ex)
+
+            if (IsImage(file.ContentType))
             {
-                _logger.LogError(ex, $"Error uploading file {file.FileName}");
-                return null;
+                return await UploadSingleImageAsync(file, folder);
+            }
+            else // Video
+            {
+                return await UploadSingleVideoAsync(file, folder);
             }
         }
 
