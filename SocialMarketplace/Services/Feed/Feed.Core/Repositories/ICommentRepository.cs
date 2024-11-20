@@ -1,5 +1,6 @@
 ﻿using Feed.Core.Entities;
 using Feed.Core.Specs;
+using Feed.Core.ValueObjects;
 
 namespace Feed.Core.Repositories
 {
@@ -11,5 +12,7 @@ namespace Feed.Core.Repositories
         Task<Comment> CreateComment(Comment comment);
         Task<bool> UpdateComment(Comment comment);
         Task<bool> DeleteComment(string id);
+        Task<Reaction> AddReacionToCommentAsync(string commentId, Reaction reaction, CancellationToken cancellationToken = default);
+        Task<bool> RemoveReactionFromCommentAsync(string commentId, string userId, CancellationToken cancellationToken = default);
     }
 }
