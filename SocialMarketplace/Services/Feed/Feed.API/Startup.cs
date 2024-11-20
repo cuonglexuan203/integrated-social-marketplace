@@ -1,5 +1,6 @@
 ﻿using Feed.API.Middlewares;
 using Feed.Application.Extensions;
+using Feed.Application.Interfaces;
 using Feed.Application.Interfaces.HttpClients;
 using Feed.Application.Interfaces.Services;
 using Feed.Core.Repositories;
@@ -8,6 +9,7 @@ using Feed.Infrastructure.Persistence.DbContext;
 using Feed.Infrastructure.Persistence.Repositories;
 using Feed.Infrastructure.Services;
 using Feed.Infrastructure.Services.HttpClients;
+using Feed.Infrastructure.Validation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -78,6 +80,7 @@ namespace Feed.API
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddHttpContextAccessor();
             services.AddHttpClient<IIdentityService, IdentityService>();
+            services.AddScoped<IMongoIdValidator, MongoIdValidator>();
             #endregion
 
             #region CORS registration

@@ -38,5 +38,21 @@ namespace Feed.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RemoveReactionFromComment(RemoveReactionFromCommentCommand command)
+        {
+            ReturnResult<bool> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeleteComment(DeleteCommentCommand command)
+        {
+            ReturnResult<bool> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

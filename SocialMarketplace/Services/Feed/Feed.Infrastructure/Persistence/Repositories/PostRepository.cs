@@ -20,23 +20,30 @@ namespace Feed.Infrastructure.Persistence.Repositories
             _commentRepository = commentRepository;
             _logger = logger;
         }
+
+        private FilterDefinition<Post> GetNonDeletedFilter()
+        {
+            return Builders<Post>.Filter.Eq(x => x.IsDeleted, false);
+        }
         public async Task<Post> CreatePost(Post post)
         {
             await _posts.InsertOneAsync(post);
             return post;
         }
 
-        public async Task<bool> DeletePost(string id)
-        {
-            FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, id);
-            var result = await _posts
-                .DeleteOneAsync(filter);
-            return result.IsAcknowledged && result.DeletedCount > 0;
-        }
+        //public async Task<bool> DeletePost(string id)
+        //{
+        //    FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, id);
+        //    var result = await _posts
+        //        .DeleteOneAsync(filter);
+        //    return result.IsAcknowledged && result.DeletedCount > 0;
+        //}
 
         public async Task<Post> GetPost(string id)
         {
-            FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, id);
+            FilterDefinition<Post> filter = Builders<Post>.Filter.And(
+                Builders<Post>.Filter.Eq(p => p.Id, id),
+                GetNonDeletedFilter());
             return await _posts
                 .Find(filter)
                 .FirstOrDefaultAsync();
@@ -54,13 +61,13 @@ namespace Feed.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
             return await _posts
-                .Find(_ => true)
+                .Find(GetNonDeletedFilter())
                 .ToListAsync();
         }
 
         public async Task<bool> UpdatePost(Post post)
         {
-            FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, post.Id);
+            FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, post.Id) & GetNonDeletedFilter();
             var result = await _posts
                 .ReplaceOneAsync(filter, post);
             return result.IsAcknowledged && result.ModifiedCount > 0;
@@ -101,7 +108,10 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
         public async Task<bool> IsPostExistsAsync(string id)
         {
-            return await _posts.Find(x => x.Id == id).AnyAsync();
+            var filter = Builders<Post>.Filter.And(
+                Builders<Post>.Filter.Eq(x => x.Id, id),
+                GetNonDeletedFilter());
+            return await _posts.Find(filter).AnyAsync();
         }
 
         public async Task<Reaction> AddReacionToPostAsync(string postId, Reaction reaction, CancellationToken cancellationToken = default)
@@ -114,6 +124,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
                 // Check if user already reacted
                 var filter = Builders<Post>.Filter.And(
                     Builders<Post>.Filter.Eq(x => x.Id, postId),
+                    GetNonDeletedFilter(),
                     Builders<Post>.Filter.ElemMatch(x => x.Reactions,
                         r => r.User.Id == reaction.User.Id)
                 );
@@ -131,7 +142,9 @@ namespace Feed.Infrastructure.Persistence.Repositories
                 }
 
                 // Add new reaction
-                var updateFilter = Builders<Post>.Filter.Eq(x => x.Id, postId);
+                var updateFilter = Builders<Post>.Filter.And(
+                    Builders<Post>.Filter.Eq(x => x.Id, postId),
+                    GetNonDeletedFilter());
                 var updateDef = Builders<Post>.Update.Push(x => x.Reactions, reaction);
 
                 var result = await _posts.UpdateOneAsync(
@@ -161,12 +174,28 @@ namespace Feed.Infrastructure.Persistence.Repositories
             }
         }
 
+        public async Task<bool> RemoveReactionFromPostAsync(string postId, string userId, CancellationToken cancellationToken = default)
+        {
+            var filter = Builders<Post>.Filter.Eq(p => p.Id, postId) & GetNonDeletedFilter();
+            var update = Builders<Post>.Update.PullFilter(p => p.Reactions, r => r.User.Id == userId);
+
+            var result = await _posts.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+
+            if(result.ModifiedCount == 0)
+            {
+                _logger.LogError("No reaction removed for post id {postId}, user id {userId}. Possible reasons: post not found or reaction does not exist.", postId, userId);
+                throw new NotFoundException("Reaction not found or already removed");
+            }
+
+            return true;
+        }
+
         public async Task<IEnumerable<Reaction>> GetAllReactionsByPostId(string postId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(postId))
                 throw new BadRequestException("PostId cannot be empty.");
 
-            var filter = Builders<Post>.Filter.Eq(x => x.Id, postId);
+            var filter = Builders<Post>.Filter.Eq(x => x.Id, postId) & GetNonDeletedFilter();
             var reactions = await _posts.Find(filter)
                 .Project(x => x.Reactions)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -178,6 +207,24 @@ namespace Feed.Infrastructure.Persistence.Repositories
             }
 
             return reactions;
+        }
+
+        public async Task<bool> SoftDeleteAsync(string postId, CancellationToken token = default)
+        {
+            var filter = Builders<Post>.Filter.Eq(x => x.Id, postId) & GetNonDeletedFilter();
+            var update = Builders<Post>.Update
+                .Set(x => x.IsDeleted, true)
+                .Set(x => x.DeletedAt, DateTimeOffset.Now);
+
+            var result = await _posts.UpdateOneAsync(filter, update, cancellationToken: token);
+            return result.ModifiedCount > 0;
+        }
+
+        public async Task<bool> DeleteAsync(string postId, CancellationToken token = default)
+        {
+            var filter = Builders<Post>.Filter.Eq(x => x.Id, postId);
+            var result = await _posts.DeleteOneAsync(filter, cancellationToken: token);
+            return result.DeletedCount > 0;
         }
     }
 }
