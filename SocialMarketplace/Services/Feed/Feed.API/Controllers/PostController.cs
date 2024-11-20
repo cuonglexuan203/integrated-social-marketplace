@@ -56,5 +56,13 @@ namespace Feed.API.Controllers
             result.Result = await _mediator.Send(new GetAllReacionsByPostIdQuery() { PostId = postId });
             return Ok(result);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RemoveReactionFromPost(RemoveReactionFromPostCommand command)
+        {
+            ReturnResult<bool> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

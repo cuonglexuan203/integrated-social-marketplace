@@ -161,6 +161,22 @@ namespace Feed.Infrastructure.Persistence.Repositories
             }
         }
 
+        public async Task<bool> RemoveReactionFromPostAsync(string postId, string userId, CancellationToken cancellationToken = default)
+        {
+            var filter = Builders<Post>.Filter.Eq(p => p.Id, postId);
+            var update = Builders<Post>.Update.PullFilter(p => p.Reactions, r => r.User.Id == userId);
+
+            var result = await _posts.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+
+            if(result.ModifiedCount == 0)
+            {
+                _logger.LogError("No reaction removed for post id {postId}, user id {userId}. Possible reasons: post not found or reaction does not exist.", postId, userId);
+                throw new NotFoundException("Reaction not found or already removed");
+            }
+
+            return true;
+        }
+
         public async Task<IEnumerable<Reaction>> GetAllReactionsByPostId(string postId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(postId))
