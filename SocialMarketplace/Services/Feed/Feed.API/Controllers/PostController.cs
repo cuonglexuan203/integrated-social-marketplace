@@ -2,6 +2,7 @@
 using Feed.Application.Common.Models;
 using Feed.Application.DTOs;
 using Feed.Application.Queries;
+using Feed.Core.Specs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,24 @@ namespace Feed.API.Controllers
         {
             ReturnResult<IList<PostDto>> result = new();
             var query = new GetAllPostsQuery();
+            result.Result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetPosts([FromQuery]PostSpecParams postParams)
+        {
+            ReturnResult<Pagination<PostDto>> result = new();
+            var query = new GetPostsQuery(postParams);
+            result.Result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]/{postId}")]
+        public async Task<IActionResult> GetPost(string postId)
+        {
+            ReturnResult<PostDto> result = new();
+            var query = new GetPostByPostIdQuery(postId);
             result.Result = await _mediator.Send(query);
             return Ok(result);
         }

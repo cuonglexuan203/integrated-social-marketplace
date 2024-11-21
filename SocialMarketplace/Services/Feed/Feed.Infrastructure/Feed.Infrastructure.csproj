@@ -20,6 +20,9 @@
     <None Update="Persistence\SeedData\Data\comments.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Persistence\SeedData\Data\old_posts.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Persistence\SeedData\Data\posts.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

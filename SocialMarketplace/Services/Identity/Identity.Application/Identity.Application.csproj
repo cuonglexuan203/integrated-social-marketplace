@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Identity.Core\Identity.Core.csproj" />
+
   </ItemGroup>
 
 </Project>

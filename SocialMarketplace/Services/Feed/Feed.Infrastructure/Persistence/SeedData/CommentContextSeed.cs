@@ -17,7 +17,7 @@ namespace Feed.Infrastructure.Persistence.SeedData
                 // run by docker compose
                 var commentData = File.ReadAllText(path);
                 var comments = JsonConvert.DeserializeObject<List<Comment>>(commentData);
-                if (comments != null)
+                if (comments != null & comments?.Count > 0)
                 {
                     commentCollection.InsertMany(comments);
                 }

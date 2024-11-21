@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Interfaces;
+using Identity.Core.Enums;
 using MediatR;
 
 namespace Identity.Application.Commands.User.Create
@@ -10,7 +11,13 @@ namespace Identity.Application.Commands.User.Create
         public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmationPassword { get; set; }
-        public List<string> Roles { get; set; }
+        public ICollection<string> Roles { get; set; }
+        public string? ProfilePictureUrl { get; set; }
+        public int? Gender { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public ICollection<string>? Interests { get; set; }
+        public string? City { get; set; }
+        public string? Country { get; set; }
     }
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
@@ -22,7 +29,7 @@ namespace Identity.Application.Commands.User.Create
         }
         public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.CreateUserAsync(request.UserName, request.Password, request.Email, request.FullName, request.Roles);
+            var result = await _identityService.CreateUserAsync(request);
             return result.isSucceed ? 1 : 0;
         }
     }
