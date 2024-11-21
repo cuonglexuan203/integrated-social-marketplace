@@ -1,0 +1,330 @@
+[
+  {
+    "id": "673c9bc1f467e7ab1e40a2ce",
+    "user": {
+      "id": "6d3d5105-461e-4b17-a52e-7e7ccddebfe1",
+      "fullName": "Admin",
+      "userName": "admin",
+      "email": "admin@gmail.com",
+      "roles": [
+        "admin"
+      ],
+      "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+      "profileUrl": null
+    },
+    "contentText": "Hôm nay, bọn mình sẽ cùng tự tạo con trợ lý ảo/bạn gái ảo AI siêu đơn giản, chạy ngay trên máy tính mà không cần internet luôn :3.  Con trợ lý ảo này khá thông minh dù không có dòng if/else nào, có thể trả lời câu hỏi, viết code, hướng dẫn bạn học và nhớ được ngữ cảnh trò chuyện nha.",
+    "media": [
+      {
+        "publicId": "x0j8cbs93s8xm3nsv4dp",
+        "url": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1732025281/x0j8cbs93s8xm3nsv4dp.jpg",
+        "contentType": "image",
+        "fileSize": 12869,
+        "format": "jpg",
+        "duration": null,
+        "thumbnailUrl": null,
+        "width": 500,
+        "height": 281
+      }
+    ],
+    "reactions": [
+      {
+        "user": {
+          "id": "82bce9d9-b44b-4873-be40-9b61297b925e",
+          "fullName": "User",
+          "userName": "user",
+          "email": "user@gmail.com",
+          "roles": [
+            "user"
+          ],
+          "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+          "profileUrl": null
+        },
+        "type": 2,
+        "createdAt": "2024-11-19T21:09:17.9794825+07:00"
+      },
+      {
+        "user": {
+          "id": "6d3d5105-461e-4b17-a52e-7e7ccddebfe1",
+          "fullName": "Admin",
+          "userName": "admin",
+          "email": "admin@gmail.com",
+          "roles": [
+            "admin"
+          ],
+          "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+          "profileUrl": null
+        },
+        "type": 1,
+        "createdAt": "2024-11-19T21:09:37.9308205+07:00"
+      }
+    ],
+    "commentIds": [
+      "673c9c63f467e7ab1e40a2cf",
+      "673c9c88f467e7ab1e40a2d0"
+    ],
+    "link": null,
+    "sharedPostId": null,
+    "tags": [
+      "AI",
+      "chatbot",
+      "technology"
+    ],
+    "createdAt": "2024-11-19T21:08:01.92297+07:00",
+    "modifiedAt": "2024-11-19T21:08:01.9229723+07:00",
+    "isDeleted": false,
+    "deletedAt": null
+  },
+  {
+    "id": "673c9e3ef467e7ab1e40a2d1",
+    "user": {
+      "id": "82bce9d9-b44b-4873-be40-9b61297b925e",
+      "fullName": "User",
+      "userName": "user",
+      "email": "user@gmail.com",
+      "roles": [
+        "user"
+      ],
+      "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+      "profileUrl": null
+    },
+    "contentText": "Không được 9, phải 10 hết con nhé 🐧",
+    "media": [
+      {
+        "publicId": "xtdlxshpcd48pe0y7aln",
+        "url": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1732025917/xtdlxshpcd48pe0y7aln.jpg",
+        "contentType": "image",
+        "fileSize": 24682,
+        "format": "jpg",
+        "duration": null,
+        "thumbnailUrl": null,
+        "width": 500,
+        "height": 333
+      }
+    ],
+    "reactions": [],
+    "commentIds": [],
+    "link": null,
+    "sharedPostId": null,
+    "tags": [
+      "AI",
+      "Elon Musk",
+      "Technology"
+    ],
+    "createdAt": "2024-11-19T21:18:38.2695232+07:00",
+    "modifiedAt": "2024-11-19T21:18:38.2695245+07:00",
+    "isDeleted": false,
+    "deletedAt": null
+  },
+  {
+    "id": "673ca460966619a1efb0aa58",
+    "user": {
+      "id": "82bce9d9-b44b-4873-be40-9b61297b925e",
+      "fullName": "User",
+      "userName": "user",
+      "email": "user@gmail.com",
+      "roles": [
+        "user"
+      ],
+      "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+      "profileUrl": null
+    },
+    "contentText": "Chúng ta đang ở đâu?? 👇👇👇",
+    "media": [
+      {
+        "publicId": "yefnjihtpxzm3tn9repl",
+        "url": "https://res.cloudinary.com/dpnh3ytfm/video/upload/v1732027487/yefnjihtpxzm3tn9repl.mp4",
+        "contentType": "video",
+        "fileSize": 11165652,
+        "format": "mp4",
+        "duration": 74.755147,
+        "thumbnailUrl": "https://res.cloudinary.com/dpnh3ytfm/video/upload/v1732027487/yefnjihtpxzm3tn9repl.jpg",
+        "width": null,
+        "height": null
+      }
+    ],
+    "reactions": [
+      {
+        "user": {
+          "id": "6d3d5105-461e-4b17-a52e-7e7ccddebfe1",
+          "fullName": "Admin",
+          "userName": "admin",
+          "email": "admin@gmail.com",
+          "roles": [
+            "admin"
+          ],
+          "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+          "profileUrl": null
+        },
+        "type": 2,
+        "createdAt": "2024-11-19T21:46:32.4213883+07:00"
+      },
+      {
+        "user": {
+          "id": "82bce9d9-b44b-4873-be40-9b61297b925e",
+          "fullName": "User",
+          "userName": "user",
+          "email": "user@gmail.com",
+          "roles": [
+            "user"
+          ],
+          "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+          "profileUrl": null
+        },
+        "type": 1,
+        "createdAt": "2024-11-19T21:46:52.007655+07:00"
+      }
+    ],
+    "commentIds": [
+      "673ca510966619a1efb0aa59",
+      "673ca74ffa1995b684873e85"
+    ],
+    "link": null,
+    "sharedPostId": null,
+    "tags": [
+      "information technology",
+      "code"
+    ],
+    "createdAt": "2024-11-19T21:44:48.3869455+07:00",
+    "modifiedAt": "2024-11-19T21:44:48.3870852+07:00",
+    "isDeleted": false,
+    "deletedAt": null
+  },
+  {
+    "id": "673ca9a44c6540083f098d82",
+    "user": {
+      "id": "6d3d5105-461e-4b17-a52e-7e7ccddebfe1",
+      "fullName": "Admin",
+      "userName": "admin",
+      "email": "admin@gmail.com",
+      "roles": [
+        "admin"
+      ],
+      "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+      "profileUrl": null
+    },
+    "contentText": "CÁCH ĐOÀN PHIM CHÚNG TÔI TÌM ĐƯỢC ANH ẤY Với vai diễn Dương – chàng trai trải qua những mất mát, cô đơn nhưng vẫn giữ cho mình sự dịu dàng và ấm áp,Hoàng Quân sẽ mang đến hình ảnh một thanh xuân đầy tổn thương và hy vọng. Hãy đón xem hành trình của cậu ấy trong Forget Me Not  – nơi mỗi khoảnh khắc đều là những xúc cảm khó quên.",
+    "media": [],
+    "reactions": [],
+    "commentIds": [],
+    "link": null,
+    "sharedPostId": null,
+    "tags": [],
+    "createdAt": "2024-11-19T22:07:16.5573759+07:00",
+    "modifiedAt": "2024-11-19T22:07:16.5574504+07:00",
+    "isDeleted": false,
+    "deletedAt": null
+  },
+  {
+    "id": "673ca9c14c6540083f098d83",
+    "user": {
+      "id": "6d3d5105-461e-4b17-a52e-7e7ccddebfe1",
+      "fullName": "Admin",
+      "userName": "admin",
+      "email": "admin@gmail.com",
+      "roles": [
+        "admin"
+      ],
+      "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+      "profileUrl": null
+    },
+    "contentText": null,
+    "media": [
+      {
+        "publicId": "ngbo0kwjlcr4oj2aprj9",
+        "url": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1732028865/ngbo0kwjlcr4oj2aprj9.jpg",
+        "contentType": "image",
+        "fileSize": 22186,
+        "format": "jpg",
+        "duration": null,
+        "thumbnailUrl": null,
+        "width": 500,
+        "height": 333
+      }
+    ],
+    "reactions": [],
+    "commentIds": [],
+    "link": null,
+    "sharedPostId": null,
+    "tags": [
+      "natural"
+    ],
+    "createdAt": "2024-11-19T22:07:42.7908899+07:00",
+    "modifiedAt": "2024-11-19T22:07:42.7909011+07:00",
+    "isDeleted": false,
+    "deletedAt": null
+  },
+  {
+    "id": "673ca9f94c6540083f098d84",
+    "user": {
+      "id": "6d3d5105-461e-4b17-a52e-7e7ccddebfe1",
+      "fullName": "Admin",
+      "userName": "admin",
+      "email": "admin@gmail.com",
+      "roles": [
+        "admin"
+      ],
+      "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+      "profileUrl": null
+    },
+    "contentText": "Học sinh Triều Tiên được đào tạo C++ Mình bất ngờ khi xem video xem được cảnh các bé học sinh Triều Tiên đang ngồi máy tính, có bé thì đang luyện gõ 10 ngón có bé đang học vẽ 3D, đặc biệt có bạn đang code C++ trên DevC :v điều mà truyền thông phương Tây tuyền truyền rằng ở đó người dân không được tiếp cận điện thoại và máy tính :v",
+    "media": [
+      {
+        "publicId": "kyhf1lgvpjhvdqojan2k",
+        "url": "https://res.cloudinary.com/dpnh3ytfm/video/upload/v1732028920/kyhf1lgvpjhvdqojan2k.mp4",
+        "contentType": "video",
+        "fileSize": 11165652,
+        "format": "mp4",
+        "duration": 74.755147,
+        "thumbnailUrl": "https://res.cloudinary.com/dpnh3ytfm/video/upload/v1732028920/kyhf1lgvpjhvdqojan2k.jpg",
+        "width": null,
+        "height": null
+      }
+    ],
+    "reactions": [
+      {
+        "user": {
+          "id": "6d3d5105-461e-4b17-a52e-7e7ccddebfe1",
+          "fullName": "Admin",
+          "userName": "admin",
+          "email": "admin@gmail.com",
+          "roles": [
+            "admin"
+          ],
+          "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+          "profileUrl": null
+        },
+        "type": 1,
+        "createdAt": "2024-11-19T22:09:13.8633272+07:00"
+      },
+      {
+        "user": {
+          "id": "82bce9d9-b44b-4873-be40-9b61297b925e",
+          "fullName": "User",
+          "userName": "user",
+          "email": "user@gmail.com",
+          "roles": [
+            "user"
+          ],
+          "profilePictureUrl": "https://res.cloudinary.com/dpnh3ytfm/image/upload/v1731844682/anonymous_wgerg5.jpg",
+          "profileUrl": null
+        },
+        "type": 4,
+        "createdAt": "2024-11-19T22:10:00.0556064+07:00"
+      }
+    ],
+    "commentIds": [
+      "673caa594c6540083f098d85",
+      "673caacb4844d1165f610d46",
+      "673caaed4844d1165f610d47"
+    ],
+    "link": null,
+    "sharedPostId": null,
+    "tags": [
+      "computer"
+    ],
+    "createdAt": "2024-11-19T22:08:36.3689827+07:00",
+    "modifiedAt": "2024-11-19T22:08:36.3689884+07:00",
+    "isDeleted": false,
+    "deletedAt": null
+  }
+]
