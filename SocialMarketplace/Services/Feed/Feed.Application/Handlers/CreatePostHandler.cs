@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Feed.Application.Commands;
+﻿using Feed.Application.Commands;
 using Feed.Application.DTOs;
 using Feed.Application.Interfaces.HttpClients;
 using Feed.Application.Interfaces.Services;
