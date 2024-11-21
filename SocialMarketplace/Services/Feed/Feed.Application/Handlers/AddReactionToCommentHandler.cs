@@ -1,4 +1,5 @@
-﻿using Feed.Application.Commands;
+﻿
+using Feed.Application.Commands;
 using Feed.Application.DTOs;
 using Feed.Application.Interfaces.HttpClients;
 using Feed.Application.Mappers;
@@ -11,21 +12,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Feed.Application.Handlers
 {
-    public class AddReactionToPostHandler : IRequestHandler<AddReactionToPostCommand, ReactionDto>
+    public class AddReactionToCommentHandler : IRequestHandler<AddReactionToCommentCommand, ReactionDto>
     {
-        private readonly ILogger<AddReactionToPostCommand> _logger;
-        private readonly IPostRepository _postRepo;
+        private readonly ILogger<AddReactionToCommentHandler> _logger;
+        private readonly ICommentRepository _comment;
         private readonly IIdentityService _identityService;
 
-        public AddReactionToPostHandler(ILogger<AddReactionToPostCommand> logger, IPostRepository postRepo, IIdentityService identityService)
+        public AddReactionToCommentHandler(ILogger<AddReactionToCommentHandler> logger, ICommentRepository comment, IIdentityService identityService)
         {
             _logger = logger;
-            _postRepo = postRepo;
+            _comment = comment;
             _identityService = identityService;
         }
-        public async Task<ReactionDto> Handle(AddReactionToPostCommand request, CancellationToken cancellationToken)
+        public async Task<ReactionDto> Handle(AddReactionToCommentCommand request, CancellationToken cancellationToken)
         {
-            var userDetails = await _identityService.GetUserDetailsAsync(request.UserId) 
+            var userDetails = await _identityService.GetUserDetailsAsync(request.UserId)
                 ?? throw new NotFoundException($"User with id {request.UserId} does not exist");
 
             var reaction = new Reaction()
@@ -34,7 +35,7 @@ namespace Feed.Application.Handlers
                 Type = (ReactionType)request.ReactionType
             };
 
-            var result = await _postRepo.AddReacionToPostAsync(request.PostId, reaction);
+            var result = await _comment.AddReacionToCommentAsync(request.CommentId, reaction);
             return FeedMapper.Mapper.Map<ReactionDto>(result);
         }
     }
