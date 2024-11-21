@@ -6,7 +6,7 @@ namespace Identity.Application.Queries.User
 {
     public class GetUserDetailsQuery : IRequest<UserDetailsResponseDTO>
     {
-        public string UserId { get; set; }
+        public string UserId { get; set; } = default!;
     }
 
     public class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQuery, UserDetailsResponseDTO>
@@ -19,9 +19,7 @@ namespace Identity.Application.Queries.User
         }
         public async Task<UserDetailsResponseDTO> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
         {
-            var (userId, fullName, userName, email, roles, profilePictureUrl, profileUrl) = await _identityService.GetUserDetailsAsync(request.UserId);
-            return new UserDetailsResponseDTO() { Id = userId, FullName = fullName, UserName = userName, Email = email,
-                                                  Roles = roles, ProfilePictureUrl =  profilePictureUrl, ProfileUrl = profileUrl};
+            return await _identityService.GetUserDetailsAsync(request.UserId);
         }
     }
 }

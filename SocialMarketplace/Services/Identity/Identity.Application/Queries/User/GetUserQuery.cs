@@ -4,11 +4,11 @@ using MediatR;
 
 namespace Identity.Application.Queries.User
 {
-    public class GetUserQuery : IRequest<List<UserResponseDTO>>
+    public class GetUserQuery : IRequest<IList<UserResponseDTO>>
     {
     }
 
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, List<UserResponseDTO>>
+    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, IList<UserResponseDTO>>
     {
         private readonly IIdentityService _identityService;
 
@@ -17,16 +17,9 @@ namespace Identity.Application.Queries.User
             _identityService = identityService;
         }
 
-        public async Task<List<UserResponseDTO>> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<IList<UserResponseDTO>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var users = await _identityService.GetAllUsersAsync();
-            return users.Select(x => new UserResponseDTO()
-            {
-                Id = x.id,
-                FullName = x.fullName,
-                UserName = x.userName,
-                Email = x.email
-            }).ToList();
+            return await _identityService.GetAllUsersAsync();
         }
     }
 }

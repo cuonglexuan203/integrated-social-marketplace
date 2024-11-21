@@ -1,8 +1,12 @@
-﻿using Identity.Application.Exceptions;
+﻿using Identity.Application.Commands.User.Create;
+using Identity.Application.DTOs;
+using Identity.Application.Exceptions;
 using Identity.Application.Interfaces;
+using Identity.Core.Enums;
 using Identity.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Identity.Infrastructure.Services
 {
@@ -75,6 +79,52 @@ namespace Identity.Infrastructure.Services
             return (result.Succeeded, user.Id);
         }
 
+        public async Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserCommand command)
+        {
+            // Validate roles first
+            foreach (var role in command.Roles)
+            {
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    throw new NotFoundException($"Role {role} not found");
+                }
+            }
+
+            // Create user with optional properties
+            var user = new ApplicationUser
+            {
+                FullName = command.FullName,
+                UserName = command.UserName,
+                Email = command.Email,
+                Gender = command.Gender.HasValue ? (Gender)command.Gender.Value : Gender.Unknown,
+                DateOfBirth = command.DateOfBirth,
+                Interests = command.Interests?.ToList() ?? new List<string>(),
+                City = command.City,
+                Country = command.Country
+            };
+
+            if (command.ProfilePictureUrl != null)
+            {
+                user.ProfilePictureUrl = command.ProfilePictureUrl;
+            }
+
+            // Create user
+            var result = await _userManager.CreateAsync(user, command.Password);
+            if (!result.Succeeded)
+            {
+                throw new CustomValidationException(result.Errors);
+            }
+
+            // Add user to roles
+            var addUserRole = await _userManager.AddToRolesAsync(user, command.Roles);
+            if (!addUserRole.Succeeded)
+            {
+                throw new CustomValidationException(addUserRole.Errors);
+            }
+
+            return (result.Succeeded, user.Id);
+        }
+
         public async Task<bool> DeleteRoleAsync(string roleId)
         {
             var roleDetails = await _roleManager.FindByIdAsync(roleId);
@@ -113,17 +163,23 @@ namespace Identity.Infrastructure.Services
             return result.Succeeded;
         }
 
-        public async Task<List<(string id, string fullName, string userName, string email)>> GetAllUsersAsync()
+        public async Task<IList<UserResponseDTO>> GetAllUsersAsync()
         {
-            var users = await _userManager.Users.Select(x => new
-            {
-                x.Id,
-                x.FullName,
-                x.UserName,
-                x.Email
-            }).ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
 
-            return users.Select(user => (user.Id, user.FullName, user.UserName, user.Email)).ToList();
+            return users.Select(user => new UserResponseDTO()
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Email = user.Email,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                ProfileUrl = user.ProfileUrl,
+                DateOfBirth = user.DateOfBirth,
+                Interests = user.Interests,
+                City = user.City,
+                Country = user.Country,
+            }).ToList();
         }
 
         public Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync()
@@ -147,7 +203,7 @@ namespace Identity.Infrastructure.Services
             return roles.Select(role => (role.Id, role.Name)).ToList();
         }
 
-        public async Task<(string userId, string fullName, string UserName, string email, IList<string> roles, string profilePictureUrl, string profileUrl)> GetUserDetailsAsync(string userId)
+        public async Task<UserDetailsResponseDTO> GetUserDetailsAsync(string userId)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
             if (user == null)
@@ -155,10 +211,24 @@ namespace Identity.Infrastructure.Services
                 throw new NotFoundException("User not found");
             }
             var roles = await _userManager.GetRolesAsync(user);
-            return (user.Id, user.FullName, user.UserName, user.Email, roles, user.ProfilePictureUrl, user.ProfileUrl);
+
+            return new UserDetailsResponseDTO()
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Email = user.Email,
+                Roles = roles,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                ProfileUrl = user.ProfileUrl,
+                DateOfBirth = user.DateOfBirth,
+                Interests = user.Interests,
+                City = user.City,
+                Country = user.Country,
+            };
         }
 
-        public async Task<(string userId, string fullName, string UserName, string email, IList<string> roles, string profilePictureUrl, string profileUrl)> GetUserDetailsByUserNameAsync(string userName)
+        public async Task<UserDetailsResponseDTO> GetUserDetailsByUserNameAsync(string userName)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
             if (user == null)
@@ -166,7 +236,20 @@ namespace Identity.Infrastructure.Services
                 throw new NotFoundException("User not found");
             }
             var roles = await _userManager.GetRolesAsync(user);
-            return (user.Id, user.FullName, user.UserName, user.Email, roles, user.ProfilePictureUrl, user.ProfileUrl);
+            return new UserDetailsResponseDTO()
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Email = user.Email,
+                Roles = roles,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                ProfileUrl = user.ProfileUrl,
+                DateOfBirth = user.DateOfBirth,
+                Interests = user.Interests,
+                City = user.City,
+                Country = user.Country,
+            };
         }
 
         public async Task<string> GetUserIdAsync(string userName)

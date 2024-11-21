@@ -1,6 +1,7 @@
 ﻿using Identity.Application.DTOs;
 using Identity.Application.Interfaces;
 using MediatR;
+using System.Data;
 
 namespace Identity.Application.Queries.User
 {
@@ -20,15 +21,19 @@ namespace Identity.Application.Queries.User
 
         public async Task<IList<UserDetailsResponseDTO>> Handle(GetAllUsersDetailsQuery request, CancellationToken cancellationToken)
         {
-
-
             var users = await _identityService.GetAllUsersAsync();
-            var userDetails = users.Select(x => new UserDetailsResponseDTO()
+            var userDetails = users.Select(user => new UserDetailsResponseDTO()
             {
-                Id = x.id,
-                Email = x.email,
-                UserName = x.userName
-                //Roles = (IList<string>)_identityService.GetUserRolesAsync(x.id) // Converstion problem
+                Id = user.Id,
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Email = user.Email,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                ProfileUrl = user.ProfileUrl,
+                DateOfBirth = user.DateOfBirth,
+                Interests = user.Interests,
+                City = user.City,
+                Country = user.Country,
             }).ToList();
 
             foreach (var user in userDetails)

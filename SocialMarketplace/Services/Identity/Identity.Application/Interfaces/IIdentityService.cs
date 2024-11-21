@@ -1,19 +1,23 @@
-﻿namespace Identity.Application.Interfaces
+﻿using Identity.Application.Commands.User.Create;
+using Identity.Application.DTOs;
+
+namespace Identity.Application.Interfaces
 {
     public interface IIdentityService
     {
         // User section
         Task<(bool isSucceed, string userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles);
+        Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserCommand user);
         Task<bool> SigninUserAsync(string userName, string password);
         //Task<bool> SignOutAsync();
         Task<string> GetUserIdAsync(string userName);
-        Task<(string userId, string fullName, string UserName, string email, IList<string> roles, string profilePictureUrl, string profileUrl)> GetUserDetailsAsync(string userId);
-        Task<(string userId, string fullName, string UserName, string email, IList<string> roles, string profilePictureUrl, string profileUrl)> GetUserDetailsByUserNameAsync(string userName);
+        Task<UserDetailsResponseDTO> GetUserDetailsAsync(string userId);
+        Task<UserDetailsResponseDTO> GetUserDetailsByUserNameAsync(string userName);
         Task<string> GetUserNameAsync(string userId);
         Task<bool> DeleteUserAsync(string userId);
         Task<bool> IsUniqueUserName(string userName);
-        Task<List<(string id, string fullName, string userName, string email)>> GetAllUsersAsync();
-        Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync();
+        Task<IList<UserResponseDTO>> GetAllUsersAsync();
+        Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync(); // not implement
         Task<bool> UpdateUserProfile(string id, string fullName, string email, IList<string> roles);
 
         // Role Section
