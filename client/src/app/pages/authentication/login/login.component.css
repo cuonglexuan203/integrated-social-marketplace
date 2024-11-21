@@ -75,7 +75,7 @@
 
 h1 {
     margin-bottom: 30px;
-    color: #333;
+    /* color: #333; */
     font-weight: 600;
 }
 
@@ -169,3 +169,7 @@ h1 {
   font-size: 14px;
 }
 
+.submit-button .spinner-border {
+    vertical-align: middle;
+    margin-right: 5px;
+}

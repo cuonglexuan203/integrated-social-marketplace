@@ -8,18 +8,8 @@ import { ChatComponent } from './pages/chat/chat.component';
 export const routes: Routes = [  
     {
         path: '',
-        component: BlankComponent,
-        children: [
-            {
-                path: '',
-                loadChildren: () => import('./pages/authentication/authentication.routes').then(m => m.AuthenticationRoutes),
-            }
-        ]
-    },   
-    {
-        path: '',
         component: FullComponent,
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         // canActivateChild: [PermissionGuard],
         children: [
             {
@@ -41,7 +31,16 @@ export const routes: Routes = [
             }
         ]
     },
-   
+    {
+        path: '',
+        component: BlankComponent,
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('./pages/authentication/authentication.routes').then(m => m.AuthenticationRoutes),
+            }
+        ]
+    },   
     {
         path: "error",
         component: ErrorComponent,

@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="d-flex flex-row gap-3 w-100">
+        @if (user?.profilePictureUrl) {
+            <tui-avatar
+                size="m"
+                src="{{user?.profilePictureUrl}}"
+                />
+            }
+        @else {
+            <tui-avatar
+            size="m"
+            src="@tui.user"
+            />
+        }
+        <div class="input-item">
+            <input 
+                readonly
+                (click)="onFocus()" 
+            class="input-post" style="border: none; flex: 1; width: 100%;" [placeholder]="user?.fullName + ', What are you thinking?'" type="search">
+        </div>
+    </div>
+</div>

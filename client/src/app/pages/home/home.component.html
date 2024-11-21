@@ -3,9 +3,13 @@
         style="
             width: 70%;
             ">
-        @for (item of mockDataPost(); track $index) {
-            <div class="post-containter">
-                <app-post-item [item]="item" ></app-post-item>
+        <div class="new-post"
+        >
+            <app-user-new-post></app-user-new-post>
+        </div>
+        @for (post of posts; track $index) {
+            <div class="post-containter" [tuiSkeleton]="isLoading">
+                <app-post-item [isLoading]="isLoading" [post]="post" ></app-post-item>
             </div>   
         }
     </div>

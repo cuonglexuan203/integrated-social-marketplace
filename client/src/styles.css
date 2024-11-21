@@ -1,5 +1,5 @@
 .button-action {
-    background-color: white;
+    /* background-color: white; */
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -148,3 +148,6 @@
     color: #71AAEB !important;
 }
 
+.font-14 {
+    font-size: 14px !important;
+}

@@ -13,6 +13,10 @@ export const AuthenticationRoutes: Routes = [
                 component: LoginComponent,
             },
             {
+                path: 'login',
+                component: LoginComponent,
+            },
+            {
                 path:'error',
                 component: ErrorComponent
             },
