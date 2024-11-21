@@ -3,6 +3,7 @@ using Identity.Application.Interfaces;
 using Identity.Core.Enums;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Identity.Infrastructure.Persistence.DbContext
 {
@@ -24,19 +25,29 @@ namespace Identity.Infrastructure.Persistence.DbContext
 
             if (!context.Users.Any())
             {
-                foreach (var user in GetUserSeeds())
+                var userSeeds = GetUserSeeds();
+                foreach (var user in userSeeds)
                 {
                     await identityService.CreateUserAsync(user);
                 }
-                logger.LogInformation($"Identity Database {typeof(IdentityContext).Name} seeded with users.");
+                logger.LogInformation($"Identity Database {typeof(IdentityContext).Name} seeded with {userSeeds.Count()} users.");
             }
         }
 
         #region seed data
         private static IEnumerable<CreateUserCommand> GetUserSeeds()
-        =>
-        [
-            new CreateUserCommand(){
+        {
+            // run by docker compose
+            var path = Path.Combine("Persistence", "SeedData", "users.json");
+            // run local
+            //var path = "../Identity.Infrastructure/Persistence/SeedData/users.json";
+
+            var userDataStr = File.ReadAllText(path);
+            var userData = JsonConvert.DeserializeObject<List<CreateUserCommand>>(userDataStr);
+            #region default users
+            var systemUser = new List<CreateUserCommand>
+            {
+                 new CreateUserCommand(){
                 UserName = "admin",
                 Password = "adminadmin",
                 ConfirmationPassword = "adminadmin",
@@ -60,10 +71,24 @@ namespace Identity.Infrastructure.Persistence.DbContext
                 Country = "Viet Nam",
                 DateOfBirth = new DateTime(2000,1,1)
             },
-        ];
+            };
+            #endregion
 
-            private static IEnumerable<string> GetRoleSeeds()
-            => [SMRole.admin.ToString(), SMRole.user.ToString()];
+            if (userData != null)
+            {
+                userData.AddRange(systemUser);
+            }
+            else
+            {
+                userData = systemUser;
+            }
+
+            return userData;
         }
-        #endregion
+
+
+        private static IEnumerable<string> GetRoleSeeds()
+        => [SMRole.admin.ToString(), SMRole.user.ToString()];
+    }
+    #endregion
 }
