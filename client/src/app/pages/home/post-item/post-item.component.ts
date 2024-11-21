@@ -14,7 +14,7 @@ import { FeedPost } from '../../../core/models/feed/feed.model';
 import { DateFilterPipe } from '../../../core/pipes/date-filter/date-filter.pipe';
 import { Comment } from '../../../core/models/comment/comment.model';
 import { CommentPostDialogComponent } from '../../../shared/components/comment-post-dialog/comment-post-dialog.component';
-import {  ReactionModel, ReactionRequestModel } from '../../../core/models/reaction/reaction.model';
+import { ReactionModel, ReactionRequestModel } from '../../../core/models/reaction/reaction.model';
 import { Helper } from '../../../core/utils/helper';
 import { reactions } from '../../../core/constances/reaction';
 
@@ -61,16 +61,49 @@ export class PostItemComponent {
 
   ngOnInit() {
     this.onCheckedReaction();
-    
+
   }
 
-  getReactionReacted(event: any){
-    if(event) {
+  onRemoveReaction() {
+    const dataSending = {
+      postId: this.post.id,
+      userId: Helper.getUserFromLocalStorage().id,
+    }
+    this._feedService.removeReactionFromPost(dataSending).subscribe({
+      next: (res) => {
+        if (res.result) {
+          this.isReacted = false;
+          this.reactionType = '';
+          this.post.reactions = this.post.reactions.filter((reaction) => reaction.user.id !== Helper.getUserFromLocalStorage().id);
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+      complete: () => {
+      }
+    })
+  }
+  getReactionReacted(event: any) {
+    if (this.isReacted && event === this.reactionType) {
+      this.onRemoveReaction();
+    }
+    if (this.isReacted && event !== this.reactionType) {
+      this.onRemoveReaction();
+      this.onReactionWithNew(event);
+    }
+    if (!this.isReacted) {
+      this.onReactionWithNew(event);
+    }
+  }
+
+  onReactionWithNew(event: any) {
+    if (event !== null && event !== undefined) {
       const dataForReact: ReactionRequestModel = {
         postId: this.post.id,
         userId: Helper.getUserFromLocalStorage().id,
         reactionType: event
-      } 
+      }
       this._feedService.addReaction(dataForReact).subscribe({
         next: (res) => {
           if (res.result) {
@@ -86,23 +119,18 @@ export class PostItemComponent {
   }
 
   onCheckedReaction() {
-    this.isLoading = true;
     this._feedService.getReactionsByPostId(this.post.id).subscribe({
       next: async (res) => {
         if (res.result) {
-          await this.checkingUserHasReacted(res.result); 
-          this.isLoading = false;
+          await this.checkingUserHasReacted(res.result);
         }
         else {
-          this.isLoading = false;
         }
       },
       error: (err) => {
         console.log(err);
-        this.isLoading = false;
       },
       complete: () => {
-        this.isLoading = false;
       }
     });
   }
@@ -136,7 +164,7 @@ export class PostItemComponent {
       });
   }
 
-  
+
   onComment(post: FeedPost) {
     const data = { title: 'Comment', post: post };
     this.dialogs

@@ -7,7 +7,7 @@ export class CommentRequestModel extends AuditableModel {
     @required()
     userId: string;
     @prop()
-    commentText: string | null;
+    commentText: string;
     @prop()
-    media: File | null;
+    media: File;
 }

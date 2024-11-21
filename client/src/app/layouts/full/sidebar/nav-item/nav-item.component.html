@@ -10,6 +10,9 @@
                     <tui-icon 
                         [icon]="item.iconName"
                         class="primary-color"
+                        [style.height.px]="'18'"
+                        [style.width.px]="'18'"
+                        
                         >
                     </tui-icon>
                 </div>
@@ -20,7 +23,7 @@
 }
 @else {
     @if (item) {
-        <div class="sidenav-container">
+        <div class="sidenav-container" (click)="onClickNavItem(item.displayName)">
             <!-- @if (item.navCap) {
                 <h4 class="align-items-center d-flex justify-content-center" mat-subheader><strong>{{item.navCap}}</strong></h4>
             } -->
@@ -34,12 +37,14 @@
                         <tui-icon 
                             [icon]="item.iconName"
                             class="primary-color"
+                            [style.height.px]="'18'"
+                            [style.width.px]="'18'"
                             >
                     </tui-icon>
                     </div>
                 }
                 @if (item.displayName) {
-                    <div class="nav-item-name">
+                    <div class="nav-item-name font-14">
                         <span>{{item.displayName}}</span>
                     </div>   
                 }

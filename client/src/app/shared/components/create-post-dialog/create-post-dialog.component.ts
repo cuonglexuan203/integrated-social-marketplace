@@ -1,15 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, INJECTOR, ViewChild } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RxFormBuilder, RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
-import { TuiButton, TuiDialogContext, TuiIcon, TuiLink } from '@taiga-ui/core';
+import { TuiButton, TuiDialogContext, TuiDialogService, TuiIcon, TuiLink } from '@taiga-ui/core';
 import { TuiAvatar, TuiFiles, TuiStepper } from '@taiga-ui/kit';
-import { injectContext } from '@taiga-ui/polymorpheus';
+import { injectContext, PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { CreatePostModel } from '../../../core/models/feed/post.model';
 import { Helper } from '../../../core/utils/helper';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import { TuiInputTagModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { FeedService } from '../../../core/services/feed/feed.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { EnlargeImageComponentComponent } from '../enlarge-image-component/enlarge-image-component.component';
+import { MediaModel } from '../../../core/models/media/media.model';
 
 @Component({
   selector: 'app-create-post-dialog',
@@ -45,13 +48,17 @@ export class CreatePostDialogComponent {
   uploadedFile: File[] = [];
   formData: FormData = new FormData();
 
+  private readonly injector = inject(INJECTOR);
+  private readonly dialogs = inject(TuiDialogService);
+
   public readonly context = injectContext<TuiDialogContext<any>>();
 
   constructor(
     private formBuilder: RxFormBuilder,
     private cdr: ChangeDetectorRef,
     private alertService: AlertService,
-    private _feedService: FeedService
+    private _feedService: FeedService,
+    private sanitizer: DomSanitizer
   ) {
     this.data = this.context.data;
     this.form = this.formBuilder.formGroup(CreatePostModel, {});
@@ -119,6 +126,8 @@ export class CreatePostDialogComponent {
       }
       this.form.get('files')?.setValue(this.uploadedFile);
     }
+    console.log(this.uploadedFile);
+    
   }
 
   removeFile(file: File) {
@@ -155,6 +164,55 @@ export class CreatePostDialogComponent {
         }
       })
     }
+  }
+
+  getFileUrl(file: File): SafeUrl | null {
+    if (!file) return null;
+    
+    const objectUrl = URL.createObjectURL(file);
+    return this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+  }
+
+  isImage(file: File): boolean {
+    const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    return allowedImageExtensions.includes(fileExtension);
+  }
+
+  isVideo(file: File): boolean {
+    const allowedVideoExtensions = ['.mp4', '.mpeg', '.quicktime'];
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    return allowedVideoExtensions.includes(fileExtension);
+  }
+
+  enlargeMedia(file: File) {
+    let media: MediaModel = {
+      publicId: '',
+      url: '',
+      contentType: file.type.split('/')[0],
+      thumbnailUrl: '',
+      duration: 0,
+      width: 0,
+      height: 0,
+      fileSize: 0,
+      format: '',
+    }
+    const fileUrl = URL.createObjectURL(file);
+    media.url = fileUrl as any;
+    
+    this.dialogs
+    .open(
+      new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+      {
+        data: media,
+        size: 'auto',
+        appearance: 'lorem-ipsum',
+        
+      }
+    )
+    .subscribe((data) => {
+      console.log(data);
+    });
   }
 
 }

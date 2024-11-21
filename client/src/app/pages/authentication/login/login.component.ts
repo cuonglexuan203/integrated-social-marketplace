@@ -72,6 +72,7 @@ export class LoginComponent {
           this.router.navigate(['/home']);
         }
         else {
+          this.alertService.showError('Invalid Username or Password', 'Error');
           this.isLoading = false;
         }
       })

@@ -39,12 +39,4 @@ export const navItems: NavItem[] = [
         route: '/saved-posts',
         tooltip: 'Saved Posts'
     },
-    {
-        displayName: 'Cart',
-        iconName: '@tui.shopping-cart',
-        bgColor: 'white',
-        route: '/cart',
-        tooltip: 'Cart'
-    }
-
 ]

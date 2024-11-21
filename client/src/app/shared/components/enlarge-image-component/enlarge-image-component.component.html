@@ -1,0 +1,24 @@
+@if (media) {
+    <div class="enlarge-image-container">
+        @if (media.contentType === "image") {
+            <img 
+                [src]="media.url" 
+                class="enlarge-image"
+                alt="Enlarged Image"
+                width="800"
+                height="800"
+            />
+        }
+        @if (media.contentType === "video") {
+            <video 
+                [src]="media.url" 
+                controls
+                class="enlarge-video"
+                [width]="media.width"
+                [height]="media.height"
+            >
+                Your browser does not support the video tag.
+            </video>
+        }
+    </div>
+}

@@ -80,7 +80,7 @@
                                 <img *tuiItem src="{{ item?.url }}" class="carousel-image">
                         }
                         @if(item?.contentType === 'video') {
-                            <video *tuiItem src="{{ item?.url }}" controls class="carousel-video">
+                            <video [width]="'500'" [height]="'500'" *tuiItem src="{{ item?.url }}" controls class="carousel-video">
                                 Your browser does not support the video tag.
                             </video>
                         }
@@ -144,7 +144,7 @@
                 </div>
 
                 <ng-template #reactionDialog>
-                    <app-reaction-dialog (onReaction)="getReactionReacted($event)" [postItem]="post"></app-reaction-dialog>
+                    <app-reaction-dialog [isReacted]="isReacted" [reactedReactionType]="reactionType" (onReaction)="getReactionReacted($event)" [postItem]="post"></app-reaction-dialog>
                 </ng-template>
 
                 <div class="item-footer-post"

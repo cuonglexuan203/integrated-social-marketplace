@@ -7,7 +7,7 @@ export class CreatePostModel {
     contentText: string;
     @required()
     @file({maxFiles: 5})
-    files: File[];
+    files: File[] | null;
     @required()
     tags: string[];
 }

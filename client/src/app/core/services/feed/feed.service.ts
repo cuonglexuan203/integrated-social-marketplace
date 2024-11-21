@@ -38,4 +38,8 @@ export class FeedService {
     return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/GetReactionsByPostId/${postId}`, null);
   }
 
+  removeReactionFromPost(dataSending: any): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/RemoveReactionFromPost`, dataSending);
+  }
+
 }

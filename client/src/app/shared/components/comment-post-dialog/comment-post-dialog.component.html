@@ -9,7 +9,7 @@
                     [style.--tui-carousel-padding]="0"
                     [(index)]="currentIndex"
                 >   
-                    <ng-container *ngFor="let item of post.media">
+                    <ng-container class="media" *ngFor="let item of post.media">
                         @if(item?.contentType === 'image') {
                             <img 
                                 *tuiItem 
@@ -30,15 +30,16 @@
                         }
                     </ng-container>
                 </tui-carousel>
+                <tui-pagination
+                size="l"
+                class="pagination mt-2"
+                [length]="post.media.length"
+                [(index)]="currentIndex"
+                *ngIf="post.media.length > 1"
+            />
             }
         </div>
-        <!-- <tui-pagination
-            size="l"
-            class="pagination mt-2"
-            [length]="post.media.length"
-            [(index)]="currentIndex"
-            *ngIf="post.media.length > 1"
-        /> -->
+       
        <div style="width: 30% !important;">
         @if (post.user) {
             <div class="right-header">
@@ -75,39 +76,50 @@
                 </ng-container>
 
                 <ng-container *ngIf="post?.comments?.length">
-                    <div class="comment-content">
-                        <div class="comment-user font-14" *ngFor="let comment of post.comments">
-                            <img 
-                            *tuiItem 
-                            [src]="'https://res.cloudinary.com/dpnh3ytfm/image/upload/v1732035072/mb6q3rlsyrl7auwfoomi.jpg'"
-                            style="width: fit-content; height: fit-content;"
-                            alt="Comment Image"
-
-                        >
-                            <div class="d-flex gap-3">
-                                <tui-avatar [size]="'l'">{{ comment.user.fullName| firstLetterWord }}</tui-avatar>
-                                <div class="comment-text">
-                                    <div>
-                                        <a class="primary-color" style="font-weight: bold; text-decoration: none; cursor: pointer;">{{ comment.user.fullName }}</a>
-                                        <span class="font-14" style="color: gray;"> - {{comment.createdAt | date: 'dd/MM/yyyy: HH:mm' }}:</span>
+                    <div class="comment-content"  #commentContainer>
+                        @for (comment of post.comments; track $index) {
+                                <div class="comment-user font-14">
+                                    <div class="d-flex gap-3">
+                                        <tui-avatar [size]="'l'">{{ comment.user.fullName| firstLetterWord }}</tui-avatar>
+                                        <div class="comment-text">
+                                            <div>
+                                                <a class="primary-color" style="font-weight: bold; text-decoration: none; cursor: pointer;">{{ comment.user.fullName }}</a>
+                                                <span class="font-14" style="color: gray;"> - {{comment.createdAt | date: 'dd/MM/yyyy: HH:mm' }}:</span>
+                                            </div>
+                                            @if(comment?.commentText) {
+                                                <span>{{ comment?.commentText }}</span>
+                                            }
+                                            @if (comment?.media && comment.media.length > 0) {
+                                                @for (mediaItem of comment.media; track $index) {
+                                                    @if(mediaItem?.contentType === 'image') {
+                                                        <img 
+                                                            [src]="mediaItem.url" 
+                                                            class="comment-media-image"
+                                                            alt="Comment Image"
+                                                            width="200"
+                                                            (click)="enlargeMedia(mediaItem)"
+                                                            height="200"
+                                                        />
+                                                    }
+                                                    @if(mediaItem?.contentType === 'video') {
+                                                        <video 
+                                                            [src]="mediaItem.url" 
+                                                            controls
+                                                            width="200"
+                                                            height="200"
+                                                            (click)="enlargeMedia(mediaItem)"
+                                                            class="comment-media-video"
+                                                        >
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    }
+                                                }
+                                            }
+                                            <!-- } -->
+                                        </div>
                                     </div>
-                                    <span>{{ comment.commentText }}</span>
-                                </div>
                             </div>
-                            <div class="comment-image">
-                                <!-- @if(comment?.media?.[0]?.contentType === 'image') { -->
-                               
-                                <!-- } -->
-                                <!-- @if(comment?.media?.[0]?.contentType === 'video') {
-                                    <video 
-                                        *tuiItem 
-                                        [src]="comment?.media?.[0]?.url" 
-                                    >
-                                        Your browser does not support the video tag.
-                                    </video>
-                                } -->
-                            </div>
-                        </div>
+                        }
                     </div>
                 </ng-container>
             </div>
@@ -117,26 +129,33 @@
                     [overlay]="true"
                     [showLoader]="isLoading"
                 >
-                    <label class="mt-2" tuiInputFiles *ngIf="showFileInput && !(form?.controls?.['media']?.value)">
-                        <input
-                            tuiInputFiles
-                            formControlName="media"
-                        />
-                    </label>
-                    <tui-files class="tui-space_top-1">
-                        <tui-file
-                            [file]="form.controls['media'].value"
-                            *ngIf="form?.controls?.['media']?.value"
-                            (remove)="removeFile()"
-                        />
-                    </tui-files>
+                <div class="uploaded-file-container">
+                    <img
+                      class="uploaded-file"
+                      *ngIf="uploadedFile && isImage(uploadedFile)"
+                      [src]="getFileUrl(uploadedFile)"
+                      alt="Uploaded Image"
+                    />
+                    <video
+                      class="uploaded-file"
+                      *ngIf="uploadedFile && isVideo(uploadedFile)"
+                      [src]="getFileUrl(uploadedFile)"
+                      controls
+                    ></video>
+                    <button *ngIf="uploadedFile" type="button" (click)="removeFile()" class="remove-file-button">
+                      X
+                    </button>
+                  </div>
+                  <label class="mt-2" tuiInputFiles *ngIf="showFileInput && !uploadedFile">
+                    <input tuiInputFiles formControlName="media" (change)="onFileUpload($event)" />
+                  </label>
+                    
                     <div class="leave-comment">
                         <tui-avatar [size]="'m'">{{ post.user.fullName | firstLetterWord }}</tui-avatar>
     
-    <textarea
+    <textarea           
                         #commentText
                         formControlName="commentText"
-                        (input)="autoResize($event)"
                         (keydown.enter)="onSubmit($event)"
                         class="input-comment" placeholder="Write a comment..." style="white-space: normal !important;">
     </textarea>
