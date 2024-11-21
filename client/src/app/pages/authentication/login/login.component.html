@@ -29,12 +29,11 @@
                 <form [formGroup]="form" (ngSubmit)="onSubmit()">
                     <div class="d-flex flex-column gap-3">
                         <tui-input 
-                        formControlName="email"
-                        [tuiHintContent]="hintLogin.email"
+                        formControlName="userName"
                         [tuiTextfieldCleaner]="true"
-                        [tuiTextfieldCustomContent]="f['email'].valid ? success : ''"
+                        [tuiTextfieldCustomContent]="f['userName'].valid ? success : ''"
                     >
-                      Email
+                      Username
                     </tui-input>
                     <ng-template #success>
                         <tui-icon
@@ -43,18 +42,18 @@
                             style="color: green;"
                         ></tui-icon>
                     </ng-template>
-                    @if (f['email'].touched && f['email'].invalid) {
-                        @if (f['email'].errors?.['required']) {
+                    @if (f['userName'].touched && f['userName'].invalid) {
+                        @if (f['userName'].errors?.['required']) {
                           <tui-error class="error-message"
-                            [error]="f['email'].errors?.['required']"
+                            [error]="f['userName'].errors?.['required']"
                           ></tui-error>
                         }
-                        @if (f['email'].errors?.['email']) {
+                        <!-- @if (f['userName'].errors?.['userName']) {
                             <tui-error class="error-message"
-                                [error]="f['email'].errors?.['email']"
+                                [error]="f['userName'].errors?.['userName']"
                                 >
                             </tui-error>
-                        }
+                        } -->
                       }
                     
                         <tui-input-password
@@ -72,17 +71,23 @@
                                 >
                                 </tui-error>
                             }
-                            @if (f['password'].errors?.['password']) {
+                            <!-- @if (f['password'].errors?.['password']) {
                                 <tui-error class="error-message"
                                     [error]="f['password'].errors?.['password']"
                                 >
-                                </tui-error>                            }
+                                </tui-error>                            } -->
                           }
                     </div>
-                </form>
-                <button class="submit-button w-100 mt-3" (click)="onSubmit()" color="primary" [disabled]="!form.valid">
-                    Sign In
+                    
+                <button type="submit" class="submit-button w-100 mt-3" color="primary" [disabled]="!form.valid || isLoading">
+                    <ng-container *ngIf="!isLoading">Sign In</ng-container>
+                    <ng-container *ngIf="isLoading">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="visually-hidden">Loading...</span>
+                    </ng-container>                
                 </button>
+                </form>
+
                     
                 <div class="social-login">
                     <p class="or-divider">Or login with</p>

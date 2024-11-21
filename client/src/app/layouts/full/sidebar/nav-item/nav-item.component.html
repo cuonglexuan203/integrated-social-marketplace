@@ -1,5 +1,5 @@
 @if(!isToggle) {
-    <div class="d-flex flex-column align-items-center justify-content-center">
+    <div class="d-flex flex-column align-items-center justify-content-center" (click)="onClickNavItem(item.displayName)">
         @if (item.iconName) {
                 <div class="button-action" 
                     [tuiHint]="item.tooltip"

@@ -17,25 +17,29 @@
         <input #inputSearch class="input-search"  style="border: none; flex: 1;" [placeholder]="placeholder.search" type="search">
     </div>
     <div class="d-flex justify-content-center align-items-center gap-3">
-        <div class="d-flex justify-content-center align-items-center gap-3">
-            <div class="button-action"
-                tuiDropdownHover
-                [tuiDropdown]="userDialog"    
-            >
-                <tui-icon class="primary-color" 
-                    
-                    icon="@tui.user">
-                </tui-icon>
+        @if(user) {
+            <div class="d-flex justify-content-center align-items-center gap-3">
+                <div class="button-action"
+                    tuiDropdownHover
+                    [tuiDropdown]="userDialog"    
+                >
+                    <tui-icon class="primary-color" 
+                        
+                        icon="@tui.user">
+                    </tui-icon>
+                </div>
+                <ng-template #userDialog>
+                    <app-user-dialog 
+                        [user]="user"
+                    ></app-user-dialog>
+                </ng-template>
+                <span>
+                    <strong class="f-s-24">{{user.fullName}}</strong>
+                </span>
             </div>
-            <ng-template #userDialog>
-                <app-user-dialog
-                ></app-user-dialog>
-            </ng-template>
-            <span>
-                <strong class="f-s-24">TrieuDoQuang</strong>
-            </span>
-        </div>
-        <div class="button-action">
+        }
+        <div class="button-action"
+        >
             <tui-badged-content [style.--tui-radius.%]="50">
                 <tui-badge-notification
                     size="s"
@@ -54,7 +58,9 @@
         </div>
        	 
         
-        <div class="align-items-center button-action">
+        <div class="align-items-center button-action"
+            (click)="logOut()"
+        >
                 <tui-icon 
                 class="primary-color"
                 icon="@tui.log-out"

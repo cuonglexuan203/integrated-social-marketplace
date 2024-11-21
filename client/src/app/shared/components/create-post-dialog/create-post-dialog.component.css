@@ -1,0 +1,47 @@
+:host {
+    max-height: 100vh
+}
+.input-post {
+    width: 100%;
+    display: flex;
+    flex-shrink: 1;
+    height: 150px;
+    border: none;
+}
+
+.input-post:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.footer-post {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.footer-item-post {
+    cursor: pointer;
+}
+
+
+.submit-button {
+    background-color: #71AAEB;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.submit-button:hover {
+    background-color: #0095FF;
+}
+
+
+.submit-button .spinner-border {
+    vertical-align: middle;
+    margin-right: 5px;
+}

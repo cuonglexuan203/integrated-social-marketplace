@@ -22,7 +22,7 @@ export const authOptions = {
     },
     token: {
         class: NbAuthJWTToken,
-        key: 'token',
+        key: 'result.token',
     }
 }
 

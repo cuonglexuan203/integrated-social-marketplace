@@ -11,6 +11,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import { TuiCheckbox } from '@taiga-ui/kit';
 import { HINT_LOGIN } from '../../../core/constances/hint-login';
+import { Helper } from '../../../core/utils/helper';
 
 
 @Component({
@@ -32,6 +33,7 @@ import { HINT_LOGIN } from '../../../core/constances/hint-login';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  isLoading = false;
   logoLoginLeftSide = LOGO_LOGIN_LEFT_SIDE;
   logoLoginRightSide = LOGO_LOGIN_RIGHT_SIDE;
   form!: FormGroup;
@@ -61,7 +63,19 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.form.valid) {
-
+      Helper.clearLocalStorage();
+      this.isLoading = true;
+      this.authService.authenticate('email', this.form.value).subscribe(result => {
+        if(result.isSuccess()) {
+          this.isLoading = false;
+          this.alertService.showSuccess('Success','Login Successfully');
+          this.router.navigate(['/home']);
+        }
+        else {
+          this.isLoading = false;
+        }
+      })
+      
     }
   }
 

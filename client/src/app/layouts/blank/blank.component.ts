@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TuiRoot } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-blank',
   standalone: true,
   imports: [RouterOutlet,
-    CommonModule
+    CommonModule,
+    TuiRoot
   ],
   templateUrl: './blank.component.html',
 })

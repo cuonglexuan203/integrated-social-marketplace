@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, INJECTOR, Input, Output } from '@angular/core';
 import { NavItem } from './nav-item';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { TuiIcon, TuiHint } from '@taiga-ui/core';
+import { TuiIcon, TuiHint, TuiDialogService } from '@taiga-ui/core';
 import { TuiTooltip } from '@taiga-ui/kit';
+import { CreatePostDialogComponent } from '../../../../shared/components/create-post-dialog/create-post-dialog.component';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 
 @Component({
   selector: 'app-nav-item',
@@ -20,10 +22,40 @@ import { TuiTooltip } from '@taiga-ui/kit';
 export class NavItemComponent {
   @Input() item: NavItem;
   @Input() isToggle: boolean;
-  constructor() {}
+
+  private readonly injector = inject(INJECTOR);
+  private readonly dialogs = inject(TuiDialogService);
+  constructor() { }
 
   ngOnInit() {
-    console.log(this.item);
   }
-  
+
+
+  onClickNavItem(navItemName: string | undefined) {
+    switch (navItemName) {
+      case 'Create Post':
+        this.createPost();
+        break;
+    }
+  }
+
+  createPost() {
+    const data = { title: 'Create Post' };
+    this.dialogs.open(
+      new PolymorpheusComponent(CreatePostDialogComponent, this.injector),
+      {
+        data: data,
+        dismissible: false,
+      }
+    ).subscribe({
+      next: (data) => {
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+
+      }
+    })
+  }
 }

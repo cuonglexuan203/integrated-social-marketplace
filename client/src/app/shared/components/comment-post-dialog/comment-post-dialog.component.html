@@ -1,0 +1,158 @@
+@if (post) {
+    <div class="d-flex p-3 container">
+        <div style="width: 70%;" class="post-media-url">
+            @if (post.media) {
+                <tui-carousel
+                    #carousel
+                    class="carousel"
+                    (indexChange)="onCarouselChange($event)"
+                    [style.--tui-carousel-padding]="0"
+                    [(index)]="currentIndex"
+                >   
+                    <ng-container *ngFor="let item of post.media">
+                        @if(item?.contentType === 'image') {
+                            <img 
+                                *tuiItem 
+                                [ngStyle]="{ }"
+                                [src]="item?.url" 
+                                class="carousel-image"
+                            >
+                        }
+                        @if(item?.contentType === 'video') {
+                            <video 
+                                *tuiItem 
+                                [src]="item?.url" 
+                                controls 
+                                class="carousel-video"
+                            >
+                                Your browser does not support the video tag.
+                            </video>
+                        }
+                    </ng-container>
+                </tui-carousel>
+            }
+        </div>
+        <!-- <tui-pagination
+            size="l"
+            class="pagination mt-2"
+            [length]="post.media.length"
+            [(index)]="currentIndex"
+            *ngIf="post.media.length > 1"
+        /> -->
+       <div style="width: 30% !important;">
+        @if (post.user) {
+            <div class="right-header">
+                <tui-avatar [size]="'l'">{{ post.user.fullName | firstLetterWord }}</tui-avatar>
+                <div>
+                        <a  
+                            *ngIf="post.user"
+                            style="font-weight: bold;
+                            text-decoration: none;
+                            cursor: pointer;
+                            color: gray;
+                            "
+                        >
+                            {{post.user.fullName}}
+                        </a>
+                        <div style="color: gray"
+                        >
+                            {{post.createdAt | date: 'dd/MM/yyyy: HH:mm'}}
+                        </div>
+                    </div>
+            </div>
+
+            <div class="divider"></div>
+            <div class="comment-container">
+                <ng-container *ngIf="!post?.comments?.length">
+                    <div class="comment-item font-14">
+                        <tui-icon icon="@tui.message-square-text" class="comment-icon"
+                        [style.width.px]="'48'"
+                        [style.height.px]="'48'"
+                        ></tui-icon>
+                        <span>Leave the first comment on this post
+                        </span>
+                    </div> 
+                </ng-container>
+
+                <ng-container *ngIf="post?.comments?.length">
+                    <div class="comment-content">
+                        <div class="comment-user font-14" *ngFor="let comment of post.comments">
+                            <img 
+                            *tuiItem 
+                            [src]="'https://res.cloudinary.com/dpnh3ytfm/image/upload/v1732035072/mb6q3rlsyrl7auwfoomi.jpg'"
+                            style="width: fit-content; height: fit-content;"
+                            alt="Comment Image"
+
+                        >
+                            <div class="d-flex gap-3">
+                                <tui-avatar [size]="'l'">{{ comment.user.fullName| firstLetterWord }}</tui-avatar>
+                                <div class="comment-text">
+                                    <div>
+                                        <a class="primary-color" style="font-weight: bold; text-decoration: none; cursor: pointer;">{{ comment.user.fullName }}</a>
+                                        <span class="font-14" style="color: gray;"> - {{comment.createdAt | date: 'dd/MM/yyyy: HH:mm' }}:</span>
+                                    </div>
+                                    <span>{{ comment.commentText }}</span>
+                                </div>
+                            </div>
+                            <div class="comment-image">
+                                <!-- @if(comment?.media?.[0]?.contentType === 'image') { -->
+                               
+                                <!-- } -->
+                                <!-- @if(comment?.media?.[0]?.contentType === 'video') {
+                                    <video 
+                                        *tuiItem 
+                                        [src]="comment?.media?.[0]?.url" 
+                                    >
+                                        Your browser does not support the video tag.
+                                    </video>
+                                } -->
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <form [formGroup]="form" class="mt-2">
+                <tui-loader
+                    [inheritColor]="true"
+                    [overlay]="true"
+                    [showLoader]="isLoading"
+                >
+                    <label class="mt-2" tuiInputFiles *ngIf="showFileInput && !(form?.controls?.['media']?.value)">
+                        <input
+                            tuiInputFiles
+                            formControlName="media"
+                        />
+                    </label>
+                    <tui-files class="tui-space_top-1">
+                        <tui-file
+                            [file]="form.controls['media'].value"
+                            *ngIf="form?.controls?.['media']?.value"
+                            (remove)="removeFile()"
+                        />
+                    </tui-files>
+                    <div class="leave-comment">
+                        <tui-avatar [size]="'m'">{{ post.user.fullName | firstLetterWord }}</tui-avatar>
+    
+    <textarea
+                        #commentText
+                        formControlName="commentText"
+                        (input)="autoResize($event)"
+                        (keydown.enter)="onSubmit($event)"
+                        class="input-comment" placeholder="Write a comment..." style="white-space: normal !important;">
+    </textarea>
+    
+                        <div class="image-toggle" (click)="toggleFileInput()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#19a32a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image">
+                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                                <circle cx="10" cy="12" r="2" />
+                                <path d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22" />
+                            </svg>
+                        </div>
+                    </div>
+                </tui-loader>
+            </form>
+        }
+       </div>
+    </div>
+}

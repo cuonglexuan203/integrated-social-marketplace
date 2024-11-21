@@ -45,9 +45,10 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error.status === 401 || error.status === 0) {
           if (error.status === 401) {
             this.router.navigate(['/login']);
-            this.alert.showError(error.status == 401 ? 'Your Server URL or API Token is incorrect. Please try again' : 'Sorry, the system has an unexpected technical issue.', 'Error');
+            this.alert.showError(error.status == 401 ? 'Your Username or Password is incorrect. Please try again' : 'Sorry, the system has an unexpected technical issue.', 'Error');
             return throwError(error?.statusText);
-          } else {
+          }
+           else {
             this.alert.showError('Sorry, the system has an unexpected technical issue.', 'Error');
             return throwError(error?.statusText);
           }
@@ -57,7 +58,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         } else if (error.status === 302) {
           this.router.navigate([`/expired`]);
         } else if (error.status === 400 && error?.error) {
-          this.alert.showError(error?.error, 'Error');
+          this.alert.showError('Your Username or Password is incorrect. Please try again', 'Error');
         }
         return throwError(error?.statusText);
       }));
