@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Identity.Application.DTOs;
+﻿using Identity.Application.DTOs;
 using Identity.Application.Exceptions;
 using Identity.Application.Interfaces;
 using Identity.Infrastructure.Identity;
