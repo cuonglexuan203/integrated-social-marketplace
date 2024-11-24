@@ -1,6 +1,7 @@
 ﻿
 using Feed.Core.Entities;
 using Feed.Core.Interfaces;
+using Feed.Core.Specs;
 using Feed.Core.ValueObjects;
 
 namespace Feed.Core.Repositories
@@ -8,7 +9,8 @@ namespace Feed.Core.Repositories
     public interface IPostRepository: ISoftDeletable<Post>
     {
         Task<IEnumerable<Post>> GetAllPostsAsync();
-        Task<Post> GetPost(string id);
+        Task<Pagination<Post>> GetPostsAsync(PostSpecParams postParams, CancellationToken token = default);
+        Task<Post> GetPostAsync(string id, CancellationToken token = default);
         Task<Comment> AddCommentToPostAsync(Comment comment);
         //Task<IEnumerable<Post>> GetPostByUserId(string userId);
         Task<Post> CreatePost(Post post);

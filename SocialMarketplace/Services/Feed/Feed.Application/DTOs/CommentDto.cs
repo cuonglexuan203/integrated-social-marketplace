@@ -10,7 +10,6 @@ namespace Feed.Application.DTOs
         public User User { get; set; }
         public List<MediaDto> Media { get; set; }
         public string CommentText { get; set; }
-        public int LikesCount { get; set; }
         public List<ReactionDto> Reactions { get; set; }
         public string? ParentCommentID { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }

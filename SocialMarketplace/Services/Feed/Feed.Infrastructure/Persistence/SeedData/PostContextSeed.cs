@@ -20,7 +20,7 @@ namespace Feed.Infrastructure.Persistence.SeedData
                 // run by docker compose
                 var postData = File.ReadAllText(path);
                 var posts = JsonConvert.DeserializeObject<List<Post>>(postData);
-                if (posts != null)
+                if (posts != null && posts?.Count > 0)
                 {
                     postCollection.InsertMany(posts);
                 }

@@ -1,10 +1,13 @@
 ﻿using Feed.Core.Entities;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
+using Feed.Core.Specs;
 using Feed.Core.ValueObjects;
 using Feed.Infrastructure.Persistence.DbContext;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Xml.Linq;
 
 namespace Feed.Infrastructure.Persistence.Repositories
 {
@@ -39,7 +42,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         //    return result.IsAcknowledged && result.DeletedCount > 0;
         //}
 
-        public async Task<Post> GetPost(string id)
+        public async Task<Post> GetPostAsync(string id, CancellationToken token = default)
         {
             FilterDefinition<Post> filter = Builders<Post>.Filter.And(
                 Builders<Post>.Filter.Eq(p => p.Id, id),
@@ -63,6 +66,47 @@ namespace Feed.Infrastructure.Persistence.Repositories
             return await _posts
                 .Find(GetNonDeletedFilter())
                 .ToListAsync();
+        }
+
+        private FilterDefinition<Post> BuildFilter(PostSpecParams postParams)
+        {
+            var filter = Builders<Post>.Filter.Empty;
+
+            filter &= GetNonDeletedFilter();
+
+            return filter;
+        }
+
+        private SortDefinition<Post> BuildSort(PostSpecParams postParams)
+        {
+            var sort = Builders<Post>.Sort;
+            return postParams.Sort?.ToLower() == "desc"
+                ? sort.Descending(x => x.ModifiedAt)
+                : sort.Ascending(x => x.ModifiedAt);
+        }
+
+        public async Task<Pagination<Post>> GetPostsAsync(PostSpecParams postParams, CancellationToken token = default)
+        {
+            var filter = BuildFilter(postParams);
+            var sort = BuildSort(postParams);
+
+            var countTask = _posts.CountDocumentsAsync(filter, cancellationToken: token);
+            var dataTask = _posts
+                                .Find(filter)
+                                .Sort(sort)
+                                .Skip((postParams.PageIndex - 1) * postParams.PageSize)
+                                .Limit(postParams.PageSize)
+                                .ToListAsync(cancellationToken: token);
+
+            await Task.WhenAll(dataTask, countTask);
+
+            return new Pagination<Post>()
+            {
+                PageIndex = postParams.PageIndex,
+                PageSize = postParams.PageSize,
+                Data = dataTask.Result,
+                Count = countTask.Result,
+            };
         }
 
         public async Task<bool> UpdatePost(Post post)
