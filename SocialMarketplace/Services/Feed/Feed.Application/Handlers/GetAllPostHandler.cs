@@ -23,16 +23,16 @@ namespace Feed.Application.Handlers
         {
             var posts = await _postRepository.GetAllPostsAsync();
             var postDtos = FeedMapper.Mapper.Map<IList<PostDto>>(posts.ToList());
-            foreach (var postDto in postDtos) {
-                try
-                {
-                    var comments = await _commentRepo.GetAllCommentsByPostId(postDto.Id);
-                    postDto.Comments = FeedMapper.Mapper.Map<IList<CommentDto>>(comments.ToList());
-                }
-                catch (Exception ex) {
-                    _logger.LogError(ex, "Failed to retrieve comments for post {PostId}. Error: {Error}", postDto.Id, ex.Message);
-                }
-            }
+            //foreach (var postDto in postDtos) {
+            //    try
+            //    {
+            //        var comments = await _commentRepo.GetAllCommentsByPostId(postDto.Id);
+            //        postDto.Comments = FeedMapper.Mapper.Map<IList<CommentDto>>(comments.ToList());
+            //    }
+            //    catch (Exception ex) {
+            //        _logger.LogError(ex, "Failed to retrieve comments for post {PostId}. Error: {Error}", postDto.Id, ex.Message);
+            //    }
+            //}
             return postDtos;
         }
     }
