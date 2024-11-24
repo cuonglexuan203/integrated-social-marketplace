@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace Identity.Infrastructure.Identity
 {
     public class UserFollow
