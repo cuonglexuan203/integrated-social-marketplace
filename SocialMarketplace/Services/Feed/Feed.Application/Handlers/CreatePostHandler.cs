@@ -29,7 +29,7 @@ namespace Feed.Application.Handlers
 
         public async Task<PostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(request.ContentText) && (request.Files == null || request.Files.Length == 0))
+            if (string.IsNullOrEmpty(request.ContentText) && (request.Files == null || request.Files.Length == 0) && request.SharedPostId == null)
             {
                 throw new BadRequestException("The post must have content or media file(s).");
             }
@@ -42,19 +42,20 @@ namespace Feed.Application.Handlers
                 {
                     User = userDetails,
                     ContentText = request.ContentText,
+                    SharedPostId = request.SharedPostId,
                 };
 
-                if(request.Tags is not null)
+                if(request.Tags != null)
                 {
                     post.Tags = request.Tags;
                 }
 
-                if (request.Files is not null) {
+                if (request.Files != null) {
                     var mediaResult = await _cloudinaryService.UploadMultipleFilesAsync(request.Files);
                     post.Media = FeedMapper.Mapper.Map<List<Media>>(mediaResult);
                 }
                 
-                var result = await _postRepository.CreatePost(post);
+                var result = await _postRepository.CreatePostAsync(post);
                 return FeedMapper.Mapper.Map<PostDto>(result);
             }
             catch (Exception ex) {
