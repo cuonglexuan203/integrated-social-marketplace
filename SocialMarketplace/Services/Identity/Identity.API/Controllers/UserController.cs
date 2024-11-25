@@ -1,8 +1,10 @@
-﻿using Identity.Application.Commands.User.Create;
+﻿using Identity.Application.Commands;
+using Identity.Application.Commands.User.Create;
 using Identity.Application.Commands.User.Delete;
 using Identity.Application.Commands.User.Update;
 using Identity.Application.Common.Models;
 using Identity.Application.DTOs;
+using Identity.Application.Queries;
 using Identity.Application.Queries.User;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -125,5 +127,38 @@ namespace Identity.API.Controllers
             }
         }
 
+        [HttpGet("[action]/{userId}")]
+        public async Task<IActionResult> GetUserFollowers(string userId)
+        {
+            ReturnResult<IList<UserDetailsResponseDTO>> result = new();
+            var query = new GetUserFollowersQuery(userId);
+            result.Result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]/{userId}")]
+        public async Task<IActionResult> GetUserFollowings(string userId)
+        {
+            ReturnResult<IList<UserDetailsResponseDTO>> result = new();
+            var query = new GetUserFollowingsQuery(userId);
+            result.Result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> FollowUser(FollowUserCommand command)
+        {
+            ReturnResult<bool> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UnfollowUser(UnfollowUserCommand command)
+        {
+            ReturnResult<bool> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

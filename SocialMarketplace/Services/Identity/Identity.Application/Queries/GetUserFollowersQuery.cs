@@ -8,6 +8,10 @@ namespace Identity.Application.Queries
     public class GetUserFollowersQuery: IRequest<List<UserDetailsResponseDTO>>
     {
         public string UserId { get; set; }
+        public GetUserFollowersQuery(string userId)
+        {
+            UserId = userId;
+        }
     }
 
     public class GetUserFollowersHandler : IRequestHandler<GetUserFollowersQuery, List<UserDetailsResponseDTO>>

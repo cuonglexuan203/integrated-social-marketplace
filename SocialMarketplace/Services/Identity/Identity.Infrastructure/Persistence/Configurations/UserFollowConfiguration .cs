@@ -9,6 +9,8 @@ namespace Identity.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<UserFollow> builder)
         {
             builder.HasKey(uf => uf.Id);
+            builder.Property(uf => uf.Id)
+                    .ValueGeneratedOnAdd();
 
             // Configure relationships
             builder.HasOne(uf => uf.Follower)

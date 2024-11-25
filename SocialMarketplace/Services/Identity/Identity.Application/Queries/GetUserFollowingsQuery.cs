@@ -7,6 +7,10 @@ namespace Identity.Application.Queries
     public class GetUserFollowingsQuery : IRequest<List<UserDetailsResponseDTO>>
     {
         public string UserId { get; set; } = default!;
+        public GetUserFollowingsQuery(string userId)
+        {
+            UserId = userId;
+        }
     }
 
     public class GetUserFollowingsHandler : IRequestHandler<GetUserFollowingsQuery, List<UserDetailsResponseDTO>>
