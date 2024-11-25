@@ -91,5 +91,30 @@ namespace Feed.API.Controllers
             result.Result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpGet("[action]/{userId}")]
+        public async Task<IActionResult> GetAllUserSavedPosts(string userId)
+        {
+            ReturnResult<IList<SavedPostDto>> result = new();
+            var query = new GetAllUserSavedPostsQuery(userId);
+            result.Result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateSavedPost(CreateSavedPostCommand command)
+        {
+            ReturnResult<SavedPostDto> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UnsavePost(UnsavePostCommand command)
+        {
+            ReturnResult<bool> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

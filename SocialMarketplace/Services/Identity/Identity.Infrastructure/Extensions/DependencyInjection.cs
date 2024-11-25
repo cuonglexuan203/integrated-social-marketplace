@@ -41,7 +41,7 @@ namespace Identity.Infrastructure.Extensions
             });
 
             services.TryAddScoped<IIdentityService, IdentityService>();
-
+            services.TryAddScoped<IUserFollowService, UserFollowService>();
             return services;
         }
     }

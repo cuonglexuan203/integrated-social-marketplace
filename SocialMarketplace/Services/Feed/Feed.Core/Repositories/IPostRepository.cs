@@ -13,13 +13,14 @@ namespace Feed.Core.Repositories
         Task<Post> GetPostAsync(string id, CancellationToken token = default);
         Task<Comment> AddCommentToPostAsync(Comment comment);
         //Task<IEnumerable<Post>> GetPostByUserId(string userId);
-        Task<Post> CreatePost(Post post);
-        Task<bool> UpdatePost(Post post);
+        Task<Post> CreatePostAsync(Post post, CancellationToken cancellationToken = default);
+        Task<bool> UpdatePostAsync(Post post, CancellationToken cancellationToken = default);
         //Task<bool> DeletePost(string id);
         Task<bool> IsPostExistsAsync(string id);
         Task<Reaction> AddReacionToPostAsync(string postId, Reaction reaction, CancellationToken cancellationToken = default);
         Task<bool> RemoveReactionFromPostAsync(string postId, string userId, CancellationToken cancellationToken = default);
         Task<IEnumerable<Reaction>> GetAllReactionsByPostId(string postId, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(string postId, CancellationToken token = default);
+        Task<IEnumerable<Post>> GetAllUserPostsAsync(string userId, CancellationToken cancellationToken = default);
     }
 }

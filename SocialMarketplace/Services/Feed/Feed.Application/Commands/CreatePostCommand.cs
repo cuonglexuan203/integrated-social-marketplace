@@ -10,5 +10,6 @@ namespace Feed.Application.Commands
         public string? ContentText { get; set; }
         public IFormFile[]? Files { get; set; }
         public List<string>? Tags { get; set; }
+        public string? SharedPostId { get; set; }
     }
 }
