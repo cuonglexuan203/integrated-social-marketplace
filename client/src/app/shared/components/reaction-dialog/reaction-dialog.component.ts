@@ -36,6 +36,8 @@ export class ReactionDialogComponent {
   }
 
   onClickReaction(reactionType: number) {
+    console.log(reactionType);
+    
     if (reactionType !== null && reactionType !== undefined) {
       this.onReaction.emit(reactionType);
     }

@@ -14,6 +14,7 @@ import { environment } from '../environments/endpoint';
 import { RoleProvider } from './shared/roles/role.provider';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
 import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
+import { provideLottieOptions } from 'ngx-lottie';
 
 // icons
 import { BrowserModule } from '@angular/platform-browser';
@@ -55,5 +56,9 @@ export const appConfig: ApplicationConfig = {
     },
     { provide: NbRoleProvider, useClass: RoleProvider },
     provideEnvironmentNgxMask(),
+
+    provideLottieOptions({
+      player: () => import('lottie-web'),
+    }),
   ]
 };

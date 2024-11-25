@@ -1,9 +1,15 @@
+
 @if(post) {
     <div class="post-item-containter"
     >
         <div class="post-header"> 
             <div class="left-header">
-                <tui-avatar [size]="'l'">{{ 'TD' | uppercase }}</tui-avatar>
+                @if (post.user.profilePictureUrl) {
+                    <tui-avatar [size]="'l'" [src]="post.user.profilePictureUrl"></tui-avatar>
+                }
+                @else {
+                    <tui-avatar [size]="'l'">{{ post.user.fullName | firstLetterWord }}</tui-avatar>
+                }
                 <div>
                         <a class="primary-color"
                             *ngIf="post.user"
@@ -21,13 +27,6 @@
                     </div>
             </div>
             <div class="right-header">
-                <tui-icon class="follow-button"
-                    [style.height.px]="'18'"
-                    [style.width.px]="'18'"
-                    icon="@tui.user-round-plus"
-                
-                    >
-                </tui-icon>
                 <tui-icon class="more-button"
                     icon="@tui.ellipsis"
                     tuiDropdownHover
@@ -48,6 +47,16 @@
             >
                 {{post.contentText}}
             </span>
+            <div class="d-flex flex-row gap-2">
+                <tui-tag class="tags"
+                    *ngFor="let tag of post.tags"
+                    size="l"
+                    [value]="'#' + tag"
+                    [hoverable]="true"
+                    
+                >
+                </tui-tag>
+            </div>
         </div>
         <div class="post-media-url"
             tuiCarouselButtons
@@ -70,7 +79,6 @@
                 <tui-carousel
                     #carousel
                     class="carousel"
-                    [tuiSkeleton]="isLoading"
                     [(index)]="currentIndex"
                     [style.--tui-carousel-padding]="0"
                     (indexChange)="onCarouselChange($event)"
@@ -84,15 +92,6 @@
                                 Your browser does not support the video tag.
                             </video>
                         }
-                    
-                        <!-- } -->
-                        <!-- @if(item.videoUrl) {
-                            @for (item of item.videoUrl; track $index) {
-                                <video *tuiItem src="{{ item }}" controls class="carousel-video">
-                                    Your browser does not support the video tag.
-                                </video>
-                            }
-                        } -->
                     }
                 </tui-carousel>
                 
@@ -128,7 +127,7 @@
                     [tuiDropdown]="reactionDialog"
                     [ngStyle]="{'background-color': isReacted && reactionsType[reactionType] ? '#71AAEB': ''}"
                 >
-                <tui-icon *ngIf="!isReacted"
+                <tui-icon *ngIf="!isReacted || !reactionsType[reactionType]?.emoji"
                     icon="@tui.heart"
                     [style.height.px]="18"
                     [style.width.px]="18"
@@ -156,7 +155,12 @@
                         [style.width.px]="18"
                         >
                     </tui-icon>
-                    <span>{{post.comments.length}}</span>
+                    @if (comments) {
+                        <span>{{comments.length}}</span>
+                    }
+                    @else {
+                        <span>0</span>
+                    }
                 </div>
             </div>
 

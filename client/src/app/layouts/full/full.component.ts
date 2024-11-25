@@ -10,6 +10,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { CommonModule } from '@angular/common';
 import { AppConfigService } from '../../core/services/app-config/app-config.service';
 import { AppSetting } from '../../config';
+import { LottieComponent, AnimationOptions } from 'ngx-lottie';
+
 @Component({
   selector: 'app-full',
   standalone: true,
@@ -20,7 +22,8 @@ import { AppSetting } from '../../config';
     SidebarComponent,
     NavItemComponent,
     NgScrollbarModule,
-    CommonModule
+    CommonModule,
+    LottieComponent
   ],
   templateUrl: './full.component.html',
   styleUrl: './full.component.css'
@@ -29,7 +32,19 @@ import { AppSetting } from '../../config';
 export class FullComponent {
   navItems: NavItem[] = navItems;
   appSetting: AppSetting;
+  showContent: boolean = false;
   @Output() isToggled: boolean;
+
+  options: AnimationOptions = {
+    path: 'assets/animations/starting.json',
+    loop: true,
+  };
+
+  options2: AnimationOptions = {
+    path: 'assets/animations/ai.json',
+    loop: true,
+  }
+
   constructor(
     private _appConfig: AppConfigService,
   ) {
@@ -37,8 +52,15 @@ export class FullComponent {
     this.setUpAppSetting(this.appSetting);
   }
   ngOnInit() {
-    
+    this.onShowContent();
   }
+  onShowContent() {
+    setTimeout(() => {
+      this.showContent = true;
+    }, 1500);
+  }
+
+
   setUpAppSetting(options: AppSetting) {
     this.appSetting = options;
     this._appConfig.setAppSetting(options);

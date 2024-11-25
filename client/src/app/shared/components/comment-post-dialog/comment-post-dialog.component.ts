@@ -17,6 +17,7 @@ import { AlertService } from '../../../core/services/alert/alert.service';
 import { CommentService } from '../../../core/services/comment/comment.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { EnlargeImageComponentComponent } from '../enlarge-image-component/enlarge-image-component.component';
+import { Comment } from '../../../core/models/comment/comment.model';
 
 @Component({
   selector: 'app-comment-post-dialog',
@@ -58,8 +59,14 @@ export class CommentPostDialogComponent {
   formData: FormData = new FormData();
 
   user: UserResponseModel;
+  comments: Comment[] = [];
 
   isLoading: boolean = false;
+
+  typeCloudinary = 'cloudinary';
+  typeLocal = 'local';
+
+  pendingComments: Comment[] = [];
   public readonly context = injectContext<TuiDialogContext<any>>();
 
   @ViewChild('commentContainer') commentContainer!: ElementRef;
@@ -76,15 +83,38 @@ export class CommentPostDialogComponent {
     this.form = this.formBuilder.formGroup(CommentRequestModel, {});
   }
 
+  ngOnInit() {
+    this.post = this.data.post;
+    this.getCommentsPost();
+  }
+
   sortComments(a: any, b: any): number {
     const dateA = new Date(a.createdAt).getTime();
     const dateB = new Date(b.createdAt).getTime();
     return dateB - dateA;
   }
 
-  ngOnInit() {
-    this.post = this.data.post;
-    this.post.comments = this.post.comments.sort(this.sortComments);
+
+
+  getCommentsPost() {
+    this.isLoading = true;
+    this._commentService.getCommentsByPostId(this.post.id).subscribe({
+      next: (res) => {
+        if (res) {
+          this.comments = res.result;
+          if (this.comments)
+            this.comments = this.comments.sort(this.sortComments);
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
 
@@ -147,6 +177,8 @@ export class CommentPostDialogComponent {
     this.showFileInput = false;
   }
 
+  
+
   onSubmit(event: any) {
     event.preventDefault();
     this.setupDataForComment();
@@ -155,8 +187,9 @@ export class CommentPostDialogComponent {
       this._commentService.createComment(this.formData).subscribe({
         next: (res) => {
           if (res) {
-            this.alertService.showSuccess('Comment', 'Comment created successfully');
-            this.post.comments.push(res?.result);
+            this.alertService.showSuccess('Comment created successfully', 'Comment');
+            this.comments.push(res.result);
+
             this.scrollToBottom();
             this.isLoading = false;
           } else {
@@ -171,7 +204,7 @@ export class CommentPostDialogComponent {
         complete: () => {
           this.resetData();
           this.isLoading = false;
-            this.scrollToBottom();
+          this.scrollToBottom();
         }
       });
     }
@@ -185,23 +218,23 @@ export class CommentPostDialogComponent {
   }
 
   onFileUpload(event: Event): void {
-      const files = (event.target as HTMLInputElement).files;
-      if (files && files.length > 0) {
-        const file = files[0];
-        const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
-        const allowedVideoExtensions = ['.mp4', '.avi', '.flv', '.mov', '.wmv'];
-        const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
-        if (allowedImageExtensions.includes(fileExtension) || allowedVideoExtensions.includes(fileExtension)) {
-          if (file.size < 10000000) {
-            this.uploadedFile = file;
-            this.form.get('media')?.setValue(file);
-          } else {
-            this.alertService.showError('File size is too large', 'Error');
-          }
+    const files = (event.target as HTMLInputElement).files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+      const allowedVideoExtensions = ['.mp4', '.avi', '.flv', '.mov', '.wmv'];
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+      if (allowedImageExtensions.includes(fileExtension) || allowedVideoExtensions.includes(fileExtension)) {
+        if (file.size < 10000000) {
+          this.uploadedFile = file;
+          this.form.get('media')?.setValue(file);
         } else {
-          this.alertService.showError('Only image and video files are allowed', 'Error');
+          this.alertService.showError('File size is too large', 'Error');
         }
+      } else {
+        this.alertService.showError('Only image and video files are allowed', 'Error');
       }
+    }
   }
 
   isImage(file: File): boolean {
@@ -218,24 +251,27 @@ export class CommentPostDialogComponent {
 
   getFileUrl(file: File): SafeUrl | null {
     if (!file) return null;
-    
+
     const objectUrl = URL.createObjectURL(file);
     return this.sanitizer.bypassSecurityTrustUrl(objectUrl);
   }
 
-  enlargeMedia(media: MediaModel) {
+  enlargeMedia(media: MediaModel, type: string) {
     this.dialogs
-    .open(
-      new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
-      {
-        data: media,
-        size: 'auto',
-        appearance: 'lorem-ipsum',
-        
-      }
-    )
-    .subscribe((data) => {
-      console.log(data);
-    });
+      .open(
+        new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+        {
+          data: { media, type },
+          size: 'auto',
+          appearance: 'lorem-ipsum',
+        }
+      )
+      .subscribe((data) => {
+        console.log(data);
+      });
+  }
+
+  handleUrlLargeMedia(url: string): string {
+    return url.replace('/upload/', '/upload/w_800/');
   }
 }

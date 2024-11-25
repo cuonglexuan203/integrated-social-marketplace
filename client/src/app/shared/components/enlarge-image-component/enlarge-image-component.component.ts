@@ -15,14 +15,30 @@ export class EnlargeImageComponentComponent {
   public readonly context = injectContext<TuiDialogContext<any>>();
   data: any;
   media: MediaModel
+  type: string;
+  isLoading: boolean = false;
   constructor() {
     this.data = this.context.data;
-    
    }
 
   ngOnInit() {
-    this.media = this.data;
-    console.log(this.media);
-    
+    this.media = this.data.media;
+    this.type = this.data.type;
+    this.handleMedia(this.media);
+  }
+
+  handleMedia(media: MediaModel) {
+    this.isLoading = true;
+    if (this.type === 'cloudinary') {
+      this.media = {
+        ...media,
+        url: this.handleUrlLargeMedia(media.url)
+      }
+    }
+    this.isLoading = false;
+  }
+
+  handleUrlLargeMedia(url: string): string {
+    return url.replace('/upload/', '/upload/w_1000/');
   }
 }

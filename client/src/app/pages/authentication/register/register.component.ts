@@ -11,6 +11,7 @@ import { NbAuthService } from '@nebular/auth';
 import { RegisterModel } from '../../../core/models/register/register.model';
 import { Router } from '@angular/router';
 import { HINT_REGISTER } from '../../../core/constances/hint-register';
+import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 
 @Component({
   selector: 'app-register',
@@ -26,7 +27,8 @@ import { HINT_REGISTER } from '../../../core/constances/hint-register';
     TuiIcon,
     TuiTextfieldControllerModule,
     TuiHint,
-    TuiError
+    TuiError,
+    LottieComponent
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -36,6 +38,12 @@ export class RegisterComponent {
   logoLoginLeftSide = LOGO_LOGIN_LEFT_SIDE;
   form!: FormGroup;
   hintRegister = HINT_REGISTER;
+
+  options: AnimationOptions = {
+    path: 'assets/animations/login.json',
+    loop: true,
+  };
+  
   constructor(
     private router: Router,
     private authService: NbAuthService,

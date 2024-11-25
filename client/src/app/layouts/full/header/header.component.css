@@ -13,7 +13,7 @@
 }
 
 .button-action:hover {
-    background-color: #f1f1f1;
+    cursor: pointer;
 }
 .search-bar {
     border-radius: 50px;

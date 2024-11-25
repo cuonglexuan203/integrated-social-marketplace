@@ -13,8 +13,9 @@
                         @if(item?.contentType === 'image') {
                             <img 
                                 *tuiItem 
-                                [ngStyle]="{ }"
                                 [src]="item?.url" 
+                                [width]="item?.width"
+                                [height]="item?.height"
                                 class="carousel-image"
                             >
                         }
@@ -30,13 +31,6 @@
                         }
                     </ng-container>
                 </tui-carousel>
-                <tui-pagination
-                size="l"
-                class="pagination mt-2"
-                [length]="post.media.length"
-                [(index)]="currentIndex"
-                *ngIf="post.media.length > 1"
-            />
             }
         </div>
        
@@ -64,7 +58,7 @@
 
             <div class="divider"></div>
             <div class="comment-container">
-                <ng-container *ngIf="!post?.comments?.length">
+                <ng-container *ngIf="!comments?.length">
                     <div class="comment-item font-14">
                         <tui-icon icon="@tui.message-square-text" class="comment-icon"
                         [style.width.px]="'48'"
@@ -75,9 +69,9 @@
                     </div> 
                 </ng-container>
 
-                <ng-container *ngIf="post?.comments?.length">
+                <ng-container *ngIf="comments?.length">
                     <div class="comment-content"  #commentContainer>
-                        @for (comment of post.comments; track $index) {
+                        @for (comment of comments; track $index) {
                                 <div class="comment-user font-14">
                                     <div class="d-flex gap-3">
                                         <tui-avatar [size]="'l'">{{ comment.user.fullName| firstLetterWord }}</tui-avatar>
@@ -97,7 +91,7 @@
                                                             class="comment-media-image"
                                                             alt="Comment Image"
                                                             width="200"
-                                                            (click)="enlargeMedia(mediaItem)"
+                                                            (click)="enlargeMedia(mediaItem, typeCloudinary)"
                                                             height="200"
                                                         />
                                                     }
@@ -107,7 +101,7 @@
                                                             controls
                                                             width="200"
                                                             height="200"
-                                                            (click)="enlargeMedia(mediaItem)"
+                                                            (click)="enlargeMedia(mediaItem, typeCloudinary)"
                                                             class="comment-media-video"
                                                         >
                                                             Your browser does not support the video tag.
@@ -115,7 +109,6 @@
                                                     }
                                                 }
                                             }
-                                            <!-- } -->
                                         </div>
                                     </div>
                             </div>
@@ -129,6 +122,7 @@
                     [overlay]="true"
                     [showLoader]="isLoading"
                 >
+
                 <div class="uploaded-file-container">
                     <img
                       class="uploaded-file"
@@ -151,16 +145,17 @@
                   </label>
                     
                     <div class="leave-comment">
-                        <tui-avatar [size]="'m'">{{ post.user.fullName | firstLetterWord }}</tui-avatar>
-    
-    <textarea           
+                        <tui-avatar [size]="'m'">{{ user.fullName| firstLetterWord }}</tui-avatar>
+
+    <textarea           *ngIf="!isLoading"
                         #commentText
                         formControlName="commentText"
                         (keydown.enter)="onSubmit($event)"
                         class="input-comment" placeholder="Write a comment..." style="white-space: normal !important;">
     </textarea>
-    
-                        <div class="image-toggle" (click)="toggleFileInput()">
+  
+
+           <div class="image-toggle" (click)="toggleFileInput()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#19a32a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-image">
                                 <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
                                 <path d="M14 2v4a2 2 0 0 0 2 2h4" />
@@ -169,7 +164,7 @@
                             </svg>
                         </div>
                     </div>
-                </tui-loader>
+                </tui-loader>  
             </form>
         }
        </div>

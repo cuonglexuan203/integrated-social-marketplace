@@ -18,4 +18,8 @@ export class CommentService {
     return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/CreateComment`, commentData);
   }
 
+  getCommentsByPostId(postId: string): Observable<MarketplaceResponse<any>> {
+    return this.http.get<MarketplaceResponse<any>>(`${this.apiBase}/GetCommentsByPostId/${postId}`);
+  }
+
 }

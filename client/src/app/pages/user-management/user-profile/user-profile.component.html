@@ -1,1 +1,88 @@
-<p>user-profile works!</p>
+<div class="w-100 user-profile-container">
+    <!-- Cover Photo Section -->
+    <div class="cover-photo">
+        
+    </div>
+
+    <!-- Profile Info Section -->
+    <div class="header-profile">
+        <div class="profile-main-info">
+            <!-- Profile Picture -->
+            <div class="profile-picture-container">
+                <tui-avatar
+                    [src]="user.profilePictureUrl || 'tui@.user'"
+                    [size]="'xxl'"
+                    class="profile-picture"
+                >
+                </tui-avatar>
+                <div class="online-indicator"></div>
+            </div>
+
+            <!-- Name and Actions -->
+            <div class="profile-actions">
+                <div class="profile-name-section">
+                    <h2 class="profile-name">Quang Trieu</h2>
+                    <button class="edit-profile-btn">
+                        Edit profile
+                    </button>
+                </div>
+                <div class="action-buttons">
+                    <button class="button-more">
+                        <span>More</span>
+                        <tui-icon icon="@tui.chevron-down"></tui-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Content Section -->
+    <div class="content-profile">
+        <div class="content-layout">
+            <div class="w-60 d-flex flex-column">
+                <div class="w-70">
+                    <button class="create-button">
+                      <tui-icon icon="@tui.calendar-plus"></tui-icon>
+                      <span>Quang Trieu, Do you want to create a new post?</span>
+                    </button>
+                  </div>
+                  
+                  <div class="filter-section w-70 mt-3">
+                    <button >
+                      <tui-icon icon="@tui.bookmark"></tui-icon>
+                      <span>Saved Posts</span>
+                    </button>
+                    <button >
+                      <tui-icon icon="@tui.message-square"></tui-icon>
+                      <span>Commented Posts</span>
+                    </button>
+                    <button>
+                      <tui-icon icon="@tui.heart"></tui-icon>
+                      <span>Reacted Posts</span>
+                    </button>
+                  </div>
+            </div>
+            
+            <div class="follower w-30">
+                <div class="follower-header">
+                    <span class="following-text">Following:</span>
+                    <span class="following-count">1</span>
+                </div>
+                <div class="follower-item">
+                    <tui-avatar [size]="'m'">
+                        <tui-icon icon="@tui.user"></tui-icon>
+                    </tui-avatar>
+                    <span class="follower-name">Quang Trieu</span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    @for (post of posts; track $index) {
+        <div class="post-container">
+            <app-post-item [post]="post"></app-post-item>
+        </div>
+    }
+</div>

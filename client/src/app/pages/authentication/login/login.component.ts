@@ -12,6 +12,9 @@ import { AlertService } from '../../../core/services/alert/alert.service';
 import { TuiCheckbox } from '@taiga-ui/kit';
 import { HINT_LOGIN } from '../../../core/constances/hint-login';
 import { Helper } from '../../../core/utils/helper';
+import { UserService } from '../../../core/services/user/user.service';
+import { UserResponseModel } from '../../../core/models/user/user.model';
+import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 
 
 @Component({
@@ -27,7 +30,8 @@ import { Helper } from '../../../core/utils/helper';
     TuiCheckbox,
     TuiTextfieldControllerModule,
     TuiHint,
-    TuiError
+    TuiError,
+    LottieComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -39,11 +43,20 @@ export class LoginComponent {
   form!: FormGroup;
   logoPath = 'assets/images/icons/appicon.svg';
   hintLogin = HINT_LOGIN;
+
+  userId: string;
+  user: UserResponseModel
+
+  options: AnimationOptions = {
+    path: 'assets/animations/login.json',
+    loop: true,
+  };
   constructor(
     private router: Router,
     private authService: NbAuthService,
     private formBuilder: RxFormBuilder,
     private alertService: AlertService,
+    private _userService: UserService
 
   ) {
     this.form = this.formBuilder.formGroup(LoginModel, {});
@@ -58,7 +71,6 @@ export class LoginComponent {
   onClickNavigateRegister() {
     this.router.navigate(['/register']);
   }
-
 
 
   onSubmit() {

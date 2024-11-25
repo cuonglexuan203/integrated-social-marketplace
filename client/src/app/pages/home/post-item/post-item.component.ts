@@ -1,4 +1,4 @@
-import { Component, inject, INJECTOR, Input } from '@angular/core';
+import { Component, inject, INJECTOR, Input, SimpleChanges } from '@angular/core';
 import { TuiButton, TuiDialogService, TuiDropdown, TuiIcon, TuiRoot } from '@taiga-ui/core';
 import { TuiAvatar, TuiCarousel, TuiPagination, TuiSkeleton } from '@taiga-ui/kit';
 import { TuiCardLarge } from '@taiga-ui/layout';
@@ -17,6 +17,9 @@ import { CommentPostDialogComponent } from '../../../shared/components/comment-p
 import { ReactionModel, ReactionRequestModel } from '../../../core/models/reaction/reaction.model';
 import { Helper } from '../../../core/utils/helper';
 import { reactions } from '../../../core/constances/reaction';
+import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word/first-letter-word.pipe';
+import { CommentService } from '../../../core/services/comment/comment.service';
+import { TuiTagModule } from '@taiga-ui/legacy';
 
 @Component({
   selector: 'app-post-item',
@@ -33,7 +36,10 @@ import { reactions } from '../../../core/constances/reaction';
     ReactionDialogComponent,
     TuiSkeleton,
     DateFilterPipe,
-    TuiPagination
+    TuiPagination,
+    TuiSkeleton,
+    FirstLetterWordPipe,
+    TuiTagModule
   ],
   templateUrl: './post-item.component.html',
   styleUrl: './post-item.component.css'
@@ -53,15 +59,56 @@ export class PostItemComponent {
   reactionType: any;
   reactionsType = reactions;
 
+
   constructor(
     private _feedService: FeedService,
     private alertService: AlertService,
+    private _commentService: CommentService,
 
   ) { }
 
   ngOnInit() {
-    this.onCheckedReaction();
+    this.initializePostState();
+  }
 
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['post'] && !changes['post'].isFirstChange()) {
+      this.initializePostState();
+    }
+  }
+
+  initializePostState() {
+    // Reset state for the new post
+    this.comments = [];
+    this.isReacted = false;
+    this.reactionType = '';
+    this.currentIndex = 0;
+
+    if (this.post) {
+      this.getCommentsPost();
+      this.onCheckedReaction();
+    }
+  }
+
+
+  getCommentsPost() {
+    this.isLoading = true;
+    this._commentService.getCommentsByPostId(this.post.id).subscribe({
+      next: (res) => {
+        if (res) {
+          this.comments = res.result || [];
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
   onRemoveReaction() {
@@ -85,6 +132,8 @@ export class PostItemComponent {
     })
   }
   getReactionReacted(event: any) {
+    console.log(event);
+    
     if (this.isReacted && event === this.reactionType) {
       this.onRemoveReaction();
     }
@@ -174,6 +223,7 @@ export class PostItemComponent {
           dismissible: false,
           size: 'auto',
           data: data,
+          appearance: 'comment-dialog',
         }
       )
       .subscribe((data) => {

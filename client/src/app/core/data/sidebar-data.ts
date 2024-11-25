@@ -26,13 +26,6 @@ export const navItems: NavItem[] = [
         tooltip: 'Chat'
     },
     {
-        displayName: 'Create Post',
-        iconName: '@tui.plus',
-        bgColor: 'white',
-        route: '/create-post',
-        tooltip: 'Create Post'
-    },
-    {
         displayName: 'Saved Posts',
         iconName: '@tui.file-heart',
         bgColor: 'white',

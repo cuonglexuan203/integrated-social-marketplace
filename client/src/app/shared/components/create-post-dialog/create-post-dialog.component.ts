@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, inject, INJECTOR, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, INJECTOR, ViewChild } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RxFormBuilder, RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { TuiButton, TuiDialogContext, TuiDialogService, TuiIcon, TuiLink } from '@taiga-ui/core';
@@ -35,7 +35,7 @@ import { MediaModel } from '../../../core/models/media/media.model';
 })
 export class CreatePostDialogComponent {
   @ViewChild('textArea') textArea: ElementRef;
-
+  
   isLoading: boolean = false;
 
   form!: FormGroup;
@@ -73,6 +73,9 @@ export class CreatePostDialogComponent {
     if (this.timeUpdateInterval) {
       clearInterval(this.timeUpdateInterval);
     }
+
+    this.data = null;
+
   }
 
   ngAfterContentChecked() {
@@ -87,6 +90,14 @@ export class CreatePostDialogComponent {
 
   getCurrentTime() {
     this.currentTime = new Date(Helper.getCurrentTime());
+  }
+
+  handleMedia(media: MediaModel) {
+    media.url = this.handleUrlLargeMedia(media.url);
+  }
+
+  handleUrlLargeMedia(url: string): string {
+    return url.replace('/upload/', '/upload/w_1000/');
   }
 
   startTimeUpdate() {
@@ -140,8 +151,17 @@ export class CreatePostDialogComponent {
       });
       this.formData.append('userId', this.user?.id);
       this.formData.append('contentText', this.form.get('contentText')?.value);
-      this.formData.append('tags', this.form.get('tags')?.value);
+
+      let tags = this.form.get('tags')?.value;
+      
+      if(tags) {
+        tags.forEach((tag: string) => {
+          this.formData.append('tags', tag);
+        });
+      }
+      
   }
+
 
   onPost() {
     this.setupDataForPost();
@@ -152,7 +172,7 @@ export class CreatePostDialogComponent {
           if (res){
             this.isLoading = false;
             this.alertService.showSuccess('Create a new post successfully', 'Success');
-            this.context.completeWith(this.form.value);
+            this.context.completeWith(res?.result);
           }
         },
         error: (error) => {
@@ -186,6 +206,8 @@ export class CreatePostDialogComponent {
   }
 
   enlargeMedia(file: File) {
+    console.log(file, "before");
+    
     let media: MediaModel = {
       publicId: '',
       url: '',
@@ -199,12 +221,12 @@ export class CreatePostDialogComponent {
     }
     const fileUrl = URL.createObjectURL(file);
     media.url = fileUrl as any;
-    
+    const type = 'local';
     this.dialogs
     .open(
       new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
       {
-        data: media,
+        data: {media, type},
         size: 'auto',
         appearance: 'lorem-ipsum',
         
