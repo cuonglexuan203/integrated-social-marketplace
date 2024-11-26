@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Identity.API.Controllers
 {
@@ -98,19 +99,12 @@ namespace Identity.API.Controllers
         }
 
 
-        [HttpPut("EditUserProfile/{id}")]
-        [ProducesDefaultResponseType(typeof(int))]
-        public async Task<ActionResult> EditUserProfile(string id, [FromBody] EditUserProfileCommand command)
+        [HttpPut("[action]")]
+        [ProducesResponseType(typeof(UserDetailsResponseDTO), (int) HttpStatusCode.OK)]
+        public async Task<ActionResult> EditUserProfile(EditUserProfileCommand command)
         {
-            if (id == command.Id)
-            {
                 var result = await _mediator.Send(command);
                 return Ok(result);
-            }
-            else
-            {
-                return BadRequest();
-            }
         }
 
         [HttpGet("[action]/{userId}")]

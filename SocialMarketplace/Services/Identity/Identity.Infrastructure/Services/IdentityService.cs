@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Commands.User.Create;
+using Identity.Application.Commands.User.Update;
 using Identity.Application.DTOs;
 using Identity.Application.Exceptions;
 using Identity.Application.Interfaces;
@@ -96,6 +97,7 @@ namespace Identity.Infrastructure.Services
                 FullName = command.FullName,
                 UserName = command.UserName,
                 Email = command.Email,
+                PhoneNumber = command.PhoneNumber,
                 Gender = command.Gender.HasValue ? (Gender)command.Gender.Value : Gender.Unknown,
                 DateOfBirth = command.DateOfBirth,
                 Interests = command.Interests?.ToList() ?? new List<string>(),
@@ -173,6 +175,7 @@ namespace Identity.Infrastructure.Services
                 FullName = user.FullName,
                 UserName = user.UserName,
                 Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 ProfileUrl = user.ProfileUrl,
                 DateOfBirth = user.DateOfBirth,
@@ -218,6 +221,7 @@ namespace Identity.Infrastructure.Services
                 FullName = user.FullName,
                 UserName = user.UserName,
                 Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
                 Roles = roles,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 ProfileUrl = user.ProfileUrl,
@@ -242,6 +246,7 @@ namespace Identity.Infrastructure.Services
                 FullName = user.FullName,
                 UserName = user.UserName,
                 Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
                 Roles = roles,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 ProfileUrl = user.ProfileUrl,
@@ -358,6 +363,92 @@ namespace Identity.Infrastructure.Services
             result = await _userManager.AddToRolesAsync(user, usersRole);
 
             return result.Succeeded;
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(string userName, string currentPassword, string newPassword, CancellationToken token = default)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if(user == null) return IdentityResult.Failed(new IdentityError() { Code = "UserNotFound", Description = "Username not found" });
+
+            var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+            return result;
+        }
+
+        public async Task<(IdentityResult, UserDetailsResponseDTO?)> UpdateUserProfileAsync(string userId, EditUserProfileCommand command, CancellationToken token = default)
+        {
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) throw new NotFoundException($"UserId {userId} not found");
+            if (!string.IsNullOrEmpty(command.FullName))
+            {
+                user.FullName = command.FullName;
+            }
+
+            if (!string.IsNullOrEmpty(command.Email))
+            {
+                user.Email = command.Email;
+            }
+
+            if (!string.IsNullOrEmpty(command.PhoneNumber))
+            {
+                user.PhoneNumber = command.PhoneNumber;
+            }
+
+            if (!string.IsNullOrEmpty(command.ProfilePictureUrl))
+            {
+                user.ProfilePictureUrl = command.ProfilePictureUrl;
+            }
+
+            if (command.Gender.HasValue)
+            {
+                user.Gender = (Gender)command.Gender;
+            }
+
+            if (command.DateOfBirth.HasValue)
+            {
+                user.DateOfBirth = command.DateOfBirth.Value;
+            }
+
+            if (command.Interests != null && command.Interests.Any())
+            {
+                user.Interests = command.Interests.ToList();
+            }
+
+            if (!string.IsNullOrEmpty(command.City))
+            {
+                user.City = command.City;
+            }
+
+            if (!string.IsNullOrEmpty(command.Country))
+            {
+                user.Country = command.Country;
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            UserDetailsResponseDTO userDetailsDto = default;
+            if (result.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userDetailsDto = new UserDetailsResponseDTO()
+                {
+                    Id = user.Id,
+                    FullName = user.FullName,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    Roles = roles,
+                    ProfilePictureUrl = user.ProfilePictureUrl,
+                    ProfileUrl = user.ProfileUrl,
+                    DateOfBirth = user.DateOfBirth,
+                    Interests = user.Interests,
+                    City = user.City,
+                    Country = user.Country,
+                };
+            }
+
+            return (result, userDetailsDto);
+
         }
     }
 }

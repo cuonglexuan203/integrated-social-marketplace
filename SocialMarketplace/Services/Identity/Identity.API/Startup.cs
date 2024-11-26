@@ -40,7 +40,7 @@ namespace Identity.API
                     Scheme = "bearer",
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
-                    Description = "Enter 'Bearer' followed by your token in the text input below. Example: 'Bearer {token}'",
+                    Description = "Enter your JWT token below. Example: 'your-token'",
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -90,6 +90,7 @@ namespace Identity.API
             #endregion
             services.AddAuthorization();
             services.AddControllers();
+            services.AddHttpContextAccessor();
 
             services.AddSingleton<ITokenGenerator>(new TokenGenerator(_key, _issuer, _audience, _expirtyMinutes));
             //
