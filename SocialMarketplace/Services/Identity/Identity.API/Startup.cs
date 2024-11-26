@@ -31,7 +31,33 @@ namespace Identity.API
             services.AddControllers();
             services.AddApiVersioning();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity.API", Version = "v1" }); });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity.API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Scheme = "Bearer",
+                    Type = SecuritySchemeType.ApiKey,
+                    BearerFormat = "JWT",
+                    Description = "Enter 'Bearer' followed by your token in the text input below. Example: 'Bearer {token}'",
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
             //
             #region jwt config
             var _key = Configuration["Jwt:Key"];

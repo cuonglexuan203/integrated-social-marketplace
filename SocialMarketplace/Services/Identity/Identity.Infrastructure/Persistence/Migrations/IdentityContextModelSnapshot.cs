@@ -281,13 +281,13 @@ namespace Identity.Infrastructure.Persistence.Migrations
                     b.HasOne("Identity.Infrastructure.Identity.ApplicationUser", "Followed")
                         .WithMany("Followers")
                         .HasForeignKey("FollowedId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Identity.Infrastructure.Identity.ApplicationUser", "Follower")
                         .WithMany("Following")
                         .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Followed");

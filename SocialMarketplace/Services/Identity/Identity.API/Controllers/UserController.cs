@@ -43,8 +43,8 @@ namespace Identity.API.Controllers
             return Ok(await _mediator.Send(new Application.Queries.User.GetUserQuery()));
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[Authorize(Roles = "admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(Roles = "admin")]
         [HttpDelete("Delete/{userId}")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<IActionResult> DeleteUser(string userId)
