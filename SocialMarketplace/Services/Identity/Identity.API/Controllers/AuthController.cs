@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Commands.Auth;
+using Identity.Application.Commands.User.Create;
 using Identity.Application.Common.Models;
 using Identity.Application.DTOs;
 using MediatR;
@@ -33,6 +34,16 @@ namespace Identity.API.Controllers
             ReturnResult<Unit> result = new();
             var command = new LogoutCommand();
             result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<ActionResult> Register(CreateUserCommand command)
+        {
+            ReturnResult<int> result = new();
+            result.Result = await _mediator.Send(command);
+
             return Ok(result);
         }
     }

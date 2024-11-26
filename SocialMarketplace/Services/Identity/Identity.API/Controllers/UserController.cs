@@ -1,5 +1,4 @@
 ﻿using Identity.Application.Commands;
-using Identity.Application.Commands.User.Create;
 using Identity.Application.Commands.User.Delete;
 using Identity.Application.Commands.User.Update;
 using Identity.Application.Common.Models;
@@ -13,8 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //[Authorize(Roles = "admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ApiController
     {
         private readonly IMediator _mediator;
@@ -24,17 +22,6 @@ namespace Identity.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("Create")]
-        [ProducesDefaultResponseType(typeof(int))]
-        public async Task<ActionResult> CreateUser(CreateUserCommand command)
-        {
-            ReturnResult<int> result = new();
-            result.Result = await _mediator.Send(command);
-
-            return Ok(result);
-        }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("GetAll")]
         [ProducesDefaultResponseType(typeof(List<UserResponseDTO>))]
@@ -43,7 +30,6 @@ namespace Identity.API.Controllers
             return Ok(await _mediator.Send(new Application.Queries.User.GetUserQuery()));
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpDelete("Delete/{userId}")]
         [ProducesDefaultResponseType(typeof(int))]
