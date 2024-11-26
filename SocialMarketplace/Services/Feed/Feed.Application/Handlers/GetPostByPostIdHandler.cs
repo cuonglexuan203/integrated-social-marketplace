@@ -1,5 +1,6 @@
 ﻿
 using Feed.Application.DTOs;
+using Feed.Application.Interfaces.Services;
 using Feed.Application.Mappers;
 using Feed.Application.Queries;
 using Feed.Core.Exceptions;
@@ -13,35 +14,24 @@ namespace Feed.Application.Handlers
     {
         private readonly ILogger<GetPostByPostIdQuery> _logger;
         private readonly IPostRepository _postRepo;
+        private readonly IPostMappingService _postMappingService;
 
-        public GetPostByPostIdHandler(ILogger<GetPostByPostIdQuery> logger, IPostRepository postRepo)
+        public GetPostByPostIdHandler(ILogger<GetPostByPostIdQuery> logger, IPostRepository postRepo, IPostMappingService postMappingService)
         {
             _logger = logger;
             _postRepo = postRepo;
+            _postMappingService = postMappingService;
         }
         public async Task<PostDto> Handle(GetPostByPostIdQuery request, CancellationToken cancellationToken)
         {
-            var result = await _postRepo.GetPostAsync(request.PostId, cancellationToken);
-            if(result == null)
+            var post = await _postRepo.GetPostAsync(request.PostId, cancellationToken);
+            if(post == null)
             {
                 _logger.LogError("Post not found: post id {postId}", request.PostId);
                 throw new NotFoundException("Post not found");
             }
 
-            var postDto = FeedMapper.Mapper.Map<PostDto>(result);
-            if(!string.IsNullOrEmpty(result.SharedPostId))
-            {
-                try
-                {
-                    var sharedPost = await _postRepo.GetPostAsync(result.SharedPostId, cancellationToken);
-                    postDto.SharedPost = FeedMapper.Mapper.Map<PostDto>(sharedPost);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Error in getting the shared post {sharedPostId} - post id {postId}: {errorMessage}", result.SharedPostId, result.Id, ex.Message);
-                    //throw;
-                }
-            }
+            var postDto = await _postMappingService.MapToDtoAsync(post);
             return postDto;
         }
     }

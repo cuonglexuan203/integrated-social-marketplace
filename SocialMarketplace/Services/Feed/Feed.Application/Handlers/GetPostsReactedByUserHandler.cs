@@ -1,6 +1,7 @@
 ﻿
 using Feed.Application.DTOs;
 using Feed.Application.Extensions;
+using Feed.Application.Interfaces.Services;
 using Feed.Application.Mappers;
 using Feed.Application.Queries;
 using Feed.Core.Entities;
@@ -18,12 +19,15 @@ namespace Feed.Application.Handlers
         private readonly ILogger<GetPostsReactedByUserHandler> _logger;
         private readonly IPostRepository _postRepo;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IPostMappingService _postMappingService;
 
-        public GetPostsReactedByUserHandler(ILogger<GetPostsReactedByUserHandler> logger, IPostRepository postRepo, IHttpContextAccessor httpContextAccessor)
+        public GetPostsReactedByUserHandler(ILogger<GetPostsReactedByUserHandler> logger, IPostRepository postRepo, IHttpContextAccessor httpContextAccessor,
+            IPostMappingService postMappingService)
         {
             _logger = logger;
             _postRepo = postRepo;
             _httpContextAccessor = httpContextAccessor;
+            _postMappingService = postMappingService;
         }
         public async Task<Pagination<PostDto>> Handle(GetPostsReactedByUserQuery request, CancellationToken cancellationToken)
         {
@@ -35,24 +39,7 @@ namespace Feed.Application.Handlers
             }
 
             var postPage = await _postRepo.GetPostsReactedByUserIdAsync(userId, request.ReactionSpecParams);
-            var postDtoPage = postPage.Map<Post, PostDto>();
-
-            foreach (var postDto in postDtoPage.Data)
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(postDto.SharedPostId))
-                    {
-                        var sharedPost = await _postRepo.GetPostAsync(postDto.SharedPostId, cancellationToken);
-                        postDto.SharedPost = FeedMapper.Mapper.Map<Post, PostDto>(sharedPost);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Error in getting the shared post {sharedPostId} - post id {postId}: {errorMessage}", postDto.SharedPostId, postDto.Id, ex.Message);
-                    //throw;
-                }
-            }
+            var postDtoPage = await postPage.MapAsync(_postMappingService.MapToDtosAsync);
 
             return postDtoPage;
         }
