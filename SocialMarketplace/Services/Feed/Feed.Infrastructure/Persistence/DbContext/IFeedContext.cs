@@ -7,5 +7,6 @@ namespace Feed.Infrastructure.Persistence.DbContext
     {
         IMongoCollection<Comment> Comments { get; }
         IMongoCollection<Post> Posts { get; }
+        IMongoCollection<SavedPost> SavedPosts { get; }
     }
 }

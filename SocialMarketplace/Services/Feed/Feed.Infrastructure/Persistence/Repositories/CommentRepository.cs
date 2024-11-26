@@ -78,7 +78,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
         public async Task<Pagination<Comment>> GetCommentsByPostId(string postId, CommentSpecParams commentParams)
         {
-            if(string.IsNullOrEmpty(postId))
+            if (string.IsNullOrEmpty(postId))
                 throw new BadRequestException("PostId cannot be empty.");
 
             var filter = BuildFilter(commentParams, postId);
@@ -206,6 +206,11 @@ namespace Feed.Infrastructure.Persistence.Repositories
             var filter = Builders<Comment>.Filter.Eq(x => x.Id, commentId);
             var result = await _comments.DeleteOneAsync(filter, cancellationToken: token);
             return result.DeletedCount > 0;
+        }
+
+        public async Task<Pagination<Comment>> GetCommentsByUserIdAsync(string userId, CommentSpecParams commentParams, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }

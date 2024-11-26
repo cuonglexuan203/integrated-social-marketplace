@@ -1,13 +1,12 @@
-﻿using Feed.Core.Entities;
+﻿using Feed.Core.Common.Constants;
+using Feed.Core.Entities;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
 using Feed.Core.Specs;
 using Feed.Core.ValueObjects;
 using Feed.Infrastructure.Persistence.DbContext;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Xml.Linq;
 
 namespace Feed.Infrastructure.Persistence.Repositories
 {
@@ -28,7 +27,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             return Builders<Post>.Filter.Eq(x => x.IsDeleted, false);
         }
-        public async Task<Post> CreatePost(Post post)
+        public async Task<Post> CreatePostAsync(Post post, CancellationToken cancellationToken = default)
         {
             await _posts.InsertOneAsync(post);
             return post;
@@ -70,9 +69,12 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
         private FilterDefinition<Post> BuildFilter(PostSpecParams postParams)
         {
-            var filter = Builders<Post>.Filter.Empty;
+            var filter = Builders<Post>.Filter.Empty & GetNonDeletedFilter();
 
-            filter &= GetNonDeletedFilter();
+            if (postParams.UserId != null)
+            {
+                filter &= Builders<Post>.Filter.Eq(p => p.User.Id, postParams.UserId);
+            }
 
             return filter;
         }
@@ -80,7 +82,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         private SortDefinition<Post> BuildSort(PostSpecParams postParams)
         {
             var sort = Builders<Post>.Sort;
-            return postParams.Sort?.ToLower() == "desc"
+            return postParams.Sort?.ToLower() == SortConstants.Descending
                 ? sort.Descending(x => x.ModifiedAt)
                 : sort.Ascending(x => x.ModifiedAt);
         }
@@ -109,11 +111,17 @@ namespace Feed.Infrastructure.Persistence.Repositories
             };
         }
 
-        public async Task<bool> UpdatePost(Post post)
+        public async Task<bool> UpdatePostAsync(Post post, CancellationToken cancellationToken = default)
         {
             FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, post.Id) & GetNonDeletedFilter();
             var result = await _posts
                 .ReplaceOneAsync(filter, post);
+
+            if (result.MatchedCount == 0)
+            {
+                _logger.LogError("Post id {postId} not found", post.Id);
+                throw new NotFoundException("Post not found");
+            }
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
@@ -127,7 +135,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
             try
             {
-                if(!(await IsPostExistsAsync(comment.PostId))) 
+                if (!(await IsPostExistsAsync(comment.PostId)))
                     throw new PostNotFoundException(comment.PostId);
 
                 var addedComment = await _commentRepository.CreateComment(comment);
@@ -225,7 +233,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
             var result = await _posts.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
-            if(result.ModifiedCount == 0)
+            if (result.ModifiedCount == 0)
             {
                 _logger.LogError("No reaction removed for post id {postId}, user id {userId}. Possible reasons: post not found or reaction does not exist.", postId, userId);
                 throw new NotFoundException("Reaction not found or already removed");
@@ -270,5 +278,40 @@ namespace Feed.Infrastructure.Persistence.Repositories
             var result = await _posts.DeleteOneAsync(filter, cancellationToken: token);
             return result.DeletedCount > 0;
         }
+
+        public async Task<IEnumerable<Post>> GetAllUserPostsAsync(string userId, CancellationToken cancellationToken = default)
+        {
+            var filter = Builders<Post>.Filter.Eq(p => p.User.Id, userId) & GetNonDeletedFilter();
+            return await _posts.Find(filter)
+                                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<Pagination<Post>> GetPostsReactedByUserIdAsync(string userId, ReactionSpecParams reactionParams, CancellationToken token = default)
+        {
+            var filter = Builders<Post>.Filter.ElemMatch(p => p.Reactions, r => r.User.Id == userId) & GetNonDeletedFilter();
+            var sort = reactionParams.Sort?.ToLower() == SortConstants.Descending ?
+                Builders<Post>.Sort.Descending(r => r.CreatedAt) :
+                Builders<Post>.Sort.Ascending(r => r.CreatedAt);
+
+            var countTask = _posts.CountDocumentsAsync(filter, cancellationToken: token);
+            var dataTask = _posts.Find(filter)
+                                 .Sort(sort)
+                                 .Skip((reactionParams.PageIndex - 1) * reactionParams.PageSize)
+                                 .Limit(reactionParams.PageSize)
+                                 .ToListAsync(token);
+
+            await Task.WhenAll(countTask, dataTask);
+
+            return new Pagination<Post>(reactionParams.PageIndex, reactionParams.PageSize, countTask.Result, dataTask.Result);
+
+        }
+
+        public async Task<Post> GetPostByCommentId(string commentId, CancellationToken token = default)
+        {
+            var filter = Builders<Post>.Filter.AnyEq(p => p.CommentIds, commentId) & GetNonDeletedFilter();
+            return await _posts.Find(filter)
+                               .FirstOrDefaultAsync(token);
+        }
+
     }
 }
