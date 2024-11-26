@@ -15,14 +15,14 @@ namespace Feed.Application.Handlers
     public class CreatePostHandler : IRequestHandler<CreatePostCommand, PostDto>
     {
         private readonly IIdentityService _identityService;
-        private readonly IPostRepository _postRepository;
+        private readonly IPostRepository _postRepo;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly ILogger<CreatePostHandler> _logger;
 
         public CreatePostHandler(IIdentityService identityService, IPostRepository postRepository, ICloudinaryService cloudinaryService, ILogger<CreatePostHandler> logger)
         {
             _identityService = identityService;
-            _postRepository = postRepository;
+            _postRepo = postRepository;
             _cloudinaryService = cloudinaryService;
             _logger = logger;
         }
@@ -55,8 +55,22 @@ namespace Feed.Application.Handlers
                     post.Media = FeedMapper.Mapper.Map<List<Media>>(mediaResult);
                 }
                 
-                var result = await _postRepository.CreatePostAsync(post);
-                return FeedMapper.Mapper.Map<PostDto>(result);
+                var result = await _postRepo.CreatePostAsync(post);
+                var postDto = FeedMapper.Mapper.Map<PostDto>(result);
+                if (!string.IsNullOrEmpty(result.SharedPostId))
+                {
+                    try
+                    {
+                        var sharedPost = await _postRepo.GetPostAsync(result.SharedPostId, cancellationToken);
+                        postDto.SharedPost = FeedMapper.Mapper.Map<PostDto>(sharedPost);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError("Error in getting the shared post {sharedPostId} - post id {postId}: {errorMessage}", result.SharedPostId, result.Id, ex.Message);
+                        //throw;
+                    }
+                }
+                return postDto;
             }
             catch (Exception ex) {
                 _logger.LogError("An error occur while creating the Post: {ErrorMessage}", ex.Message);

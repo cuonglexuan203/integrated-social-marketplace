@@ -34,7 +34,7 @@ namespace Feed.API.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetPosts([FromQuery]PostSpecParams postParams)
+        public async Task<IActionResult> GetPosts([FromQuery] PostSpecParams postParams)
         {
             ReturnResult<Pagination<PostDto>> result = new();
             var query = new GetPostsQuery(postParams);
@@ -114,6 +114,14 @@ namespace Feed.API.Controllers
         {
             ReturnResult<bool> result = new();
             result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetPostsByUserReaction([FromQuery] ReactionSpecParams reactionParams)
+        {
+            ReturnResult<Pagination<PostDto>> result = new();
+            result.Result = await _mediator.Send(new GetPostsReactedByUserQuery(reactionParams));
             return Ok(result);
         }
     }

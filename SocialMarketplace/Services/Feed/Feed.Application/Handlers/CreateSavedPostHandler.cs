@@ -32,9 +32,29 @@ namespace Feed.Application.Handlers
                 _logger.LogError("userId not found in the JWT token");
                 throw new NotFoundException("userId not found in the JWT token");
             }
+
+            if(!await _postRepo.IsPostExistsAsync(request.PostId))
+            {
+                _logger.LogError("Post not found: post id {postId}", request.PostId);
+                throw new NotFoundException("Post not found");
+            }
+
             var savedPost = await _savedPostRepo.SavePostAsync(userId, request.PostId, cancellationToken);
             var post = await _postRepo.GetPostAsync(savedPost.PostId, cancellationToken);
             var savedPostDto = FeedMapper.Mapper.Map<SavedPostDto>(post);
+            if (!string.IsNullOrEmpty(post.SharedPostId))
+            {
+                try
+                {
+                    var sharedPost = await _postRepo.GetPostAsync(post.SharedPostId, cancellationToken);
+                    savedPostDto.SharedPost = FeedMapper.Mapper.Map<PostDto>(sharedPost);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error in getting the shared post {sharedPostId} - post id {postId}: {errorMessage}", post.SharedPostId, post.Id, ex.Message);
+                    //throw;
+                }
+            }
             savedPostDto.SavedAt = savedPost.SavedAt;
             return savedPostDto;
         }
