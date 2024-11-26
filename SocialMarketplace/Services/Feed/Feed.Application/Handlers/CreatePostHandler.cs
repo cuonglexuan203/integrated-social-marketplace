@@ -18,13 +18,16 @@ namespace Feed.Application.Handlers
         private readonly IPostRepository _postRepo;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly ILogger<CreatePostHandler> _logger;
+        private readonly IPostMappingService _postMappingService;
 
-        public CreatePostHandler(IIdentityService identityService, IPostRepository postRepository, ICloudinaryService cloudinaryService, ILogger<CreatePostHandler> logger)
+        public CreatePostHandler(IIdentityService identityService, IPostRepository postRepository, ICloudinaryService cloudinaryService, 
+            ILogger<CreatePostHandler> logger, IPostMappingService postMappingService)
         {
             _identityService = identityService;
             _postRepo = postRepository;
             _cloudinaryService = cloudinaryService;
             _logger = logger;
+            _postMappingService = postMappingService;
         }
 
         public async Task<PostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
@@ -56,20 +59,7 @@ namespace Feed.Application.Handlers
                 }
                 
                 var result = await _postRepo.CreatePostAsync(post);
-                var postDto = FeedMapper.Mapper.Map<PostDto>(result);
-                if (!string.IsNullOrEmpty(result.SharedPostId))
-                {
-                    try
-                    {
-                        var sharedPost = await _postRepo.GetPostAsync(result.SharedPostId, cancellationToken);
-                        postDto.SharedPost = FeedMapper.Mapper.Map<PostDto>(sharedPost);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError("Error in getting the shared post {sharedPostId} - post id {postId}: {errorMessage}", result.SharedPostId, result.Id, ex.Message);
-                        //throw;
-                    }
-                }
+                var postDto = await _postMappingService.MapToDtoAsync(result);
                 return postDto;
             }
             catch (Exception ex) {

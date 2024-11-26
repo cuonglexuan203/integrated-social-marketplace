@@ -1,12 +1,11 @@
 ﻿using Feed.Application.Commands;
 using Feed.Application.DTOs;
-using Feed.Application.Mappers;
+using Feed.Application.Interfaces.Services;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
 
 namespace Feed.Application.Handlers
 {
@@ -16,13 +15,16 @@ namespace Feed.Application.Handlers
         private readonly ILogger<CreateSavedPostHandler> _logger;
         private readonly IPostRepository _postRepo;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IPostMappingService _postMappingService;
 
-        public CreateSavedPostHandler(ISavedPostRepository savedPostRepo, ILogger<CreateSavedPostHandler> logger,IPostRepository postRepo, IHttpContextAccessor httpContextAccessor)
+        public CreateSavedPostHandler(ISavedPostRepository savedPostRepo, ILogger<CreateSavedPostHandler> logger,IPostRepository postRepo, 
+            IHttpContextAccessor httpContextAccessor, IPostMappingService postMappingService)
         {
             _savedPostRepo = savedPostRepo;
             _logger = logger;
             _postRepo = postRepo;
             _httpContextAccessor = httpContextAccessor;
+            _postMappingService = postMappingService;
         }
         public async Task<SavedPostDto> Handle(CreateSavedPostCommand request, CancellationToken cancellationToken)
         {
@@ -40,22 +42,7 @@ namespace Feed.Application.Handlers
             }
 
             var savedPost = await _savedPostRepo.SavePostAsync(userId, request.PostId, cancellationToken);
-            var post = await _postRepo.GetPostAsync(savedPost.PostId, cancellationToken);
-            var savedPostDto = FeedMapper.Mapper.Map<SavedPostDto>(post);
-            if (!string.IsNullOrEmpty(post.SharedPostId))
-            {
-                try
-                {
-                    var sharedPost = await _postRepo.GetPostAsync(post.SharedPostId, cancellationToken);
-                    savedPostDto.SharedPost = FeedMapper.Mapper.Map<PostDto>(sharedPost);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Error in getting the shared post {sharedPostId} - post id {postId}: {errorMessage}", post.SharedPostId, post.Id, ex.Message);
-                    //throw;
-                }
-            }
-            savedPostDto.SavedAt = savedPost.SavedAt;
+            var savedPostDto = await _postMappingService.MapToDtoAsync(savedPost);
             return savedPostDto;
         }
     }

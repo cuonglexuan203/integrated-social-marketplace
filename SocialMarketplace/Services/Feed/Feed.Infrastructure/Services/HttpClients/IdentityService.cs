@@ -15,7 +15,7 @@ namespace Feed.Infrastructure.Services.HttpClients
         private readonly ILogger<IdentityService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public IdentityService(HttpClient client, ILogger<IdentityService> logger ,IHttpContextAccessor httpContextAccessor,
+        public IdentityService(HttpClient client, ILogger<IdentityService> logger, IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration)
         {
             _client = client;
@@ -46,7 +46,28 @@ namespace Feed.Infrastructure.Services.HttpClients
             }
             catch (HttpRequestException ex)
             {
-                _logger.LogError(ex, "Error getting user details for userId: {UserId}", userId);
+                _logger.LogError(ex, "Error in getting user details for userId: {UserId}", userId);
+                return null;
+            }
+        }
+
+        public async Task<bool?> IsUserFollowingAsync(string followerId, string followedId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var payload = new
+                {
+                    FollowerId = followerId,
+                    FollowedId = followedId
+                };
+                var response = await _client.PostAsJsonAsync($"User/IsUserFollowing", payload, cancellationToken: cancellationToken);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadFromJsonAsync<ReturnResult<bool>>();
+                return result?.Result;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError("Error in checking following status: {errorMsg}", ex.Message);
                 return null;
             }
         }
