@@ -16,5 +16,6 @@ namespace Feed.Core.Repositories
         Task<Reaction> AddReacionToCommentAsync(string commentId, Reaction reaction, CancellationToken cancellationToken = default);
         Task<bool> RemoveReactionFromCommentAsync(string commentId, string userId, CancellationToken cancellationToken = default);
         Task<bool> DeleteAsync(string commentId, CancellationToken token = default);
+        Task<Pagination<Comment>> GetCommentsByUserIdAsync(string userId, CommentSpecParams commentParams, CancellationToken cancellationToken = default);
     }
 }

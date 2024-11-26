@@ -10,6 +10,7 @@ namespace Feed.Application.Mappers.Profiles
         public SavedPostMappingProfile()
         {
             CreateMap<Post, SavedPostDto>().ReverseMap();
+            CreateMap<PostDto, SavedPostDto>().ReverseMap();
         }
     }
 }

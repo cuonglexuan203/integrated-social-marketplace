@@ -100,11 +100,12 @@ namespace Identity.API.Controllers
 
 
         [HttpPut("[action]")]
-        [ProducesResponseType(typeof(UserDetailsResponseDTO), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserDetailsResponseDTO), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> EditUserProfile(EditUserProfileCommand command)
         {
-                var result = await _mediator.Send(command);
-                return Ok(result);
+            ReturnResult<UserDetailsResponseDTO> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpGet("[action]/{userId}")]
@@ -138,6 +139,14 @@ namespace Identity.API.Controllers
         {
             ReturnResult<bool> result = new();
             result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> IsUserFollowing(IsUserFollowingQuery query)
+        {
+            ReturnResult<bool> result = new();
+            result.Result = await _mediator.Send(query);
             return Ok(result);
         }
     }

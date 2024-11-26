@@ -15,16 +15,19 @@ namespace Feed.Application.Handlers
     public class CreatePostHandler : IRequestHandler<CreatePostCommand, PostDto>
     {
         private readonly IIdentityService _identityService;
-        private readonly IPostRepository _postRepository;
+        private readonly IPostRepository _postRepo;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly ILogger<CreatePostHandler> _logger;
+        private readonly IPostMappingService _postMappingService;
 
-        public CreatePostHandler(IIdentityService identityService, IPostRepository postRepository, ICloudinaryService cloudinaryService, ILogger<CreatePostHandler> logger)
+        public CreatePostHandler(IIdentityService identityService, IPostRepository postRepository, ICloudinaryService cloudinaryService, 
+            ILogger<CreatePostHandler> logger, IPostMappingService postMappingService)
         {
             _identityService = identityService;
-            _postRepository = postRepository;
+            _postRepo = postRepository;
             _cloudinaryService = cloudinaryService;
             _logger = logger;
+            _postMappingService = postMappingService;
         }
 
         public async Task<PostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
@@ -55,8 +58,9 @@ namespace Feed.Application.Handlers
                     post.Media = FeedMapper.Mapper.Map<List<Media>>(mediaResult);
                 }
                 
-                var result = await _postRepository.CreatePostAsync(post);
-                return FeedMapper.Mapper.Map<PostDto>(result);
+                var result = await _postRepo.CreatePostAsync(post);
+                var postDto = await _postMappingService.MapToDtoAsync(result);
+                return postDto;
             }
             catch (Exception ex) {
                 _logger.LogError("An error occur while creating the Post: {ErrorMessage}", ex.Message);

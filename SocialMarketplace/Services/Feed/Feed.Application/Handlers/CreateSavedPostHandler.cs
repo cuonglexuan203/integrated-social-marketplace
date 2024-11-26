@@ -1,12 +1,11 @@
 ﻿using Feed.Application.Commands;
 using Feed.Application.DTOs;
-using Feed.Application.Mappers;
+using Feed.Application.Interfaces.Services;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
 
 namespace Feed.Application.Handlers
 {
@@ -16,13 +15,16 @@ namespace Feed.Application.Handlers
         private readonly ILogger<CreateSavedPostHandler> _logger;
         private readonly IPostRepository _postRepo;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IPostMappingService _postMappingService;
 
-        public CreateSavedPostHandler(ISavedPostRepository savedPostRepo, ILogger<CreateSavedPostHandler> logger,IPostRepository postRepo, IHttpContextAccessor httpContextAccessor)
+        public CreateSavedPostHandler(ISavedPostRepository savedPostRepo, ILogger<CreateSavedPostHandler> logger,IPostRepository postRepo, 
+            IHttpContextAccessor httpContextAccessor, IPostMappingService postMappingService)
         {
             _savedPostRepo = savedPostRepo;
             _logger = logger;
             _postRepo = postRepo;
             _httpContextAccessor = httpContextAccessor;
+            _postMappingService = postMappingService;
         }
         public async Task<SavedPostDto> Handle(CreateSavedPostCommand request, CancellationToken cancellationToken)
         {
@@ -32,10 +34,15 @@ namespace Feed.Application.Handlers
                 _logger.LogError("userId not found in the JWT token");
                 throw new NotFoundException("userId not found in the JWT token");
             }
+
+            if(!await _postRepo.IsPostExistsAsync(request.PostId))
+            {
+                _logger.LogError("Post not found: post id {postId}", request.PostId);
+                throw new NotFoundException("Post not found");
+            }
+
             var savedPost = await _savedPostRepo.SavePostAsync(userId, request.PostId, cancellationToken);
-            var post = await _postRepo.GetPostAsync(savedPost.PostId, cancellationToken);
-            var savedPostDto = FeedMapper.Mapper.Map<SavedPostDto>(post);
-            savedPostDto.SavedAt = savedPost.SavedAt;
+            var savedPostDto = await _postMappingService.MapToDtoAsync(savedPost);
             return savedPostDto;
         }
     }
