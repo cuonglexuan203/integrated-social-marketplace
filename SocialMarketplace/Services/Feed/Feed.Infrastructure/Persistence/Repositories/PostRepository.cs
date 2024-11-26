@@ -1,4 +1,5 @@
-﻿using Feed.Core.Entities;
+﻿using Feed.Core.Common.Constants;
+using Feed.Core.Entities;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
 using Feed.Core.Specs;
@@ -70,7 +71,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             var filter = Builders<Post>.Filter.Empty & GetNonDeletedFilter();
 
-            if(postParams.UserId != null)
+            if (postParams.UserId != null)
             {
                 filter &= Builders<Post>.Filter.Eq(p => p.User.Id, postParams.UserId);
             }
@@ -81,7 +82,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         private SortDefinition<Post> BuildSort(PostSpecParams postParams)
         {
             var sort = Builders<Post>.Sort;
-            return postParams.Sort?.ToLower() == "desc"
+            return postParams.Sort?.ToLower() == SortConstants.Descending
                 ? sort.Descending(x => x.ModifiedAt)
                 : sort.Ascending(x => x.ModifiedAt);
         }
@@ -116,7 +117,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
             var result = await _posts
                 .ReplaceOneAsync(filter, post);
 
-            if(result.MatchedCount == 0)
+            if (result.MatchedCount == 0)
             {
                 _logger.LogError("Post id {postId} not found", post.Id);
                 throw new NotFoundException("Post not found");
@@ -134,7 +135,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
             try
             {
-                if(!(await IsPostExistsAsync(comment.PostId))) 
+                if (!(await IsPostExistsAsync(comment.PostId)))
                     throw new PostNotFoundException(comment.PostId);
 
                 var addedComment = await _commentRepository.CreateComment(comment);
@@ -232,7 +233,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
             var result = await _posts.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
 
-            if(result.ModifiedCount == 0)
+            if (result.ModifiedCount == 0)
             {
                 _logger.LogError("No reaction removed for post id {postId}, user id {userId}. Possible reasons: post not found or reaction does not exist.", postId, userId);
                 throw new NotFoundException("Reaction not found or already removed");
@@ -284,5 +285,33 @@ namespace Feed.Infrastructure.Persistence.Repositories
             return await _posts.Find(filter)
                                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<Pagination<Post>> GetPostsReactedByUserIdAsync(string userId, ReactionSpecParams reactionParams, CancellationToken token = default)
+        {
+            var filter = Builders<Post>.Filter.ElemMatch(p => p.Reactions, r => r.User.Id == userId) & GetNonDeletedFilter();
+            var sort = reactionParams.Sort?.ToLower() == SortConstants.Descending ?
+                Builders<Post>.Sort.Descending(r => r.CreatedAt) :
+                Builders<Post>.Sort.Ascending(r => r.CreatedAt);
+
+            var countTask = _posts.CountDocumentsAsync(filter, cancellationToken: token);
+            var dataTask = _posts.Find(filter)
+                                 .Sort(sort)
+                                 .Skip((reactionParams.PageIndex - 1) * reactionParams.PageSize)
+                                 .Limit(reactionParams.PageSize)
+                                 .ToListAsync(token);
+
+            await Task.WhenAll(countTask, dataTask);
+
+            return new Pagination<Post>(reactionParams.PageIndex, reactionParams.PageSize, countTask.Result, dataTask.Result);
+
+        }
+
+        public async Task<Post> GetPostByCommentId(string commentId, CancellationToken token = default)
+        {
+            var filter = Builders<Post>.Filter.AnyEq(p => p.CommentIds, commentId) & GetNonDeletedFilter();
+            return await _posts.Find(filter)
+                               .FirstOrDefaultAsync(token);
+        }
+
     }
 }

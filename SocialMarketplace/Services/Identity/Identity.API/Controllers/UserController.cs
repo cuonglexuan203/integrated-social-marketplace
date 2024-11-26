@@ -100,11 +100,12 @@ namespace Identity.API.Controllers
 
 
         [HttpPut("[action]")]
-        [ProducesResponseType(typeof(UserDetailsResponseDTO), (int) HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(UserDetailsResponseDTO), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> EditUserProfile(EditUserProfileCommand command)
         {
-                var result = await _mediator.Send(command);
-                return Ok(result);
+            ReturnResult<UserDetailsResponseDTO> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpGet("[action]/{userId}")]

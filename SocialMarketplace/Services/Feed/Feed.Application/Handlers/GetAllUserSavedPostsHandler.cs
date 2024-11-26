@@ -2,6 +2,7 @@
 using Feed.Application.DTOs;
 using Feed.Application.Mappers;
 using Feed.Application.Queries;
+using Feed.Core.Entities;
 using Feed.Core.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,20 @@ namespace Feed.Application.Handlers
                 {
                     var post = await _postRepo.GetPostAsync(savedPost.PostId, cancellationToken);
                     var savedPostDto = FeedMapper.Mapper.Map<SavedPostDto>(post);
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(post.SharedPostId))
+                        {
+                            var sharedPost = await _postRepo.GetPostAsync(post.SharedPostId, cancellationToken);
+                            savedPostDto.SharedPost = FeedMapper.Mapper.Map<Post, PostDto>(sharedPost);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError("Error in getting the shared post {sharedPostId} - post id {postId}: {errorMessage}", post.SharedPostId, post.Id, ex.Message);
+                        //throw;
+                    }
+
                     savedPostDto.SavedAt = savedPost.SavedAt;
                     result.Add(savedPostDto);
                 }
