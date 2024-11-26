@@ -13,5 +13,13 @@ namespace Feed.Application.Extensions
             var outputPage = FeedMapper.Mapper.Map<IReadOnlyList<TOutput>>(inputPage.Data);
             return new Pagination<TOutput>(inputPage.PageIndex, inputPage.PageSize, inputPage.Count, outputPage);
         }
+
+        public static async Task<Pagination<TOutput>> MapAsync<TInput, TOutput>(this Pagination<TInput> inputPage, Func<IEnumerable<TInput>, CancellationToken, Task<List<TOutput>>> mapperFunc)
+            where TInput : class
+            where TOutput : class
+        {
+            var outputPage = await mapperFunc(inputPage.Data, default);
+            return new Pagination<TOutput>(inputPage.PageIndex, inputPage.PageSize, inputPage.Count, outputPage);
+        }
     }
 }

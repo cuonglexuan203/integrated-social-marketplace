@@ -3,6 +3,7 @@ using Feed.Application.Extensions;
 using Feed.Application.Interfaces;
 using Feed.Application.Interfaces.HttpClients;
 using Feed.Application.Interfaces.Services;
+using Feed.Application.Services;
 using Feed.Core.Repositories;
 using Feed.Infrastructure.Configurations;
 using Feed.Infrastructure.Persistence.DbContext;
@@ -109,6 +110,7 @@ namespace Feed.API
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ISavedPostRepository, SavedPostRepository>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<IPostMappingService, PostMappingService>();
             services.AddHttpContextAccessor();
             services.AddHttpClient<IIdentityService, IdentityService>();
             services.AddScoped<IMongoIdValidator, MongoIdValidator>();
