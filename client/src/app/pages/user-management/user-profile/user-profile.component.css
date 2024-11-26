@@ -89,7 +89,7 @@
 }
 
 .edit-profile-btn {
-    color: #1877f2;
+    color: #71AAEB;
     font-size: 14px;
     background: none;
     border: none;
@@ -97,8 +97,25 @@
     cursor: pointer;
 }
 
+.follow-button {
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #71AAEB;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.follow-button:hover {
+    background-color: #0056b3;
+}
+
 .add-info-prompt {
-    color: #1877f2;
+    color: #71AAEB;
     font-size: 14px;
     cursor: pointer;
 }

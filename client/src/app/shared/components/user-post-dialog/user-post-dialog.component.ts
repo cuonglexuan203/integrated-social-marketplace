@@ -3,7 +3,7 @@ import { UserResponseModel } from '../../../core/models/user/user.model';
 import { CommonModule } from '@angular/common';
 import { TuiAvatar } from '@taiga-ui/kit';
 import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word/first-letter-word.pipe';
-import { TuiIcon } from '@taiga-ui/core';
+import { TuiIcon, TuiLoader } from '@taiga-ui/core';
 import { Router } from '@angular/router';
 import { Helper } from '../../../core/utils/helper';
 import { UserService } from '../../../core/services/user/user.service';
@@ -17,7 +17,8 @@ import { AlertService } from '../../../core/services/alert/alert.service';
     CommonModule,
     TuiAvatar,
     FirstLetterWordPipe,
-    TuiIcon
+    TuiIcon,
+    TuiLoader,
   ],
   templateUrl: './user-post-dialog.component.html',
   styleUrl: './user-post-dialog.component.css'
@@ -37,8 +38,6 @@ export class UserPostDialogComponent {
   ) { }
 
   ngOnInit() {
-    console.log(this.user);
-
     this.userLoggedIn = Helper.getUserFromLocalStorage();
     this.checkUserLoggedIn();
   }
@@ -51,8 +50,38 @@ export class UserPostDialogComponent {
     }
   }
 
+
+ 
+
   getUserProfile() {
     this.router.navigate([`/user/user-profile/${this.user?.userName}`]);
+  }
+
+  unFollowAction() {
+    const dataSending: UserFollowModel = {
+      followerId: this.userLoggedIn.id,
+      followedId: this.user.id
+    }
+
+    this.isLoading = true;
+    this._userService.unFollowUser(dataSending).subscribe({
+      next: (res) => {
+        if (res?.result) {
+          this.user.isFollowing = false;
+          this.alertService.showSuccess('UnFollowed successfully', "Success");
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+        this.alertService.showError('Failed to UnFollowed', "Error");
+      },
+      complete: () => {
+        // this.checkIsUserFollowing();
+        this.isLoading = false;
+      },
+    })
   }
 
   followAction() {
@@ -65,8 +94,9 @@ export class UserPostDialogComponent {
     this._userService.followUser(dataSending).subscribe({
       next: (res) => {
         if (res?.result) {
-          this.isLoading = false;
+          this.user.isFollowing = true;
           this.alertService.showSuccess('Followed successfully', "Success");
+          this.isLoading = false;
         }
       },
       error: (error) => {
@@ -75,6 +105,7 @@ export class UserPostDialogComponent {
         this.alertService.showError('Failed to follow', "Error");
       },
       complete: () => {
+        // this.checkIsUserFollowing();
         this.isLoading = false;
       },
     })

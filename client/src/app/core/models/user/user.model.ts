@@ -10,6 +10,7 @@ export class UserResponseModel {
     country: string | null;
     dateOfBirth: string | null;
     phoneNumber: string | null;
+    isFollowing?: boolean;
 }
 
 export class CreateUserModel {

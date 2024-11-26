@@ -17,6 +17,7 @@ import { UserStateService } from '../../../core/services/state/user-state/user-s
 import { PostStateService } from '../../../core/services/state/post-state/post-state.service';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { CreatePostDialogComponent } from '../../../shared/components/create-post-dialog/create-post-dialog.component';
+import { UserFollowModel } from '../../../core/models/user/user-dialog.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -114,6 +115,30 @@ export class UserProfileComponent {
     this.isCheckingUserLoggedIn = false;
   }
 
+   checkIsUserFollowing() {
+    this.isLoading = true;
+    const dataSending: UserFollowModel = {
+      followerId: this.userLoggedIn.id,
+      followedId: this.user.id
+    }
+
+    this._userService.isUserFollowing(dataSending).subscribe({
+      next: (res) => {
+        if (res?.result) {
+          this.user.isFollowing = res?.result;
+          this.isLoading = false;
+        } 
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    })
+  }
+
   async getUserFromUserName() {
     this.paramMapSubscription = this.activatedRoute.paramMap.subscribe(async (params: ParamMap) => {
       const newUsername = params.get('userName') || '';
@@ -134,6 +159,7 @@ export class UserProfileComponent {
         // Load user details
         await this.getUserDetailByUserName(this.userName);
         this.setupPage();
+        this.checkIsUserFollowing();
         
         // Load posts after user details are fetched
         await this.getPosts();

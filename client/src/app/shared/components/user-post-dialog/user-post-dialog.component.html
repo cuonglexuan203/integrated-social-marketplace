@@ -49,10 +49,15 @@
               </div>
         </div>
         <div class="action-user-post mt-3">
-            <button *ngIf="!isCheckedUserLoggedIn" (click)="followAction()">
-                <tui-icon icon="@tui.user-plus"></tui-icon>
-                <span>Follow</span>
+            <button [ngClass]="{'disabled': isLoading}" *ngIf="!isCheckedUserLoggedIn && !user?.isFollowing" (click)="followAction()">
+              <tui-icon icon="@tui.user-plus"></tui-icon>
+              <span>Follow</span>
             </button>
+
+            <button [ngClass]="{'disabled': isLoading}"  *ngIf="!isCheckedUserLoggedIn && user?.isFollowing" (click)="unFollowAction()">
+              <tui-icon icon="@tui.user-check"></tui-icon>
+              <span>Following</span>
+          </button>
             <button *ngIf="!isCheckedUserLoggedIn" (click)="messageAction()">
               <tui-icon icon="message-circle-more"></tui-icon>
               <span>Message</span>

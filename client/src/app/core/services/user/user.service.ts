@@ -32,7 +32,15 @@ export class UserService {
     return this.http.put<MarketplaceResponse<any>>(`${this.apiBase}/EditUserProfile`, user);
   }
   
-  followUser(userId: UserFollowModel): Observable<MarketplaceResponse<any>> {
-    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/FollowUser`, userId);
+  followUser(dataSending: UserFollowModel): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/FollowUser`, dataSending);
+  }
+
+  unFollowUser(dataSending: UserFollowModel): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/UnFollowUser`, dataSending);
+  }
+
+  isUserFollowing(dataSending: UserFollowModel): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/IsUserFollowing`, dataSending);
   }
 }
