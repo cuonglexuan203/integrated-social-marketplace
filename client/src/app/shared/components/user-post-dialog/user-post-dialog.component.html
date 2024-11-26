@@ -1,36 +1,66 @@
 @if (user) {
     <div class="user-post-container">
         <div class="d-flex gap-2 align-items-center">
-            <tui-avatar
-                *ngIf="user.profilePictureUrl"
-                [src]="user.profilePictureUrl"
-                [size]="'xl'"
-                (click)="getUserProfile()"
-            >
-            </tui-avatar>
-            <tui-avatar
-                *ngIf="!user.profilePictureUrl && user.fullName"
-                [src]="user.profilePictureUrl"
-                [size]="'xl'" 
-                (click)="getUserProfile()"
-
-            >
-                {{ user.fullName | firstLetterWord }}
-            </tui-avatar>
-            <h5 *ngIf="user.fullName" 
-                (click)="getUserProfile()"
-                class="primary-color">
-                {{user.fullName}}
-            </h5>
+           
+            <div class="user-profile-container">
+                <div class="user-info-section">
+                    <tui-avatar
+                    *ngIf="user.profilePictureUrl"
+                    [src]="user.profilePictureUrl"
+                    [size]="'xl'"
+                    (click)="getUserProfile()"
+                >
+                </tui-avatar>
+                <tui-avatar
+                    *ngIf="!user.profilePictureUrl && user.fullName"
+                    [src]="user.profilePictureUrl"
+                    [size]="'xl'" 
+                    (click)="getUserProfile()"
+    
+                >
+                    {{ user.fullName | firstLetterWord }}
+                </tui-avatar>
+                  <h5 *ngIf="user.fullName" (click)="getUserProfile()" class="user-name primary-color">
+                    {{ user.fullName }}
+                  </h5>
+                  <div *ngIf="isCheckedUserLoggedIn" class="user-details">
+                    <div *ngIf="userLoggedIn.city" class="user-detail">
+                      <span class="detail-label">City:</span>
+                      <span class="detail-value">{{ userLoggedIn.city }}</span>
+                    </div>
+                    <div *ngIf="userLoggedIn.country" class="user-detail">
+                      <span class="detail-label">Country:</span>
+                      <span class="detail-value">{{ userLoggedIn.country }}</span>
+                    </div>
+                    <div *ngIf="userLoggedIn.dateOfBirth" class="user-detail">
+                      <span class="detail-label">Date of Birth:</span>
+                      <span class="detail-value">{{ userLoggedIn.dateOfBirth }}</span>
+                    </div>
+                    <div *ngIf="userLoggedIn.email" class="user-detail">
+                      <span class="detail-label">Email:</span>
+                      <span class="detail-value">{{ userLoggedIn.email }}</span>
+                    </div>
+                    <div *ngIf="userLoggedIn.phoneNumber" class="user-detail">
+                      <span class="detail-label">Phone Number:</span>
+                      <span class="detail-value">{{ userLoggedIn.phoneNumber }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
         </div>
         <div class="action-user-post mt-3">
-            <button>
+            <button *ngIf="!isCheckedUserLoggedIn" (click)="followAction()">
                 <tui-icon icon="@tui.user-plus"></tui-icon>
                 <span>Follow</span>
             </button>
-            <button >
+            <button *ngIf="!isCheckedUserLoggedIn" (click)="messageAction()">
               <tui-icon icon="message-circle-more"></tui-icon>
               <span>Message</span>
+            </button>
+
+            <button  *ngIf="isCheckedUserLoggedIn">
+                <tui-icon icon="@tui.contact-round"></tui-icon>
+                <span>Manage Profile</span>
             </button>
           </div>
     </div>

@@ -1,1 +1,60 @@
-<p>security works!</p>
+<div class="">
+    <div style="display: flex; justify-content: flex-end; margin-top: 12px;">
+    	<tui-loader
+            class="loader"
+            [inheritColor]="true"
+            [overlay]="true"
+            [showLoader]="isLoading"
+        >
+            <button class="save-button" [disabled]="isLoading || !form.valid" tuiButton type="button" (click)="onSubmit()">Save</button>
+        </tui-loader>
+
+    </div>
+    <form [formGroup]="form" class="d-flex justify-content-center user-security-container">
+      <div class="d-flex gap-3 flex-column w-50">
+        <ng-template #success>
+          <tui-icon icon="@tui.check" class="success tui-space_left-3"
+          style="color: green;"
+
+          ></tui-icon>
+        </ng-template>
+        <tui-input-password
+          [tuiTextfieldCleaner]="true"
+          [tuiTextfieldCustomContent]="f['currentPassword'].valid ? success : ''"
+          formControlName="currentPassword"
+
+        >
+          Current Password
+        </tui-input-password>
+        @if (f['currentPassword'].touched && f['currentPassword'].invalid) {
+        @if (f['currentPassword'].errors?.['required']) {
+        <tui-error class="error-message" [error]="f['currentPassword'].errors?.['required']">
+        </tui-error>
+        }
+        @if (f['currentPassword'].errors?.['password']) {
+        <tui-error class="error-message" [error]="f['currentPassword'].errors?.['password']">
+        </tui-error>
+        }
+        }
+  
+        <tui-input-password
+          [tuiTextfieldCleaner]="true"
+          [tuiTextfieldCustomContent]="f['newPassword'].valid ? success : ''"
+          formControlName="newPassword"
+          placeholder="Enter new password" 
+        >
+          New Password
+        </tui-input-password>
+        @if (f['newPassword'].touched && f['newPassword'].invalid) {
+        @if (f['newPassword'].errors?.['required']) {
+        <tui-error class="error-message" [error]="f['newPassword'].errors?.['required']">
+        </tui-error>
+        }
+        @if (f['newPassword'].errors?.['password']) {
+        <tui-error class="error-message" [error]="f['newPassword'].errors?.['password']">
+        </tui-error>
+        }
+        }
+      </div>
+    </form>
+  </div>

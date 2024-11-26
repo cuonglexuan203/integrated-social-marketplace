@@ -1,13 +1,28 @@
 <ng-container>
+    <form [formGroup]="form">
     <div class="header-profile">
         <div class="d-flex flex-row align-items-center gap-3">
-            <tui-avatar [size]="'xl'">{{ 'TD' | uppercase }}</tui-avatar>
+            <div class="avatar-container">
+
+                <tui-avatar *ngIf="f['profilePictureUrl']?.value" [size]="'xl'"
+                    [src]="f['profilePictureUrl'].value"
+                ></tui-avatar>
+                <tui-avatar *ngIf="!f['profilePictureUrl']?.value" [size]="'xl'">
+                    {{f['fullName'].value.charAt(0) | uppercase}}
+                </tui-avatar>
+                <div class="avatar-edit-icon" (click)="editAvatar()">
+                  <tui-icon icon="@tui.pencil" size="m"></tui-icon>
+                </div>
+              </div>
             <div class="user-info d-flex flex-column">
-                <h4>
-                    Trieu Do Quang
+                <h4 *ngIf="f['fullName']?.value">
+                    {{f['fullName'].value}}
                 </h4>
-                <div style="color: gray">
-                    quangtrieu&#64;gmail.com
+                <div *ngIf="f['email']?.value" class="d-flex align-items-center gap-2" style="color: gray">
+                    <tui-icon class="font-14" icon="@tui.mail" size="s"></tui-icon>
+                    <span>
+                        {{f['email'].value}}
+                    </span>
                 </div>
             </div>
         </div>
@@ -15,28 +30,51 @@
             class="save-button"
             tuiButton
             type="button"
+            (click)="saveProfile()"
             >
             Save
         </button>
     </div>
     <div class="divider"></div>
     <div class="content-profile">
-        <form class="d-flex justify-content-center">
+        <div  class="d-flex justify-content-center">
+    
             <div class="d-flex flex-column gap-3" style="width: 80%;">
                 <!-- bio -->
-                <tui-textarea>
-                    Bio
-                    <textarea
-                    maxlength="97"
-                    placeholder="Write a few words about yourself"
-                    tuiTextfieldLegacy
-                    ></textarea>
-                </tui-textarea>
+                <div class="d-flex gap-3 flex-row"> 
+                    <!-- Country  -->
+                        <tui-input
+                            tuiHintContent="A tooltip"
+                            class="w-100"
+                            formControlName="country"
+                        >
+                        Country
+                            <input
+                                placeholder="Enter your phone number"
+                                tuiTextfieldLegacy
+                            />
+                        </tui-input>
+
+                        <!-- City -->
+                        <tui-input
+                            tuiHintContent="A tooltip"
+                            class="w-100"
+                            formControlName="city"
+                        >
+                        City
+                            <input
+                                placeholder="Enter your phone number"
+                                tuiTextfieldLegacy
+                            />
+                        </tui-input>
+                </div>
+
                 <div class="d-flex gap-3 flex-row"> 
                 <!-- full name -->
                     <tui-input
                         tuiHintContent="A tooltip"
                         class="w-100"
+                        formControlName="fullName"
                     >
                     Full Name
                         <input
@@ -48,7 +86,7 @@
                     <tui-input
                         tuiHintContent="A tooltip"
                         class="w-100"
-
+                        formControlName="phoneNumber"
                     >
                     Phone Number
                         <input
@@ -63,7 +101,7 @@
                     <tui-input
                     tuiHintContent="A tooltip"
                     class="w-100"
-
+                    formControlName="email"
                     >
                     Email
                         <input
@@ -75,7 +113,7 @@
                         <tui-input-date
                             tuiHintContent="A tooltip"
                             class="w-100"
-
+                            formControlName="dateOfBirth"
                         >
                         Birthday
                             <input
@@ -84,9 +122,32 @@
                             />
                         </tui-input-date>
                 </div>
-            </div>
-        </form>
-    </div>
 
+                <div class="d-flex gap-3 flex-row"> 
+                    <tui-input-tag
+                        class="w-100"
+                        formControlName="interests"
+                        [tuiTextfieldLabelOutside]="true"
+                        >
+                        <i>interests</i>
+                    </tui-input-tag>
+
+                    <tui-combo-box
+                        class="w-100"
+                        formControlName="gender"
+                        >
+                        Search by gender
+                        <tui-data-list-wrapper
+                            *tuiDataList
+                            [items]="genders"
+                        />
+                    </tui-combo-box>
+                </div>     
+               
+            </div>
+        </div>
+
+    </div>
+    </form>
 
 </ng-container>

@@ -1,7 +1,21 @@
 <div>
-    @for (item of moreDialogData; track $index) {
-        <div class="more-dialog-item">
-            <span>{{ item.name }}</span>
-        </div>
-    }   
+    @if (stateFilter === 'SavedPosts') {
+        @for (item of moreDialogStateFilter; track $index) {
+            <div class="more-dialog-item"
+                (click)="onClickItemMoreDialog(item)"
+            >
+                <span>{{ item.name }}</span>
+            </div>
+        } 
+    }
+    
+    @else {
+        @for (item of moreDialogData; track $index) {
+            <div class="more-dialog-item"
+                (click)="onClickItemMoreDialog(item)"
+            >
+                <span>{{ item.name }}</span>
+            </div>
+        } 
+    }
 </div>

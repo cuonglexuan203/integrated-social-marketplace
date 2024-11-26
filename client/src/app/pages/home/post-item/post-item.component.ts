@@ -61,7 +61,7 @@ export class PostItemComponent {
   reactionType: any;
   reactionsType = reactions;
 
-  dropdownHideDelay = 100;
+  dropdownHideDelay = 200;
   constructor(
     private _feedService: FeedService,
     private alertService: AlertService,

@@ -23,4 +23,7 @@ export class RegisterModel {
 
     @prop()
     roles: string[];
+
+    @prop()
+    phoneNumber: string;
 }

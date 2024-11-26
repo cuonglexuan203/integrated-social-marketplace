@@ -13,6 +13,16 @@ import { Router } from '@angular/router';
 import { HINT_REGISTER } from '../../../core/constances/hint-register';
 import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 import { UserService } from '../../../core/services/user/user.service';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import type { TuiCountryIsoCode } from '@taiga-ui/i18n';
+import {
+  TuiInputPhoneInternational,
+  tuiInputPhoneInternationalOptionsProvider,
+  TuiSortCountriesPipe,
+} from '@taiga-ui/kit';
+import { getCountries } from 'libphonenumber-js';
+import { defer } from 'rxjs';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -29,10 +39,20 @@ import { UserService } from '../../../core/services/user/user.service';
     TuiTextfieldControllerModule,
     TuiHint,
     TuiError,
-    LottieComponent
+    LottieComponent,
+    TuiInputPhoneInternational,
+    TuiSortCountriesPipe,
+    AsyncPipe
   ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
+  providers: [
+    tuiInputPhoneInternationalOptionsProvider({
+        metadata: defer(async () =>
+            import('libphonenumber-js/max/metadata').then((m) => m.default),
+        ),
+    }),
+],
 })
 export class RegisterComponent {
   isLoading: boolean = false;
@@ -52,10 +72,17 @@ export class RegisterComponent {
     private formBuilder: RxFormBuilder,
     private alertService: AlertService,
     private _userService: UserService,
+    private authService: AuthService,
   ) {
     this.form = this.formBuilder.formGroup(RegisterModel, {});
 
   }
+
+  protected readonly countries = getCountries();
+  protected countryIsoCode: TuiCountryIsoCode = 'VN';
+  protected value = '';
+
+
   ngOnInit() { }
 
   get f() {
@@ -72,21 +99,18 @@ export class RegisterComponent {
 
     if (this?.form?.valid) {
       this.isLoading = true;
-      this._userService.createUser(this?.form?.value).subscribe({
+      this.authService.register(this.form.value).subscribe({
         next: (res) => {
           if (res) {
-            this.alertService.showSuccess('User created successfully', 'Success');
-            this.isLoading = false;
+            this.alertService.showSuccess('User registered successfully', 'Success');
             this.router.navigate(['/login']);
           }
         },
-        error: (error) => {
-          console.error(error);
-          this.alertService.showError('Register failed', 'Error');
+        error: (err) => {
+          this.alertService.showError('Error while registering user', 'Error');
           this.isLoading = false;
         },
         complete: () => {
-          this.router.navigate(['/login']);
           this.isLoading = false;
         }
       });

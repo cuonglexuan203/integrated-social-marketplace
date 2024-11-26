@@ -19,6 +19,10 @@ export const authOptions = {
         endpoint: '/logout',
         method: 'post',
     },
+    register: {
+        endpoint: '/register',
+        method: 'post',
+    },
     token: {
         class: NbAuthJWTToken,
         key: 'result.token',

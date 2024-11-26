@@ -13,6 +13,7 @@ import { FeedService } from '../../../core/services/feed/feed.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { EnlargeImageComponentComponent } from '../enlarge-image-component/enlarge-image-component.component';
 import { MediaModel } from '../../../core/models/media/media.model';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-create-post-dialog',
@@ -35,16 +36,20 @@ import { MediaModel } from '../../../core/models/media/media.model';
 })
 export class CreatePostDialogComponent {
   @ViewChild('textArea') textArea: ElementRef;
-  
+
   isLoading: boolean = false;
 
   form!: FormGroup;
   user: any;
+
   data: any;
   title: string = '';
+
   currentTime: Date = new Date();
-  showFileInput = false;
   timeUpdateInterval: any;
+
+  showFileInput = false;
+
   uploadedFile: File[] = [];
   formData: FormData = new FormData();
 
@@ -75,10 +80,27 @@ export class CreatePostDialogComponent {
     }
 
     this.data = null;
-
+    // this.checkDataHasChanged();
   }
 
+  // checkDataHasChanged() {
+  //   if (this.form?.dirty) {
+  //     this.dialogs.open(
+  //       new PolymorpheusComponent(ConfirmationDialogComponent, this.injector), {
+  //       data: {
+  //         title: 'Are you sure you want to leave?',
+  //         description: 'Your changes will be lost.'
+  //       },
+  //       size: 'auto',
+  //       appearance: 'lorem-ipsum',
+  //     }).subscribe((data) => {
+  //       this.context.completeWith(data);
+  //     });
+  //   }
+  // }
+
   ngAfterContentChecked() {
+
     this.cdr.detectChanges();
   }
 
@@ -113,6 +135,7 @@ export class CreatePostDialogComponent {
   }
 
 
+
   toggleFileInput() {
     this.showFileInput = !this.showFileInput;
   }
@@ -124,7 +147,7 @@ export class CreatePostDialogComponent {
         const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
         const allowedVideoExtensions = ['.mp4', '.mpeg', '.quicktime'];
         if (allowedImageExtensions.includes(files[i].name.substring(files[i].name.lastIndexOf('.'))) || allowedVideoExtensions.includes(files[i].name.substring(files[i].name.lastIndexOf('.')))) {
-          if(files[i].size < 10000000) {
+          if (files[i].size < 10000000) {
             this.uploadedFile.push(files[i]);
           }
           else {
@@ -138,7 +161,7 @@ export class CreatePostDialogComponent {
       this.form.get('files')?.setValue(this.uploadedFile);
     }
     console.log(this.uploadedFile);
-    
+
   }
 
   removeFile(file: File) {
@@ -146,20 +169,20 @@ export class CreatePostDialogComponent {
   }
 
   setupDataForPost() {
-      this.uploadedFile.forEach(file => {
-        this.formData.append('files', file);
-      });
-      this.formData.append('userId', this.user?.id);
-      this.formData.append('contentText', this.form.get('contentText')?.value);
+    this.uploadedFile.forEach(file => {
+      this.formData.append('files', file);
+    });
+    this.formData.append('userId', this.user?.id);
+    this.formData.append('contentText', this.form.get('contentText')?.value);
 
-      let tags = this.form.get('tags')?.value;
-      
-      if(tags) {
-        tags.forEach((tag: string) => {
-          this.formData.append('tags', tag);
-        });
-      }
-      
+    let tags = this.form.get('tags')?.value;
+
+    if (tags) {
+      tags.forEach((tag: string) => {
+        this.formData.append('tags', tag);
+      });
+    }
+
   }
 
 
@@ -169,7 +192,7 @@ export class CreatePostDialogComponent {
     if (this.form.valid) {
       this._feedService.createPost(this.formData).subscribe({
         next: (res) => {
-          if (res){
+          if (res) {
             this.isLoading = false;
             this.alertService.showSuccess('Create a new post successfully', 'Success');
             this.context.completeWith(res?.result);
@@ -188,7 +211,7 @@ export class CreatePostDialogComponent {
 
   getFileUrl(file: File): SafeUrl | null {
     if (!file) return null;
-    
+
     const objectUrl = URL.createObjectURL(file);
     return this.sanitizer.bypassSecurityTrustUrl(objectUrl);
   }
@@ -205,9 +228,10 @@ export class CreatePostDialogComponent {
     return allowedVideoExtensions.includes(fileExtension);
   }
 
+
   enlargeMedia(file: File) {
     console.log(file, "before");
-    
+
     let media: MediaModel = {
       publicId: '',
       url: '',
@@ -223,18 +247,18 @@ export class CreatePostDialogComponent {
     media.url = fileUrl as any;
     const type = 'local';
     this.dialogs
-    .open(
-      new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
-      {
-        data: {media, type},
-        size: 'auto',
-        appearance: 'lorem-ipsum',
-        
-      }
-    )
-    .subscribe((data) => {
-      console.log(data);
-    });
+      .open(
+        new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+        {
+          data: { media, type },
+          size: 'auto',
+          appearance: 'lorem-ipsum',
+
+        }
+      )
+      .subscribe((data) => {
+        console.log(data);
+      });
   }
 
 }

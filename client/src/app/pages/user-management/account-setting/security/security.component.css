@@ -1,0 +1,32 @@
+/* .user-security-container {
+    border: 1px solid #e8e1e1;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  } */
+
+  .tui-input-password {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .tui-input-password:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+
+  .save-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+.loader {
+    display: flex;
+    inline-size: fit-content;
+    margin: 1rem 0;
+}

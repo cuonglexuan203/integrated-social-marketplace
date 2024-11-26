@@ -120,6 +120,16 @@
                                         </tui-error>
                                     }
                                 }
+
+                                <tui-input-phone-international
+                                    [countries]="(countries | tuiSortCountries | async) || []"
+                                    [countrySearch]="true"
+                                    [(countryIsoCode)]="countryIsoCode"
+                                    [(ngModel)]="value"
+                                    formControlName="phoneNumber"
+                                    >
+                                    Type your number
+                                </tui-input-phone-international>
                             </div>
                             <button type="submit" class="submit-button w-100 mt-3" color="primary" [disabled]="!form.valid || isLoading">
                                 <ng-container *ngIf="!isLoading">Sign In</ng-container>

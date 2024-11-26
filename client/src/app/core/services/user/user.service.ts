@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/endpoint';
 import { MarketplaceResponse } from '../../models/marketplace/marketplace-response.model';
 import { CreateUserModel, UserResponseModel } from '../../models/user/user.model';
+import { UserDetailsModel } from '../../models/user/user-details.model';
+import { UserFollowModel } from '../../models/user/user-dialog.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +26,13 @@ export class UserService {
 
   createUser(user: CreateUserModel): Observable<MarketplaceResponse<UserResponseModel>> {
     return this.http.post<MarketplaceResponse<UserResponseModel>>(`${this.apiBase}/Create`, user);
+  }
+
+  editUserProfile(user: UserDetailsModel): Observable<MarketplaceResponse<any>> {
+    return this.http.put<MarketplaceResponse<any>>(`${this.apiBase}/EditUserProfile`, user);
+  }
+  
+  followUser(userId: UserFollowModel): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/FollowUser`, userId);
   }
 }

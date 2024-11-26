@@ -8,6 +8,9 @@ import { CreatePostDialogComponent } from '../../../../shared/components/create-
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { UserResponseModel } from '../../../../core/models/user/user.model';
 import { Helper } from '../../../../core/utils/helper';
+import { UserService } from '../../../../core/services/user/user.service';
+import { NbAuthService } from '@nebular/auth';
+import { AlertService } from '../../../../core/services/alert/alert.service';
 
 @Component({
   selector: 'app-nav-item',
@@ -24,20 +27,54 @@ import { Helper } from '../../../../core/utils/helper';
 export class NavItemComponent {
   @Input() item: NavItem;
   @Input() isToggle: boolean;
+
+  userId: string;
   user: UserResponseModel;
 
   private readonly injector = inject(INJECTOR);
   private readonly dialogs = inject(TuiDialogService);
   constructor(
     private router: Router,
-  ) { }
+    private _userService: UserService,
+    private authService: NbAuthService,
+    private alertService: AlertService
+  ) {
+    
+   }
 
   ngOnInit() {
-    this.getUser();
+    this.setupData()
   }
 
-  getUser() {
-    this.user = Helper.getUserFromLocalStorage();
+  async setupData() {
+    await this.getUserToken()
+    await this.getUserDetail();
+  }
+
+
+  async getUserToken() {
+    this.authService.onTokenChange().subscribe((token) => {
+      if (token?.isValid()) {
+        this.userId = token?.getPayload()?.userId;
+      }
+    });
+  }
+
+  async getUserDetail() {
+    this._userService.getUserDetail(this.userId).subscribe({
+      next: (res) => {
+        if (res) {
+          this.user = res.result;
+          localStorage.setItem('user', JSON.stringify(this.user));
+        }
+      },
+      error: (error) => {
+        this.alertService.showError('Error', error);
+      },
+      complete: () => {
+
+      }
+    })
   }
 
   onClickNavItem(navItemName: string | undefined) {

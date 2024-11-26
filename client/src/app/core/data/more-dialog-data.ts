@@ -14,3 +14,18 @@ export const MoreDialogData: MoreDialogModel[] = [
         action: 'notInteresting',
     },
 ]
+
+export const MoreDialogStateFilter: MoreDialogModel[] = [
+    {
+        name: 'Remove this saved post',
+        action: 'removeSavedPost',
+    },
+    {
+        name: 'Report',
+        action: 'report',
+    },
+    {
+        name: 'Not interesting',
+        action: 'notInteresting',
+    },
+]

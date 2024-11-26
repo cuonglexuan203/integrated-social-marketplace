@@ -1,6 +1,9 @@
-	 
 .left {
     margin-right: 2rem;
     min-inline-size: 10rem;
     inline-size: 10rem;
-}
+    position: sticky;
+    top: 0;
+    height: 100%;
+    overflow-y: auto;
+  }

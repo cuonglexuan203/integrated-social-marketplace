@@ -38,7 +38,7 @@ export class HomeComponent {
   page: Page = {
     pageIndex: 1,
     pageSize: 5,
-    sort: 'asc',
+    sort: 'desc',
   }
 
   constructor(
@@ -87,7 +87,7 @@ export class HomeComponent {
         this.page = {
           pageIndex: this.page.pageIndex + 1,
           pageSize: 10,
-          sort: 'asc',
+          sort: 'desc',
         }
         this.loadingPosts = [];
       }

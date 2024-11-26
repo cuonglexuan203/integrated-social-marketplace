@@ -6,6 +6,10 @@ export class UserResponseModel {
     roles: string[];
     profilePictureUrl: string;
     profileUrl?: string;
+    city: string | null;
+    country: string | null;
+    dateOfBirth: string | null;
+    phoneNumber: string | null;
 }
 
 export class CreateUserModel {

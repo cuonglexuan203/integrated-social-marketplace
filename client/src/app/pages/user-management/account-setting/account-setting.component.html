@@ -1,44 +1,22 @@
-<tui-breadcrumbs
-    size="l"
-    class="tui-space_top-2 mb-3"
-    >
+<tui-breadcrumbs size="l" class="tui-space_top-2 mb-3">
     <ng-container>
-            @for (item of breadcrumbs; track $index) {
-            <a
-            *tuiItem
-            tuiLink
-            [routerLink]="item.routerLink"
-            [routerLinkActive]="item.routerLink"
-            [ngStyle]="{'color': item.currentColor}"
-            >
-                {{ item.caption }}
-            </a>
-        }
+      @for (item of breadcrumbs; track $index) {
+      <a *tuiItem tuiLink [routerLink]="item.routerLink" [routerLinkActive]="item.routerLink" [ngStyle]="{'color': item.currentColor}">
+        {{ item.caption }}
+      </a>
+      }
     </ng-container>
-</tui-breadcrumbs>
-<div class="d-flex flex-row align-items-center">
-    <div>
-        <nav
-            tuiTabs
-            vertical="left"
-            class="left"
-        >
-            @for (tab of tabs; track $index) {
-                <button
-                tuiTab
-                type="button"
-                [routerLinkActive]="tab.routerLink"
-                [routerLink]="tab.routerLink"
-                [ngStyle]="{'font-weight': '500'}"
-            >
-                {{tab.caption}}
-                
-            </button>
-            }
-        </nav>
+  </tui-breadcrumbs>
+  
+  <div class="d-flex flex-row align-items-start">
+    <nav tuiTabs vertical="left" class="left fixed-tabs">
+      @for (tab of tabs; track $index) {
+      <button tuiTab type="button" [routerLinkActive]="tab.routerLink" [routerLink]="tab.routerLink" [ngStyle]="{'font-weight': '500'}">
+        {{tab.caption}}
+      </button>
+      }
+    </nav>
+    <div class="flex-grow-1">
+      <router-outlet></router-outlet>
     </div>
-    <div style="width: 100%;">
-        <router-outlet></router-outlet>
-    </div>
-</div>
-
+  </div>
