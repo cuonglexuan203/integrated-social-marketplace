@@ -68,9 +68,12 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
         private FilterDefinition<Post> BuildFilter(PostSpecParams postParams)
         {
-            var filter = Builders<Post>.Filter.Empty;
+            var filter = Builders<Post>.Filter.Empty & GetNonDeletedFilter();
 
-            filter &= GetNonDeletedFilter();
+            if(postParams.UserId != null)
+            {
+                filter &= Builders<Post>.Filter.Eq(p => p.User.Id, postParams.UserId);
+            }
 
             return filter;
         }
