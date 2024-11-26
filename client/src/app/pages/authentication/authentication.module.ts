@@ -15,7 +15,6 @@ export const authOptions = {
             failure: 'login',
         }
     },
-
     logout: {
         endpoint: '/logout',
         method: 'post',

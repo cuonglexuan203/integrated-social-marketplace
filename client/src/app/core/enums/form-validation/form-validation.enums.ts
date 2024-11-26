@@ -26,7 +26,6 @@ export enum FormValidationMessage {
   zipCode = 'Please enter a valid zip code',
   minLength = 'Minimum length is {{1}} characters',
   numeric = 'Only numeric values are allowed',
-
   minAlphabet = '{{1}} must contain at least {{2}} alphabet',
   minLowerCase = '{{1}} must contain at least {{2}} lowercase letter',
   minUpperCase = '{{1}} must contain at least {{2}} uppercase letter',

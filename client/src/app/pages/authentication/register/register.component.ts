@@ -12,6 +12,7 @@ import { RegisterModel } from '../../../core/models/register/register.model';
 import { Router } from '@angular/router';
 import { HINT_REGISTER } from '../../../core/constances/hint-register';
 import { LottieComponent, AnimationOptions } from 'ngx-lottie';
+import { UserService } from '../../../core/services/user/user.service';
 
 @Component({
   selector: 'app-register',
@@ -34,6 +35,8 @@ import { LottieComponent, AnimationOptions } from 'ngx-lottie';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
+  isLoading: boolean = false;
+
   logoPath = '../../../../assets/images/icons/appicon.svg';
   logoLoginLeftSide = LOGO_LOGIN_LEFT_SIDE;
   form!: FormGroup;
@@ -43,13 +46,13 @@ export class RegisterComponent {
     path: 'assets/animations/login.json',
     loop: true,
   };
-  
+
   constructor(
     private router: Router,
-    private authService: NbAuthService,
     private formBuilder: RxFormBuilder,
     private alertService: AlertService,
-  ) { 
+    private _userService: UserService,
+  ) {
     this.form = this.formBuilder.formGroup(RegisterModel, {});
 
   }
@@ -59,12 +62,38 @@ export class RegisterComponent {
     return this.form.controls;
   }
 
-  onClickNavigateLogin() { 
+  onClickNavigateLogin() {
     this.router.navigate(['/login']);
   }
 
-  onClickVerify() {
-    this.router.navigate(['/verify-phone']);
+  onSubmit() {
+    const roles = ['user'];
+    this.form.controls['roles']?.setValue(roles);
+
+    if (this?.form?.valid) {
+      this.isLoading = true;
+      this._userService.createUser(this?.form?.value).subscribe({
+        next: (res) => {
+          if (res) {
+            this.alertService.showSuccess('User created successfully', 'Success');
+            this.isLoading = false;
+            this.router.navigate(['/login']);
+          }
+        },
+        error: (error) => {
+          console.error(error);
+          this.alertService.showError('Register failed', 'Error');
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.router.navigate(['/login']);
+          this.isLoading = false;
+        }
+      });
+    }
+    else {
+      this.form.markAllAsTouched();
+    }
   }
 
 }

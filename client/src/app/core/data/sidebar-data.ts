@@ -15,7 +15,7 @@ export const navItems: NavItem[] = [
         displayName: 'User Profile',
         iconName: '@tui.contact',
         bgColor: 'white',
-        route: 'user/user-profile',
+        route: 'user/user-profile/:userName',
         tooltip: 'User Profile'
     },
     {

@@ -38,8 +38,8 @@ export class HomeComponent {
   page: Page = {
     pageIndex: 1,
     pageSize: 5,
-    sort: 'createdAt',
-  };
+    sort: 'asc',
+  }
 
   constructor(
     private _feedService: FeedService,
@@ -52,11 +52,9 @@ export class HomeComponent {
   }
 
   checkNewPostCreated(event: any) {
-    console.log("Received event:", event);
     if (event) {
       this.newPostCreated = event;
       this.posts = [this.newPostCreated, ...this.posts]; // Update reference
-      console.log("Updated posts array:", this.posts);
     }
   }
 
@@ -89,7 +87,7 @@ export class HomeComponent {
         this.page = {
           pageIndex: this.page.pageIndex + 1,
           pageSize: 10,
-          sort: null,
+          sort: 'asc',
         }
         this.loadingPosts = [];
       }

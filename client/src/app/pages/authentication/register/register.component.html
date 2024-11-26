@@ -3,15 +3,14 @@
             <div class="left-side w-50">
                 <h1>Registration</h1>
                     <div>
-                        <form [formGroup]="form" (ngSubmit)="onClickVerify()">
+                        <form [formGroup]="form" (ngSubmit)="onSubmit()">
                             <div class="d-flex flex-column gap-3">
                                 <tui-input 
-                                formControlName="email"
-                                [tuiHintContent]="hintRegister.email"
+                                formControlName="userName"
                                 [tuiTextfieldCleaner]="true"
-                                [tuiTextfieldCustomContent]="f['email'].valid ? success : ''"
+                                [tuiTextfieldCustomContent]="f['userName'].valid ? success : ''"
                                 >
-                                Email
+                                Username
                                 </tui-input>
                                 <ng-template #success>
                                     <tui-icon
@@ -20,6 +19,49 @@
                                         style="color: green;"
                                     ></tui-icon>
                                 </ng-template>
+                                @if (f['userName'].touched && f['userName'].invalid) {
+                                    @if (f['userName'].errors?.['required']) {
+                                        <tui-error class="error-message"
+                                            [error]="f['userName'].errors?.['required']"
+                                        >
+                                        </tui-error>
+                                    }
+                                    <!-- @if (f['email'].errors?.['email']) {
+                                        <tui-error class="error-message"
+                                            [error]="f['email'].errors?.['email']"
+                                        >
+                                        </tui-error>
+                                    } -->
+                                }
+                                <tui-input
+                                    [tuiTextfieldCleaner]="true"
+                                    [tuiTextfieldCustomContent]="f['fullName'].valid ? success : ''"
+                                    formControlName="fullName">
+                                    Full Name
+                                </tui-input>
+                                @if (f['fullName'].touched && f['fullName'].invalid) {
+                                    @if (f['fullName'].errors?.['required']) {
+                                        <tui-error class="error-message"
+                                            [error]="f['fullName'].errors?.['required']"
+                                        >
+                                        </tui-error>
+                                    }
+                                    <!-- @if (f['phoneNumber'].errors?.['phoneNumber']) {
+                                        <tui-error class="error-message"
+                                            [error]="f['phoneNumber'].errors?.['phoneNumber']"
+                                        >
+                                        </tui-error>
+                                    } -->
+                                }
+
+                                <tui-input 
+                                formControlName="email"
+                                [tuiTextfieldCleaner]="true"
+                                [tuiTextfieldCustomContent]="f['email'].valid ? success : ''"
+                                >
+                                Email
+                                </tui-input>
+
                                 @if (f['email'].touched && f['email'].invalid) {
                                     @if (f['email'].errors?.['required']) {
                                         <tui-error class="error-message"
@@ -34,30 +76,8 @@
                                         </tui-error>
                                     }
                                 }
-                                <tui-input
-                                    [tuiHintContent]="hintRegister.phoneNumber"
-                                    [tuiTextfieldCleaner]="true"
-                                    [tuiTextfieldCustomContent]="f['phoneNumber'].valid ? success : ''"
-                                    formControlName="phoneNumber">
-                                    Phone Number
-                                </tui-input>
-                                @if (f['phoneNumber'].touched && f['phoneNumber'].invalid) {
-                                    @if (f['phoneNumber'].errors?.['required']) {
-                                        <tui-error class="error-message"
-                                            [error]="f['phoneNumber'].errors?.['required']"
-                                        >
-                                        </tui-error>
-                                    }
-                                    @if (f['phoneNumber'].errors?.['phoneNumber']) {
-                                        <tui-error class="error-message"
-                                            [error]="f['phoneNumber'].errors?.['phoneNumber']"
-                                        >
-                                        </tui-error>
-                                    }
-                                }
                                 
                                 <tui-input-password
-                                    [tuiHintContent]="hintRegister.password"
                                     [tuiTextfieldCleaner]="true"
                                     [tuiTextfieldCustomContent]="f['password'].valid ? success : ''"
                                     formControlName="password"
@@ -78,11 +98,38 @@
                                         </tui-error>
                                     }
                                 }
+
+                                <tui-input-password
+                                    [tuiTextfieldCleaner]="true"
+                                    [tuiTextfieldCustomContent]="f['confirmationPassword'].valid ? success : ''"
+                                    formControlName="confirmationPassword"
+                                    >
+                                    Confirm Password
+                                </tui-input-password>
+                                @if (f['confirmationPassword'].touched && f['confirmationPassword'].invalid) {
+                                    @if (f['confirmationPassword'].errors?.['required']) {
+                                        <tui-error class="error-message"
+                                            [error]="f['confirmationPassword'].errors?.['required']"
+                                        >
+                                        </tui-error>
+                                    }
+                                    @if (f['confirmationPassword'].errors?.['compare'] && !f['confirmationPassword'].errors?.['required']) {
+                                        <tui-error class="error-message"
+                                            [error]="f['confirmationPassword'].errors?.['compare']"
+                                            >
+                                        </tui-error>
+                                    }
+                                }
                             </div>
+                            <button type="submit" class="submit-button w-100 mt-3" color="primary" [disabled]="!form.valid || isLoading">
+                                <ng-container *ngIf="!isLoading">Sign In</ng-container>
+                                <ng-container *ngIf="isLoading">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Loading...</span>
+                                </ng-container>                
+                            </button>
                     </form>
-                    <button class="submit-button w-100 mt-3" (click)="onClickVerify()" color="primary" [disabled]="!form.valid">
-                        Verify Phone Number
-                    </button>
+                  
                         
                     <div class="switch">
                         <p>Have an account? 

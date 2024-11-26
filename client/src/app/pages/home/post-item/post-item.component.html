@@ -5,14 +5,26 @@
         <div class="post-header"> 
             <div class="left-header">
                 @if (post.user.profilePictureUrl) {
-                    <tui-avatar [size]="'l'" [src]="post.user.profilePictureUrl"></tui-avatar>
+                    <tui-avatar 
+                        tuiDropdownHover
+                        [tuiDropdown]="userPost"
+                        [tuiDropdownHideDelay]="dropdownHideDelay"
+                        [size]="'l'" [src]="post.user.profilePictureUrl"></tui-avatar>
                 }
                 @else {
-                    <tui-avatar [size]="'l'">{{ post.user.fullName | firstLetterWord }}</tui-avatar>
+                    <tui-avatar 
+                        tuiDropdownHover
+                        [tuiDropdown]="userPost"
+                        [tuiDropdownHideDelay]="dropdownHideDelay"
+                        [size]="'l'">{{ post.user.fullName | firstLetterWord }}
+                    </tui-avatar>
                 }
                 <div>
                         <a class="primary-color"
                             *ngIf="post.user"
+                            tuiDropdownHover
+                            [tuiDropdown]="userPost"
+                            [tuiDropdownHideDelay]="dropdownHideDelay"
                             style="font-weight: bold;
                             text-decoration: none;
                             cursor: pointer;
@@ -20,6 +32,9 @@
                         >
                             {{post.user.fullName}}
                         </a>
+                        <ng-template #userPost>
+                            <app-user-post-dialog [user]="post.user"></app-user-post-dialog>
+                        </ng-template>
                         <div style="color: gray"
                         >
                             {{post.createdAt | date: 'dd/MM/yyyy: HH:mm'}}
@@ -31,6 +46,7 @@
                     icon="@tui.ellipsis"
                     tuiDropdownHover
                     [tuiDropdown]="moreDialog"
+                    [tuiDropdownHideDelay]="dropdownHideDelay"
                 
                     >
                 </tui-icon>

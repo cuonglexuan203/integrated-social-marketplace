@@ -1,17 +1,26 @@
 
-import { email, password, pattern, required } from "@rxweb/reactive-form-validators";
+import { compare, email, password, pattern, prop, required } from "@rxweb/reactive-form-validators";
 
 export class RegisterModel {
+    @required()
+    userName: string;
+
+    @required()
+    fullName: string;
+
+
+    @required()
+    @password({ validation: { minLength: 6,lowerCase: true } })
+    password: string;
+
     @required()
     @email()
     email: string;
 
     @required()
-    @pattern({ expression: { phoneNumber: /^(\()?(\+\d{1,4}(\))?[\s.-]?)?\(?\d{0,6}\)?[\s.-]?\d{3}[\s.-]?\d{3,4}$/ }, message: 'Please enter a valid phone number' })
-    phoneNumber: string;
+    @compare({ fieldName: 'password' })
+    confirmationPassword: string;
 
-
-    @required()
-    @password({ validation: { minLength: 5, maxLength: 10, digit: true, specialCharacter: true } })
-    password: string;
+    @prop()
+    roles: string[];
 }

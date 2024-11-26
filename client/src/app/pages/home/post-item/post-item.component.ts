@@ -20,6 +20,7 @@ import { reactions } from '../../../core/constances/reaction';
 import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word/first-letter-word.pipe';
 import { CommentService } from '../../../core/services/comment/comment.service';
 import { TuiTagModule } from '@taiga-ui/legacy';
+import { UserPostDialogComponent } from '../../../shared/components/user-post-dialog/user-post-dialog.component';
 
 @Component({
   selector: 'app-post-item',
@@ -39,7 +40,8 @@ import { TuiTagModule } from '@taiga-ui/legacy';
     TuiPagination,
     TuiSkeleton,
     FirstLetterWordPipe,
-    TuiTagModule
+    TuiTagModule,
+    UserPostDialogComponent
   ],
   templateUrl: './post-item.component.html',
   styleUrl: './post-item.component.css'
@@ -59,7 +61,7 @@ export class PostItemComponent {
   reactionType: any;
   reactionsType = reactions;
 
-
+  dropdownHideDelay = 100;
   constructor(
     private _feedService: FeedService,
     private alertService: AlertService,

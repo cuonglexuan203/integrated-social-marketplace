@@ -7,3 +7,9 @@ export class UserResponseModel {
     profilePictureUrl: string;
     profileUrl?: string;
 }
+
+export class CreateUserModel {
+    fullName: string;
+    userName: string;
+    password: string;
+}
