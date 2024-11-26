@@ -13,6 +13,7 @@ namespace Feed.Application.Mappers
                 cfg.AddProfile<PostMappingProfile>();
                 cfg.AddProfile<CommentMappingProfile>();
                 cfg.AddProfile<UserMappingProfile>();
+                cfg.AddProfile<SavedPostMappingProfile>();
             });
             var mapper = config.CreateMapper();
             return mapper;

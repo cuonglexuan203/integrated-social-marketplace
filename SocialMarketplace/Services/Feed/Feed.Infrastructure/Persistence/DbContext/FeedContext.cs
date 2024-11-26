@@ -1,6 +1,7 @@
 ﻿using Feed.Core.Entities;
+using Feed.Infrastructure.Configurations;
 using Feed.Infrastructure.Persistence.SeedData;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace Feed.Infrastructure.Persistence.DbContext
@@ -9,14 +10,17 @@ namespace Feed.Infrastructure.Persistence.DbContext
     {
         public IMongoCollection<Comment> Comments { get; }
         public IMongoCollection<Post> Posts { get; }
-        public FeedContext(IConfiguration configuration)
+        public IMongoCollection<SavedPost> SavedPosts { get; }
+
+        public FeedContext(IOptions<DatabaseSettings> dbOptions)
         {
-            var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
-            var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
+            var client = new MongoClient(dbOptions.Value.ConnectionString);
+            var database = client.GetDatabase(dbOptions.Value.DatabaseName);
 
             #region collection assignment
-            Comments = database.GetCollection<Comment>(configuration.GetValue<string>("DatabaseSettings:CommentsCollection"));
-            Posts = database.GetCollection<Post>(configuration.GetValue<string>("DatabaseSettings:PostsCollection"));
+            Comments = database.GetCollection<Comment>(dbOptions.Value.CommentsCollection);
+            Posts = database.GetCollection<Post>(dbOptions.Value.PostsCollection);
+            SavedPosts = database.GetCollection<SavedPost>(dbOptions.Value.SavedPostsCollection);
             #endregion
 
             #region populate seed data

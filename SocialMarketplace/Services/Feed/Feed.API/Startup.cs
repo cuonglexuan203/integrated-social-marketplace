@@ -31,6 +31,11 @@ namespace Feed.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            #region binding configuration
+            services.Configure<DatabaseSettings>(_configuration.GetSection(nameof(DatabaseSettings)));
+            services.Configure<CloudinarySettings>(_configuration.GetSection(nameof(CloudinarySettings)));
+            var dbSettings = _configuration.GetSection(nameof(DatabaseSettings)).Get<DatabaseSettings>();
+            #endregion
             #region add exception handlers
             services.AddExceptionHandler<ValidationExceptionHandler>();
             services.AddExceptionHandler<BadRequestExceptionHandler>();
@@ -42,10 +47,36 @@ namespace Feed.API
             services.AddControllers();
             services.AddApiVersioning();
             services.AddHealthChecks()
-                .AddMongoDb(_configuration["DatabaseSettings:ConnectionString"], "Feed MongoDB Health Check"
+                .AddMongoDb(dbSettings.ConnectionString, "Feed MongoDB Health Check"
                 , HealthStatus.Degraded);
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Feed.API", Version = "v1" }); });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Feed.API", Version = "v1" }); 
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Scheme = "bearer",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Description = "Enter your JWT token below. Example: 'your-token'",
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             services.AddApplicationServices();
             #region jwt config
@@ -76,7 +107,7 @@ namespace Feed.API
             services.AddScoped<IFeedContext, FeedContext>();
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
-            services.Configure<CloudinarySettings>(_configuration.GetSection("CloudinarySettings"));
+            services.AddScoped<ISavedPostRepository, SavedPostRepository>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddHttpContextAccessor();
             services.AddHttpClient<IIdentityService, IdentityService>();

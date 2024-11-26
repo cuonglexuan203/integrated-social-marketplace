@@ -5,9 +5,7 @@ using Feed.Core.Specs;
 using Feed.Core.ValueObjects;
 using Feed.Infrastructure.Persistence.DbContext;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Xml.Linq;
 
 namespace Feed.Infrastructure.Persistence.Repositories
 {
@@ -28,7 +26,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             return Builders<Post>.Filter.Eq(x => x.IsDeleted, false);
         }
-        public async Task<Post> CreatePost(Post post)
+        public async Task<Post> CreatePostAsync(Post post, CancellationToken cancellationToken = default)
         {
             await _posts.InsertOneAsync(post);
             return post;
@@ -109,11 +107,17 @@ namespace Feed.Infrastructure.Persistence.Repositories
             };
         }
 
-        public async Task<bool> UpdatePost(Post post)
+        public async Task<bool> UpdatePostAsync(Post post, CancellationToken cancellationToken = default)
         {
             FilterDefinition<Post> filter = Builders<Post>.Filter.Eq(p => p.Id, post.Id) & GetNonDeletedFilter();
             var result = await _posts
                 .ReplaceOneAsync(filter, post);
+
+            if(result.MatchedCount == 0)
+            {
+                _logger.LogError("Post id {postId} not found", post.Id);
+                throw new NotFoundException("Post not found");
+            }
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
@@ -269,6 +273,13 @@ namespace Feed.Infrastructure.Persistence.Repositories
             var filter = Builders<Post>.Filter.Eq(x => x.Id, postId);
             var result = await _posts.DeleteOneAsync(filter, cancellationToken: token);
             return result.DeletedCount > 0;
+        }
+
+        public async Task<IEnumerable<Post>> GetAllUserPostsAsync(string userId, CancellationToken cancellationToken = default)
+        {
+            var filter = Builders<Post>.Filter.Eq(p => p.User.Id, userId) & GetNonDeletedFilter();
+            return await _posts.Find(filter)
+                                .ToListAsync(cancellationToken);
         }
     }
 }
