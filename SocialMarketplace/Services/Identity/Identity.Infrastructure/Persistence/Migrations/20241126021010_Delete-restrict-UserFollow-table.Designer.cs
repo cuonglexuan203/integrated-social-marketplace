@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20241125033220_AddAutoIncrementToUserFollow")]
-    partial class AddAutoIncrementToUserFollow
+    [Migration("20241126021010_Delete-restrict-UserFollow-table")]
+    partial class DeleterestrictUserFollowtable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -284,13 +284,13 @@ namespace Identity.Infrastructure.Persistence.Migrations
                     b.HasOne("Identity.Infrastructure.Identity.ApplicationUser", "Followed")
                         .WithMany("Followers")
                         .HasForeignKey("FollowedId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Identity.Infrastructure.Identity.ApplicationUser", "Follower")
                         .WithMany("Following")
                         .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Followed");

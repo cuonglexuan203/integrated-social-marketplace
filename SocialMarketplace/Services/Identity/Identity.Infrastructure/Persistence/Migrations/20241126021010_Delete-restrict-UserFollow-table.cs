@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Identity.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAutoIncrementToUserFollow : Migration
+    public partial class DeleterestrictUserFollowtable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,12 +181,14 @@ namespace Identity.Infrastructure.Persistence.Migrations
                         name: "FK_UserFollows_AspNetUsers_FollowedId",
                         column: x => x.FollowedId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserFollows_AspNetUsers_FollowerId",
                         column: x => x.FollowerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

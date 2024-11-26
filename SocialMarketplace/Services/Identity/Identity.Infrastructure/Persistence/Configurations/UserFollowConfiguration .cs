@@ -16,12 +16,12 @@ namespace Identity.Infrastructure.Persistence.Configurations
             builder.HasOne(uf => uf.Follower)
                    .WithMany(u => u.Following)
                    .HasForeignKey(uf => uf.FollowerId)
-                   .OnDelete(DeleteBehavior.NoAction);
+                   .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(uf => uf.Followed)
                    .WithMany(u => u.Followers)
                    .HasForeignKey(uf => uf.FollowedId)
-                   .OnDelete(DeleteBehavior.NoAction);
+                   .OnDelete(DeleteBehavior.Restrict);
 
             // Create a unique index to prevent duplicate follows
             builder.HasIndex(uf => new { uf.FollowerId, uf.FollowedId })

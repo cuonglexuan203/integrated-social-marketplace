@@ -1,7 +1,10 @@
 ﻿using Identity.Application.Commands.Auth;
+using Identity.Application.Commands.User.Create;
 using Identity.Application.Common.Models;
 using Identity.Application.DTOs;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -32,6 +35,25 @@ namespace Identity.API.Controllers
         {
             ReturnResult<Unit> result = new();
             var command = new LogoutCommand();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        [ProducesDefaultResponseType(typeof(int))]
+        public async Task<ActionResult> Register(CreateUserCommand command)
+        {
+            ReturnResult<int> result = new();
+            result.Result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordCommand command)
+        {
+            ReturnResult<bool> result = new();
             result.Result = await _mediator.Send(command);
             return Ok(result);
         }

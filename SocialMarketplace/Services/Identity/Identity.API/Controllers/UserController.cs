@@ -1,5 +1,4 @@
 ﻿using Identity.Application.Commands;
-using Identity.Application.Commands.User.Create;
 using Identity.Application.Commands.User.Delete;
 using Identity.Application.Commands.User.Update;
 using Identity.Application.Common.Models;
@@ -10,11 +9,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Identity.API.Controllers
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //[Authorize(Roles = "admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ApiController
     {
         private readonly IMediator _mediator;
@@ -24,17 +23,6 @@ namespace Identity.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("Create")]
-        [ProducesDefaultResponseType(typeof(int))]
-        public async Task<ActionResult> CreateUser(CreateUserCommand command)
-        {
-            ReturnResult<int> result = new();
-            result.Result = await _mediator.Send(command);
-
-            return Ok(result);
-        }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(Roles = "admin")]
         [HttpGet("GetAll")]
         [ProducesDefaultResponseType(typeof(List<UserResponseDTO>))]
@@ -43,8 +31,7 @@ namespace Identity.API.Controllers
             return Ok(await _mediator.Send(new Application.Queries.User.GetUserQuery()));
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("Delete/{userId}")]
         [ProducesDefaultResponseType(typeof(int))]
         public async Task<IActionResult> DeleteUser(string userId)
@@ -112,19 +99,12 @@ namespace Identity.API.Controllers
         }
 
 
-        [HttpPut("EditUserProfile/{id}")]
-        [ProducesDefaultResponseType(typeof(int))]
-        public async Task<ActionResult> EditUserProfile(string id, [FromBody] EditUserProfileCommand command)
+        [HttpPut("[action]")]
+        [ProducesResponseType(typeof(UserDetailsResponseDTO), (int) HttpStatusCode.OK)]
+        public async Task<ActionResult> EditUserProfile(EditUserProfileCommand command)
         {
-            if (id == command.Id)
-            {
                 var result = await _mediator.Send(command);
                 return Ok(result);
-            }
-            else
-            {
-                return BadRequest();
-            }
         }
 
         [HttpGet("[action]/{userId}")]

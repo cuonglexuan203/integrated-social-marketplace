@@ -1,5 +1,7 @@
 ﻿using Identity.Application.Commands.User.Create;
+using Identity.Application.Commands.User.Update;
 using Identity.Application.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Interfaces
 {
@@ -19,6 +21,8 @@ namespace Identity.Application.Interfaces
         Task<IList<UserResponseDTO>> GetAllUsersAsync();
         Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync(); // not implement
         Task<bool> UpdateUserProfile(string id, string fullName, string email, IList<string> roles);
+        Task<(IdentityResult, UserDetailsResponseDTO?)> UpdateUserProfileAsync(string userId, EditUserProfileCommand command, CancellationToken token = default);
+        Task<IdentityResult> ChangePasswordAsync(string userName, string currentPassword, string newPassword, CancellationToken token = default);
 
         // Role Section
         Task<bool> CreateRoleAsync(string roleName);

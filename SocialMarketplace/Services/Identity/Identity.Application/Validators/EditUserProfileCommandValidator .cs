@@ -8,11 +8,6 @@ namespace Identity.Application.Validators
     {
         public EditUserProfileCommandValidator()
         {
-            RuleFor(a => a.Id)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage("{PropertyName} is required");
-
             RuleFor(a => a.FullName)
                 .NotNull()
                 .NotEmpty()
@@ -22,10 +17,6 @@ namespace Identity.Application.Validators
                 .EmailAddress()
                 .When(a => !string.IsNullOrEmpty(a.Email))
                 .WithMessage("The email must be valid if provided.");
-
-            RuleForEach(a => a.Roles)
-                .Must(role => Enum.TryParse<SMRole>(role, out _))
-                .WithMessage("Each role must be a valid value from SMRole.");
         }
     }
 }
