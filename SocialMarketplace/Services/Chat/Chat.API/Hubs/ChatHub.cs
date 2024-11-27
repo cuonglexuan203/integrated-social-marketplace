@@ -1,16 +1,12 @@
-﻿using Chat.Core.Enums;
-using Chat.Core.Repositories;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.API.Hubs
 {
     public class ChatHub : Hub
     {
-        private readonly IChatRepository _repository;
 
-        public ChatHub(IChatRepository repository)
+        public ChatHub()
         {
-            _repository = repository;
         }
 
         //public override async Task OnConnectedAsync()

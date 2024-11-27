@@ -12,6 +12,6 @@ namespace Chat.Core.Entities
         public string Id { get; set; }
         public string Name { get; set; }
         public RoomType Type { get; set; } = RoomType.OneToOne;
-        public ICollection<string> ParticipantIds { get; set; } = new List<string>();
+        public ICollection<string> ParticipantIds { get; set; } = new List<string>(); // User Ids
     }
 }

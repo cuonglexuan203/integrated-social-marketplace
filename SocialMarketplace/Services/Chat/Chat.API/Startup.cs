@@ -10,6 +10,7 @@ using Chat.Infrastructure.Persistence.DbContext;
 using Chat.Core.Repositories;
 using Chat.Infrastructure.Persistence.Repositories;
 using Chat.API.Hubs;
+using Chat.API.Middlewares;
 
 namespace Chat.API
 {
@@ -30,6 +31,12 @@ namespace Chat.API
             var dbSettings = _configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>();
             var jwtSettings = _configuration.GetSection("Jwt").Get<JwtSettings>();
             #endregion
+            #region add exception handlers
+            services.AddExceptionHandler<ValidationExceptionHandler>();
+            services.AddExceptionHandler<BadRequestExceptionHandler>();
+            services.AddExceptionHandler<NotFoundExceptionHandler>();
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            #endregion
             services.AddProblemDetails();
             services.AddControllers();
             services.AddApiVersioning();
@@ -37,7 +44,33 @@ namespace Chat.API
                 .AddMongoDb(dbSettings.ConnectionString, "Chat MongoDB Health Check"
                 , HealthStatus.Degraded);
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Chat.API", Version = "v1" }); });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Chat.API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Scheme = "bearer",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Description = "Enter your JWT token below. Example: 'your-token'",
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
             services.AddHttpContextAccessor();
             services.AddSignalR();
 

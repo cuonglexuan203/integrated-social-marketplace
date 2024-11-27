@@ -10,7 +10,6 @@ namespace Chat.Infrastructure.Persistence.DbContext
     {
         public IMongoCollection<ChatRoom> Rooms { get; }
         public IMongoCollection<Message> Messages { get; }
-        public IMongoCollection<ChatParticipant> Participants { get; set; }
         public ChatContext(IOptions<DatabaseSettings> dbOptions)
         {
             var client = new MongoClient(dbOptions.Value.ConnectionString);
@@ -20,7 +19,6 @@ namespace Chat.Infrastructure.Persistence.DbContext
 
             Rooms = db.GetCollection<ChatRoom>(dbOptions.Value.ChatRoomCollection);
             Messages = db.GetCollection<Message>(dbOptions.Value.MessageCollection);
-            Participants = db.GetCollection<ChatParticipant>(dbOptions.Value.ChatParticipantCollection);
             #endregion
 
             #region Seed data
