@@ -27,6 +27,11 @@ namespace Chat.Infrastructure.Services.HttpClients
                 .ToString()
                 ?.Replace("Bearer ", "");
 
+            if(string.IsNullOrEmpty(accessToken) )
+            {
+                accessToken = _httpContextAccessor.HttpContext?.Request.Query["access_token"].FirstOrDefault() ?? "";
+            }
+
             if (!string.IsNullOrEmpty(accessToken))
             {
                 _client.DefaultRequestHeaders.Authorization =

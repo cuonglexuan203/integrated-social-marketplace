@@ -1,13 +1,10 @@
-﻿
-using Feed.Core.Entities;
-
-namespace Feed.Application.DTOs
+﻿namespace Feed.Application.DTOs
 {
     public class CommentDto
     {
         public string Id { get; set; }
         public string PostId { get; set; }
-        public User User { get; set; }
+        public UserDto User { get; set; }
         public List<MediaDto> Media { get; set; }
         public string CommentText { get; set; }
         public List<ReactionDto> Reactions { get; set; }

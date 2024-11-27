@@ -1,6 +1,7 @@
-﻿using Feed.Core.Enums;
+﻿
+using Chat.Core.Enums;
 
-namespace Feed.Application.DTOs
+namespace Chat.Application.Dtos
 {
     public class ReactionDto
     {

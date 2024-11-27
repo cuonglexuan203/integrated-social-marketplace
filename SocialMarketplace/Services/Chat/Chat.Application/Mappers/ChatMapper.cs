@@ -13,6 +13,8 @@ namespace Chat.Application.Mappers
                 cfg.ShouldMapProperty = p => p.GetMethod.IsPublic || p.GetMethod.IsAssembly;
                 #region adding profiles
                 cfg.AddProfile<ChatRoomProfile>();
+                cfg.AddProfile<MessageProfile>();
+                cfg.AddProfile<UserProfile>();
                 #endregion
             });
             return config.CreateMapper();

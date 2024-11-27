@@ -11,6 +11,12 @@ using Chat.Core.Repositories;
 using Chat.Infrastructure.Persistence.Repositories;
 using Chat.API.Hubs;
 using Chat.API.Middlewares;
+using Chat.Application.Extensions;
+using Chat.Application.Interfaces.Services;
+using Chat.Infrastructure.Services;
+using Chat.Application.Services;
+using Chat.Application.Interfaces.HttpClients;
+using Chat.Infrastructure.Services.HttpClients;
 
 namespace Chat.API
 {
@@ -73,6 +79,7 @@ namespace Chat.API
             });
             services.AddHttpContextAccessor();
             services.AddSignalR();
+            services.AddApplicationServices();
 
             #region jwt config
             services.AddAuthentication(options =>
@@ -124,7 +131,10 @@ namespace Chat.API
 
             #region services registration
             services.AddScoped<IChatContext, ChatContext>();
-            services.AddScoped<IChatRepository, ChatRepository>();
+            //services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IChatRoomMappingService, ChatRoomMappingService>();
+            services.AddHttpClient<IIdentityService, IdentityService>();
 
             #endregion
 

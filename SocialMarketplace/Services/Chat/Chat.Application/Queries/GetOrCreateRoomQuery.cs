@@ -9,6 +9,12 @@ namespace Chat.Application.Queries
     {
         public string UserId { get; set; } = default!;
         public string TargetUserId { get; set; } = default!;
+
+        public GetOrCreateRoomQuery(string userId, string targetUserId)
+        {
+            UserId = userId;
+            TargetUserId = targetUserId;
+        }
     }
 
     public class GetOrCreateRoomHandler : IRequestHandler<GetOrCreateRoomQuery, ChatRoomDto>
