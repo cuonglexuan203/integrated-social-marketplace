@@ -6,5 +6,6 @@
         public string? DatabaseName { get; set; }
         public string? ChatRoomCollection { get; set; }
         public string? MessageCollection { get; set; }
+        public string? ChatParticipantCollection { get; set; }
     }
 }

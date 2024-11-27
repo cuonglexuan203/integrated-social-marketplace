@@ -11,7 +11,7 @@ namespace Chat.Core.Entities
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
         public string Name { get; set; }
-        public RoomType Type { get; set; }
-        public List<ChatParticipant> Participants { get; set; }
+        public RoomType Type { get; set; } = RoomType.OneToOne;
+        public ICollection<string> ParticipantIds { get; set; } = new List<string>();
     }
 }

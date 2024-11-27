@@ -6,11 +6,10 @@ using System.Text;
 using Chat.Infrastructure.Configurations;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Chat.Core.Interfaces;
-using Chat.Infrastructure.Services;
 using Chat.Infrastructure.Persistence.DbContext;
 using Chat.Core.Repositories;
 using Chat.Infrastructure.Persistence.Repositories;
+using Chat.API.Hubs;
 
 namespace Chat.API
 {
@@ -31,7 +30,7 @@ namespace Chat.API
             var dbSettings = _configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>();
             var jwtSettings = _configuration.GetSection("Jwt").Get<JwtSettings>();
             #endregion
-
+            services.AddProblemDetails();
             services.AddControllers();
             services.AddApiVersioning();
             services.AddHealthChecks()
@@ -93,7 +92,6 @@ namespace Chat.API
             #region services registration
             services.AddScoped<IChatContext, ChatContext>();
             services.AddScoped<IChatRepository, ChatRepository>();
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             #endregion
 

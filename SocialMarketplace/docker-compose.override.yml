@@ -28,6 +28,14 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  chatdb:
+    container_name: chatdb
+    restart: always
+    ports:
+      - 27018:27017
+    volumes:
+      - chat_mongo_data:/data/db
+
   identity.api:
     container_name: identity.api
     environment:
@@ -48,11 +56,25 @@ services:
       - DatabaseSettings__DatabaseName=FeedDb
       - DatabaseSettings__PostsCollection=Posts
       - DatabaseSettings__CommentsCollection=Comments
-      - Services__Identity__BaseUrl=http://identity.api/api/v1/
+      - Microservices__Identity__BaseUrl=http://identity.api/api/v1/
     depends_on:
       - feeddb
     ports:
       - "9000:80"
+
+  chat.api:
+    container_name: chat.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+      - DatabaseSettings__ConnectionString=mongodb://chatdb:27017
+      - DatabaseSettings__DatabaseName=ChatDb
+      - DatabaseSettings__ChatRoomCollection=ChatRooms
+      - DatabaseSettings__MessageCollection=Messages
+    depends_on:
+      - chatdb
+    ports:
+      - "9001:80"
 
   ocelotapigw:
     container_name: ocelotapigw

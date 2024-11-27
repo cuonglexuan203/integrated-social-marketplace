@@ -8,5 +8,6 @@ namespace Chat.Infrastructure.Persistence.DbContext
     {
         IMongoCollection<ChatRoom> Rooms { get; }
         IMongoCollection<Message> Messages { get; }
+        IMongoCollection<ChatParticipant> Participants { get; }
     }
 }

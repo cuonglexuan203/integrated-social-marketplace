@@ -8,6 +8,9 @@ services:
   feeddb:
     image: mongo
   
+  chatdb:
+    image: mongo
+  
   identity.api:
     image: ${DOCKER_REGISTRY-}identityapi
     build:
@@ -20,6 +23,12 @@ services:
       context: .
       dockerfile: Services/Feed/Feed.API/Dockerfile
 
+  chat.api:
+    image: ${DOCKER_REGISTRY-}chatapi
+    build:
+      context: .
+      dockerfile: Services/Chat/Chat.API/Dockerfile
+
   ocelotapigw:
      image: ocelotapigw
      build:
@@ -27,6 +36,7 @@ services:
         dockerfile: ApiGateways/Ocelot.Apigateway/Dockerfile
 
 volumes:
+  chat_mongo_data:
   mongo_data:
   sqlserver_data:
   portainer_data:  

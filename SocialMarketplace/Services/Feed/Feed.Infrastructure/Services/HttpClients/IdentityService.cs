@@ -22,7 +22,7 @@ namespace Feed.Infrastructure.Services.HttpClients
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
 
-            _client.BaseAddress = new Uri(configuration["Services:Identity:BaseUrl"]);
+            _client.BaseAddress = new Uri(configuration["Microservices:Identity:BaseUrl"]);
 
             var accessToken = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"]
                 .ToString()
