@@ -13,9 +13,9 @@ namespace Feed.Infrastructure.Persistence.SeedData
             if (!checkPost)
             {
                 // run local
-                var commentData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/comments.json");
+                //var commentData = File.ReadAllText("../Feed.Infrastructure/Persistence/SeedData/Data/comments.json");
                 // run by docker compose
-                //var commentData = File.ReadAllText(path);
+                var commentData = File.ReadAllText(path);
                 var comments = JsonConvert.DeserializeObject<List<Comment>>(commentData);
                 if (comments != null & comments?.Count > 0)
                 {

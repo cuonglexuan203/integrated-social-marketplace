@@ -164,12 +164,12 @@ namespace Chat.API
             app.UseRouting();
             app.UseCors("sm-web-policy");
             app.UseAuthentication();
-            //app.UseStaticFiles();
+            app.UseStaticFiles();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapHub<ChatHub>("chatHub");
                 endpoints.MapHealthChecks("/health", new HealthCheckOptions()
                 {
                     Predicate = _ => true,

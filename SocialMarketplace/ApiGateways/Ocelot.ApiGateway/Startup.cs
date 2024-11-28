@@ -10,7 +10,7 @@ namespace Ocelot.ApiGateway
         {
             services.AddOcelot()
                 .AddCacheManager(o => o.WithDictionaryHandle());
-
+            services.AddSignalR();
             services.AddCors(options =>
             {
                 options.AddPolicy("sm-web-policy", builder =>
@@ -39,7 +39,7 @@ namespace Ocelot.ApiGateway
                     await context.Response.WriteAsync("Hello Ocelot");
                 });
             });
-
+            app.UseWebSockets();
             await app.UseOcelot();
         }
     }
