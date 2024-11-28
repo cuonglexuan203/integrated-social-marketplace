@@ -15,5 +15,6 @@ export const environment = {
 
     // Chat Service
     apiChat: apiUrl + `${chat}/chat`,
+    apiChatHub: apiUrl + `${chat}/chatHub`
 
 }

@@ -1,4 +1,4 @@
-interface SaveMessageCommand {
+export interface SaveMessageCommand {
     roomId: string;
     senderId: string;
     contentText?: string;

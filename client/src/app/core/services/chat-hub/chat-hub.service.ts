@@ -5,12 +5,13 @@ import { Message } from '../../models/chat/message.model';
 import { environment } from '../../../../environments/endpoint';
 import { Pagination } from '../../models/page/pagination.model';
 import { NbAuthService } from '@nebular/auth';
+import { SaveMessageCommand } from '../../models/chat/save-message-command.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatHubService {
-  private chatApiBase = environment.apiChat;
+  private chatHubApiBase = environment.apiChatHub;
   private hubConnection!: signalR.HubConnection;
   private messagesSource = new BehaviorSubject<Message[]>([]);
   messages$ = this.messagesSource.asObservable();
@@ -26,33 +27,49 @@ export class ChatHubService {
     this.initChatHub();
   }
 
-  connectToHub(userId: string) {
+  async connectToHub(userId: string) {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${this.chatApiBase}/chatHub`, {
+      .withUrl(this.chatHubApiBase, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
         accessTokenFactory: () => this.token || '',
       })
-      .withAutomaticReconnect()
+      .withAutomaticReconnect([0, 1000, 5000, 10000])
       .build();
+    try {
+      await this.hubConnection.start();
+      console.log("Connected to chat hub")
+    }
+    catch (err) {
+      console.error('SignalR Error:', err)
+      return;
+    }
 
-    this.hubConnection.start().catch(err => console.error('SignalR Error:', err));
-
-    // Load message history
-    this.hubConnection.on("ReceiveMessageHistory", (roomId: string, messageHistoryPage: Pagination<Message>) => {
-      this.roomId = roomId;
-      this.messagesSource.next(messageHistoryPage.data);
-    });
-
-    // Listen to messages
-    this.hubConnection.on('ReceiveMessage', (message: Message) => {
-      const currentMessages = this.messagesSource.value;
-      this.messagesSource.next([...currentMessages, message]);
-    });
-
-    // Listen for typing indicator ...
-    this.hubConnection.on('TypingIndicator', (userId: string, isTyping: boolean) => {
-      this.typingSource.next({ userId, isTyping });
-    });
+    this.setupHubListeners();
   }
+
+
+  private setupHubListeners() {
+    this.hubConnection.on("ReceiveMessageHistory", this.handleMessageHistory.bind(this));
+    this.hubConnection.on('ReceiveMessage', this.handleNewMessage.bind(this));
+    this.hubConnection.on('TypingIndicator', this.handleTypingIndicator.bind(this));
+  }
+
+  private handleMessageHistory(roomId: string, messageHistoryPage: Pagination<Message>) {
+    this.roomId = roomId;
+    this.messagesSource.next(messageHistoryPage.data);
+  }
+
+  private handleNewMessage(message: Message) {
+    const currentMessages = this.messagesSource.value;
+    this.messagesSource.next([...currentMessages, message]);
+  }
+
+  private handleTypingIndicator(userId: string, isTyping: boolean) {
+    this.typingSource.next({ userId, isTyping });
+  }
+
+  //
 
   disconnectFromHub() {
     this.hubConnection.invoke("LeaveRoom");
