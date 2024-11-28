@@ -21,33 +21,37 @@
 
         <tui-textfield iconStart="@tui.search" class="search-conversation">
             <input
-                formControlName="search"
                 placeholder="Search"
                 tuiTextfield
             />
         </tui-textfield>
     </fieldset>
     <div class="sidebar-chat-content">
-        @for (userChat of userMockData; track $index) {
+        @for (room of rooms; track $index) {
             <div class="label-container"
-                (click)="handleClickUserChat(userChat)"
             >
-                <label tuiCell
-                [ngStyle]="{'background-color': selectedUserChat?.id === userChat?.id ? '#0000000A' : '' }"
-
-                >
-                    <tui-badged-content>
-                        <tui-avatar
-                            size="l"
-                            src="@tui.user"
-                            class="tui-avatar-user"
-                        />
-                    </tui-badged-content>
-                    <div class="d-flex flex-column gap-1">
-                        <div tuiTitle>{{userChat?.userName}}</div>
-                        <div tuiSubTitle>{{userChat?.lastMessage}}</div>
+            <label tuiCell
+            [ngStyle]="{'background-color': selectedRoom?.id === room?.id ? '#0000000A' : '' }"
+            (click)="selectRoom(room)">
+            <tui-badged-content *ngIf="room.participants">
+                <ng-container *ngFor="let participant of room.participants">
+                    <tui-avatar
+                        *ngIf="participant.id !== userId"
+                        size="l"
+                        [src]="participant.profilePictureUrl"
+                        class="tui-avatar-user">
+                    </tui-avatar>
+                </ng-container>
+            </tui-badged-content>
+            <div class="d-flex flex-column gap-1">
+                <ng-container *ngFor="let participant of room.participants">
+                    <div *ngIf="participant.id !== userId">
+                        <div tuiTitle>{{ participant?.fullName }}</div>
+                        <div tuiSubTitle>{{ room.messagePage?.data?.[0]?.contentText || '' }}</div>
                     </div>
-                </label>
+                </ng-container>
+            </div>
+        </label>
             </div>
         }
     </div>

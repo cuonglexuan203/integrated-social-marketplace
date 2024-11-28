@@ -1,11 +1,11 @@
 <div class="w-100 d-flex border chat-container">
     <div class="w-30">
-        <app-sidebar-chat>
+        <app-sidebar-chat (selectedRoomFromSidebar)="selectRoom($event)" [selectedRoom]="selectedRoom" [rooms]="rooms">
 
         </app-sidebar-chat>
     </div>
     <div class="w-70">
-        <app-chatbox [selectedRoom]="selectedRoom">
+        <app-chatbox  [selectedRoom]="selectedRoom">
 
         </app-chatbox>
     </div>

@@ -1,14 +1,14 @@
+/* chatbox.component.css */
+
 .chatbox-container {
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     height: 85vh;
-
 }
 
-.chatbox-header
-{
+.chatbox-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -18,9 +18,37 @@
 .chatbox-content {
     display: flex;
     flex-direction: column;
-    cursor: pointer;
     flex-grow: 1;
     overflow-y: auto;
+}
+
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+
+.message.sent {
+    align-self: flex-end;
+    background-color: #dcf8c6;
+}
+
+.message.received {
+    align-self: flex-start;
+    background-color: #ffffff;
+    border: 1px solid #e5e5e5;
+}
+
+.message-content {
+    word-wrap: break-word;
 }
 
 .chatbox-footer {
@@ -30,15 +58,15 @@
     justify-content: space-between;
     flex-direction: row;
     display: flex;
-    transition: border 0.3s; 
+    transition: border 0.3s;
     background-color: white;
     padding: 10px;
-    gap: 10px
+    gap: 10px;
 }
 
 .input-chat {
     background-color: transparent;
-    width: 100%
+    width: 100%;
 }
 
 .input-chat:focus {

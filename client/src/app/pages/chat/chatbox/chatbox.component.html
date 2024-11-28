@@ -1,43 +1,57 @@
-<div class="chatbox-container">
-    <div class="chatbox-header">
-        <div>
-            <div tuiCell>
-                <tui-avatar size="m" src="@tui.user" />
-                <div class="d-flex flex-column gap-1">
-                    <div tuiTitle>{{'Trieu Do Quang'}}</div>
-                    <div tuiSubTitle>{{'last seen 9 November at 02:57 pm'}}</div>
+@if (selectedRoom) {
+    <div class="chatbox-container">
+        <div class="chatbox-header">
+            <div>
+                <div tuiCell>
+                    <tui-avatar *ngIf="userReceiver?.profilePictureUrl" size="m" [src]="userReceiver.profilePictureUrl" />
+                    <div class="d-flex flex-column gap-1">
+                        <div *ngIf="userReceiver?.fullName" tuiTitle>{{userReceiver.fullName}}</div>
+                        <div tuiSubTitle>{{'Active'}}</div>
+                    </div>
                 </div>
             </div>
+            <div class="d-flex flex-row gap-3">
+                @for (item of chatBoxHeaderData; track $index) {
+                <tui-icon [icon]="item.iconName || ''" [style.width.px]="'18'" [style.height.px]="'18'"
+                    class="primary-color" style="cursor: pointer;">
+    
+                </tui-icon>
+                }
+            </div>
         </div>
-        <div class="d-flex flex-row gap-3">
-            @for (item of chatBoxHeaderData; track $index) {
-            <tui-icon [icon]="item.iconName || ''" [style.width.px]="'18'" [style.height.px]="'18'"
-                class="primary-color" style="cursor: pointer;">
-
-            </tui-icon>
-            }
+        <div class="chatbox-content" #chatboxContent>
+            <div class="messages-container">
+                <ng-container *ngIf="messages$ | async as messages">
+                    <div *ngFor="let message of messages" class="message" [ngClass]="{'sent': message.senderId !== userId, 'received': message.senderId === userId}">
+                        <div class="message-content">
+                            {{ message.contentText }}
+                        </div>
+                    </div>
+                    <div *ngIf="!messages.length" class="message">
+                        <div class="message-item font-14">
+                            <tui-icon icon="@tui.message-square-text" class="comment-icon"
+                            [style.width.px]="'48'"
+                            [style.height.px]="'48'"
+                            ></tui-icon>
+                            <span>Leave the first message
+                            </span>
+                        </div> 
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div class="chatbox-footer">
+            <div class="d-flex gap-3">
+                <tui-icon class="primary-color" icon="@tui.message-circle-plus">
+                </tui-icon>
+            </div>
+            <input (keydown.enter)="sendMessage()" [(ngModel)]="newMessage" #inputChat class="input-chat" style="border: none; flex: 1; width: 100%;" placeholder="Write a message"
+                type="search">
+            <div>
+                <tui-icon icon="@tui.smile-plus" class="primary-color">
+    
+                </tui-icon>
+            </div>
         </div>
     </div>
-    <div class="chatbox-content">
-        <div class="messages-container">
-            <ng-container *ngIf="messages$ | async as messages">
-                <div *ngFor="let message of messages" class="message">
-                    {{ message.contentText }}
-                </div>
-            </ng-container>
-        </div>
-    </div>
-    <div class="chatbox-footer">
-        <div class="d-flex gap-3">
-            <tui-icon class="primary-color" icon="@tui.message-circle-plus">
-            </tui-icon>
-        </div>
-        <input #inputChat class="input-chat" style="border: none; flex: 1; width: 100%;" placeholder="Write a message"
-            type="search">
-        <div>
-            <tui-icon icon="@tui.smile-plus" class="primary-color">
-
-            </tui-icon>
-        </div>
-    </div>
-</div>
+}

@@ -427,6 +427,9 @@ export class UserProfileComponent {
     })
   }
 
+  chatWithUser() {
+    this.router.navigate([`/chat/${this.user?.id}`]);
+  }
 
 
 }

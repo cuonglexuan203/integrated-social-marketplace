@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { SidebarChatComponent } from './sidebar-chat/sidebar-chat.component';
 import { ChatboxComponent } from './chatbox/chatbox.component';
 import { ChatService } from '../../core/services/chat/chat.service';
@@ -6,6 +6,9 @@ import { ChatRoom } from '../../core/models/chat/chat-room.model';
 import { NbAuthService } from '@nebular/auth';
 import { Subscription } from 'rxjs';
 import { ChatHubService } from '../../core/services/chat-hub/chat-hub.service';
+import { ActivatedRoute } from '@angular/router';
+import { UserResponseModel } from '../../core/models/user/user.model';
+import { UserService } from '../../core/services/user/user.service';
 
 @Component({
   selector: 'app-chat',
@@ -18,7 +21,10 @@ import { ChatHubService } from '../../core/services/chat-hub/chat-hub.service';
   styleUrl: './chat.component.css'
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  rooms: ChatRoom[] = [];
+  @Output() rooms: ChatRoom[] = [];
+  @Output() userReceiver: UserResponseModel;
+
+  receiverId: string;
   userId: string;
   selectedRoom: ChatRoom | null = null;
 
@@ -28,18 +34,24 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
     private chatHubService: ChatHubService,
-    private authService: NbAuthService
-  ) {}
+    private authService: NbAuthService,
+    private activatedRoute: ActivatedRoute,
+    private _userService: UserService
+  ) { }
 
   ngOnInit(): void {
-    this.initializeUser();
+    this.setupData();
+  }
+
+  async setupData
+    () {
+    await this.initializeUser();
+    this.getReceiverId();
   }
 
   ngOnDestroy(): void {
-    // Disconnect from hub
     this.chatHubService.disconnectFromHub();
 
-    // Unsubscribe from all subscriptions
     if (this.tokenSubscription) {
       this.tokenSubscription.unsubscribe();
     }
@@ -48,28 +60,52 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initializeUser() {
+  getReceiverId() {
+    this.activatedRoute.params.subscribe(params => {
+      this.receiverId = params['receiverId'];
+    });
+  }
+
+  async initializeUser() {
     this.tokenSubscription = this.authService.onTokenChange().subscribe(async (token) => {
       if (token?.isValid()) {
         this.userId = token?.getPayload()?.userId;
-        
-        // Connect to SignalR hub
+
         await this.chatHubService.connectToHub(this.userId);
-        // Load user rooms
         this.loadUserRooms();
+        await this.joinRoom();
       }
     });
   }
 
-  private loadUserRooms() {
+  loadUserRooms() {
     this.roomSubscription = this.chatService.getUserRooms(this.userId).subscribe(rooms => {
       this.rooms = rooms;
-      
-      // Automatically select the first room if available
-      if (rooms.length > 0) {
+
+      if (rooms.length > 0 && !this.receiverId) {
         this.selectRoom(rooms[0]);
       }
     });
+  }
+
+  async joinRoom() {
+    if (this.userId && this.receiverId) {
+      await this.chatHubService.joinRoom(this.userId, this.receiverId).finally(() => {
+        this.handleSelectRoom();
+
+      });
+    }
+  }
+
+
+  handleSelectRoom() {
+    if (this.rooms) {
+      this.rooms.forEach(room => {
+        if (room?.id === this.chatHubService.roomId) {
+          this.selectedRoom = room;
+        }
+      });
+    }
   }
 
   selectRoom(room: ChatRoom) {

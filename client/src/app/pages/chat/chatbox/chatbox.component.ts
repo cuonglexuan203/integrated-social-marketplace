@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiAvatar, TuiBadgedContent, TuiSwitch } from '@taiga-ui/kit';
@@ -8,9 +8,11 @@ import { ChatBoxHeaderData } from '../../../core/data/chatbox-header-data';
 import { TuiInputModule } from '@taiga-ui/legacy';
 import { ChatRoom } from '../../../core/models/chat/chat-room.model';
 import { Message } from '../../../core/models/chat/message.model';
-import { Observable } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { ChatHubService } from '../../../core/services/chat-hub/chat-hub.service';
 import { SaveMessageCommand } from '../../../core/models/chat/save-message-command.model';
+import { UserResponseModel } from '../../../core/models/user/user.model';
+import { OrderByPipe } from '../../../core/pipes/order-by/orderby.pipe';
 
 @Component({
   selector: 'app-chatbox',
@@ -27,30 +29,51 @@ import { SaveMessageCommand } from '../../../core/models/chat/save-message-comma
     TuiSwitch,
     FormsModule,
     ReactiveFormsModule,
-    TuiInputModule
+    TuiInputModule,
+    OrderByPipe
   ],
   templateUrl: './chatbox.component.html',
   styleUrl: './chatbox.component.css'
 })
 export class ChatboxComponent {
+  @ViewChild('chatboxContent') private chatboxContent: ElementRef;
+
   chatBoxHeaderData = ChatBoxHeaderData;
   @Input() selectedRoom: ChatRoom | null = null;
 
-  messages$: Observable<Message[]>;
+  messages$: Observable<Message[]> = new Observable<Message[]>();
+  reversedMessages$: Observable<Message[]> ;
+
   newMessage: string = '';
   isTyping: boolean = false;
   typingTimer: any;
 
+  userReceiver: UserResponseModel;
+  userId: string;
+  isSent: boolean = false;
   constructor(private chatHubService: ChatHubService) {
-    // Subscribe to messages from the hub service
     this.messages$ = this.chatHubService.messages$;
+    console.log(this.messages$);
+    
+    this.reversedMessages$ = this.messages$.pipe(map((messages) => messages.filter((message) => message.createdAt).reverse()));
   }
 
+
+
+  ngOnInit() {
+    this.scrollToBottom();
+
+  }
+
+ 
+
   ngOnChanges(changes: SimpleChanges) {
+    this.getUserReceiver();
     // Reset message input when room changes
     if (changes['selectedRoom']) {
       this.newMessage = '';
     }
+
   }
 
   sendMessage() {
@@ -58,7 +81,7 @@ export class ChatboxComponent {
 
     const saveMessageCommand: SaveMessageCommand = {
       contentText: this.newMessage,
-      roomId: this.chatHubService.roomId,
+      roomId: this.selectedRoom?.id,
       senderId: this.chatHubService.userId,
       // attachedPostIds:,
       // media:,
@@ -66,9 +89,29 @@ export class ChatboxComponent {
 
     // Send message through SignalR hub
     this.chatHubService.sendMessage(this.selectedRoom.id, saveMessageCommand);
-
-    // Clear the message input
     this.newMessage = '';
+
+  }
+
+  private scrollToBottom(): void {
+    try {
+      if (this.chatboxContent) {
+        this.chatboxContent.nativeElement.scrollTop = this.chatboxContent.nativeElement.scrollHeight;
+      }
+    } catch (err) {
+      console.error('Scroll to bottom error:', err);
+    }
+  }
+  
+  getUserReceiver() {
+    if (this.selectedRoom?.participants && this.chatHubService.userId) {
+      this.selectedRoom?.participants.forEach((participant) => {
+        if (participant.id !== this.chatHubService.userId) {
+          this.userReceiver = participant;
+          this.userId = participant.id;
+        }
+      })
+    }
   }
 
   onTyping() {
