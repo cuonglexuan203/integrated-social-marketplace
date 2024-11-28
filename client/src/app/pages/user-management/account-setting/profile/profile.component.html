@@ -47,6 +47,7 @@
                             tuiHintContent="A tooltip"
                             class="w-100"
                             formControlName="country"
+                            [tuiSkeleton]="isLoading"
                         >
                         Country
                             <input
@@ -60,6 +61,8 @@
                             tuiHintContent="A tooltip"
                             class="w-100"
                             formControlName="city"
+                            [tuiSkeleton]="isLoading"
+
                         >
                         City
                             <input
@@ -75,6 +78,7 @@
                         tuiHintContent="A tooltip"
                         class="w-100"
                         formControlName="fullName"
+                        [tuiSkeleton]="isLoading"
                     >
                     Full Name
                         <input
@@ -87,6 +91,7 @@
                         tuiHintContent="A tooltip"
                         class="w-100"
                         formControlName="phoneNumber"
+                        [tuiSkeleton]="isLoading"
                     >
                     Phone Number
                         <input
@@ -102,6 +107,7 @@
                     tuiHintContent="A tooltip"
                     class="w-100"
                     formControlName="email"
+                    [tuiSkeleton]="isLoading"
                     >
                     Email
                         <input
@@ -114,6 +120,7 @@
                             tuiHintContent="A tooltip"
                             class="w-100"
                             formControlName="dateOfBirth"
+                            [tuiSkeleton]="isLoading"
                         >
                         Birthday
                             <input
@@ -128,6 +135,7 @@
                         class="w-100"
                         formControlName="interests"
                         [tuiTextfieldLabelOutside]="true"
+                        [tuiSkeleton]="isLoading"
                         >
                         <i>interests</i>
                     </tui-input-tag>
@@ -135,8 +143,10 @@
                     <tui-combo-box
                         class="w-100"
                         formControlName="gender"
+                        [tuiSkeleton]="isLoading"
                         >
                         Search by gender
+                        
                         <tui-data-list-wrapper
                             *tuiDataList
                             [items]="genders"

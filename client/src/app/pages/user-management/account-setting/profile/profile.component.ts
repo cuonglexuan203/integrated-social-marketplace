@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiButton, TuiDataList, TuiIcon } from '@taiga-ui/core';
+import { TuiButton, TuiDataList, TuiIcon, TuiLoader } from '@taiga-ui/core';
 import {
   TuiAvatar, TuiDataListWrapper,
+  TuiSkeleton,
 } from '@taiga-ui/kit';
 import { TuiComboBoxModule, TuiInputDateModule, TuiInputModule, TuiInputTagModule, TuiSelectModule, TuiTextareaModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { UserResponseModel } from '../../../../core/models/user/user.model';
@@ -33,7 +34,8 @@ import { AlertService } from '../../../../core/services/alert/alert.service';
     TuiIcon,
     TuiTextfieldControllerModule,
     TuiInputTagModule,
-    TuiComboBoxModule
+    TuiComboBoxModule,
+    TuiSkeleton,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -96,6 +98,8 @@ export class ProfileComponent {
         next: (res) => {
           if (res) {
             this.user = res?.result;
+            Helper.setUserToLocalStorage(this.user);
+            this.form = this.formBuilder.formGroup(UserDetailsModel, this.user);
             this.alertService.showSuccess('Profile updated successfully', 'Success');
             this.isLoading = false;
 
