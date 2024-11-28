@@ -7,8 +7,6 @@ using Chat.Infrastructure.Configurations;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Chat.Infrastructure.Persistence.DbContext;
-using Chat.Core.Repositories;
-using Chat.Infrastructure.Persistence.Repositories;
 using Chat.API.Hubs;
 using Chat.API.Middlewares;
 using Chat.Application.Extensions;
@@ -138,7 +136,6 @@ namespace Chat.API
             services.AddHttpClient<IIdentityService, IdentityService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IFeedService, FeedService>();
-
             #endregion
 
             #region CORS registration
@@ -154,7 +151,7 @@ namespace Chat.API
             });
             #endregion
         }
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -179,6 +176,13 @@ namespace Chat.API
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
             });
+
+            // Initialize the database
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var chatContext = scope.ServiceProvider.GetRequiredService<IChatContext>();
+                await chatContext.InitializeAsync();
+            }
         }
     }
 }

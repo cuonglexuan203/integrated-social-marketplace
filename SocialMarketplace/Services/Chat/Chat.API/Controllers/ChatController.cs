@@ -19,5 +19,12 @@ namespace Chat.API.Controllers
             var rooms = await _mediator.Send(new GetUserRoomsQuery(userId));
             return Ok(rooms);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SearchMessages(SearchMessagesQuery query)
+        {
+            var messageDtos = await _mediator.Send(query);
+            return Ok(messageDtos);
+        }
     }
 }
