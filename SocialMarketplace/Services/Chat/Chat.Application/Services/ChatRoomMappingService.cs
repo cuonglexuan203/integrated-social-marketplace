@@ -26,6 +26,24 @@ namespace Chat.Application.Services
             return roomDto;
         }
 
+        public async Task<List<ChatRoomDto>> MapToDtosAsync(IEnumerable<ChatRoom> rooms, CancellationToken token = default)
+        {
+            var result = new List<ChatRoomDto>();
+            foreach (var room in rooms)
+            {
+                try
+                {
+                    result.Add(await MapToDtoAsync(room, token));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error in mapping room {roomId} to DTO: {errorMsg}", room.Id, ex.Message);
+                }
+            }
+
+            return result;
+        }
+
         private async Task MapParticipantsAsync(ChatRoom room, ChatRoomDto roomDto, CancellationToken cancellationToken = default)
         {
             try
