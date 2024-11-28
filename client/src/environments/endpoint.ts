@@ -1,6 +1,7 @@
 import { apiUrl } from "./environment";
 const auth = '/identity';
 const feed = '/feed';
+const chat = '/chat';
 export const environment = {
     //Auth Service
     apiAuth: apiUrl + `${auth}/auth`,
@@ -12,5 +13,7 @@ export const environment = {
 
     apiComment: apiUrl + `${feed}/comment`,
 
+    // Chat Service
+    apiChat: apiUrl + `${chat}/chat`,
 
 }
