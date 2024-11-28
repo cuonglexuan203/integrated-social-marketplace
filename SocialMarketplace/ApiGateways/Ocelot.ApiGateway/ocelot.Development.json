@@ -26,6 +26,19 @@
       "UpstreamPathTemplate": "/api/v1/Identity/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ]
     },
+    // Chat
+    {
+      "DownstreamPathTemplate": "/api/v1/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 9001
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/Chat/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ]
+    }
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:9010"

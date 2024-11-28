@@ -164,7 +164,7 @@ namespace Chat.API
             app.UseRouting();
             app.UseCors("sm-web-policy");
             app.UseAuthentication();
-            //app.UseStaticFiles();
+            app.UseStaticFiles();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
