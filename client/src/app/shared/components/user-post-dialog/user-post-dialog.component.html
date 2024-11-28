@@ -48,7 +48,7 @@
                 </div>
               </div>
         </div>
-        <div class="action-user-post mt-3">
+        <div *ngIf="!isFromFollow" class="action-user-post mt-3">
             <button [ngClass]="{'disabled': isLoading}" *ngIf="!isCheckedUserLoggedIn && !user?.isFollowing" (click)="followAction()">
               <tui-icon icon="@tui.user-plus"></tui-icon>
               <span>Follow</span>

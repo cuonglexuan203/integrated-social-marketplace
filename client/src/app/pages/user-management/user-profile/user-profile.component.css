@@ -182,6 +182,40 @@
 .follower-name {
     font-weight: 500;
 }
+.follower-items-container {
+    display: flex;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+  
+  }
+
+  .follower-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .follower-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .follower-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 8px;
+  }
+  
+  .follower-username {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
 
 .post-container {
     width: 700px;
@@ -191,6 +225,11 @@
   background-color: white;
 }
 
+.action-buttons {
+    display: flex;
+    gap: 10px;
+
+}
 
 .new-post,
 .filter-section {
@@ -314,3 +353,18 @@
     font-size: 1.2em;
     color: #09f;
   }
+
+  .no-followers-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    color: #999;
+    margin-top: 24px;
+}
+
+.loader {
+    display: flex;
+    inline-size: fit-content;
+    margin: 1rem 0;
+} 
