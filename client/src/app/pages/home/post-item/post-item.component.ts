@@ -1,4 +1,4 @@
-import { Component, inject, INJECTOR, Input } from '@angular/core';
+import { Component, inject, INJECTOR, Input, SimpleChanges } from '@angular/core';
 import { TuiButton, TuiDialogService, TuiDropdown, TuiIcon, TuiRoot } from '@taiga-ui/core';
 import { TuiAvatar, TuiCarousel, TuiPagination, TuiSkeleton } from '@taiga-ui/kit';
 import { TuiCardLarge } from '@taiga-ui/layout';
@@ -14,9 +14,13 @@ import { FeedPost } from '../../../core/models/feed/feed.model';
 import { DateFilterPipe } from '../../../core/pipes/date-filter/date-filter.pipe';
 import { Comment } from '../../../core/models/comment/comment.model';
 import { CommentPostDialogComponent } from '../../../shared/components/comment-post-dialog/comment-post-dialog.component';
-import {  ReactionModel, ReactionRequestModel } from '../../../core/models/reaction/reaction.model';
+import { ReactionModel, ReactionRequestModel } from '../../../core/models/reaction/reaction.model';
 import { Helper } from '../../../core/utils/helper';
 import { reactions } from '../../../core/constances/reaction';
+import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word/first-letter-word.pipe';
+import { CommentService } from '../../../core/services/comment/comment.service';
+import { TuiTagModule } from '@taiga-ui/legacy';
+import { UserPostDialogComponent } from '../../../shared/components/user-post-dialog/user-post-dialog.component';
 
 @Component({
   selector: 'app-post-item',
@@ -33,7 +37,11 @@ import { reactions } from '../../../core/constances/reaction';
     ReactionDialogComponent,
     TuiSkeleton,
     DateFilterPipe,
-    TuiPagination
+    TuiPagination,
+    TuiSkeleton,
+    FirstLetterWordPipe,
+    TuiTagModule,
+    UserPostDialogComponent
   ],
   templateUrl: './post-item.component.html',
   styleUrl: './post-item.component.css'
@@ -53,24 +61,100 @@ export class PostItemComponent {
   reactionType: any;
   reactionsType = reactions;
 
+  dropdownHideDelay = 200;
   constructor(
     private _feedService: FeedService,
     private alertService: AlertService,
+    private _commentService: CommentService,
 
   ) { }
 
   ngOnInit() {
-    this.onCheckedReaction();
-    
+    this.initializePostState();
   }
 
-  getReactionReacted(event: any){
-    if(event) {
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['post'] && !changes['post'].isFirstChange()) {
+      this.initializePostState();
+    }
+  }
+
+  initializePostState() {
+    // Reset state for the new post
+    this.comments = [];
+    this.isReacted = false;
+    this.reactionType = '';
+    this.currentIndex = 0;
+
+    if (this.post) {
+      this.getCommentsPost();
+      this.onCheckedReaction();
+    }
+  }
+
+
+  getCommentsPost() {
+    this.isLoading = true;
+    this._commentService.getCommentsByPostId(this.post.id).subscribe({
+      next: (res) => {
+        if (res) {
+          this.comments = res.result || [];
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onRemoveReaction() {
+    const dataSending = {
+      postId: this.post.id,
+      userId: Helper.getUserFromLocalStorage().id,
+    }
+    this._feedService.removeReactionFromPost(dataSending).subscribe({
+      next: (res) => {
+        if (res.result) {
+          this.isReacted = false;
+          this.reactionType = '';
+          this.post.reactions = this.post.reactions.filter((reaction) => reaction.user.id !== Helper.getUserFromLocalStorage().id);
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+      complete: () => {
+      }
+    })
+  }
+  getReactionReacted(event: any) {
+    console.log(event);
+    
+    if (this.isReacted && event === this.reactionType) {
+      this.onRemoveReaction();
+    }
+    if (this.isReacted && event !== this.reactionType) {
+      this.onRemoveReaction();
+      this.onReactionWithNew(event);
+    }
+    if (!this.isReacted) {
+      this.onReactionWithNew(event);
+    }
+  }
+
+  onReactionWithNew(event: any) {
+    if (event !== null && event !== undefined) {
       const dataForReact: ReactionRequestModel = {
         postId: this.post.id,
         userId: Helper.getUserFromLocalStorage().id,
         reactionType: event
-      } 
+      }
       this._feedService.addReaction(dataForReact).subscribe({
         next: (res) => {
           if (res.result) {
@@ -86,23 +170,18 @@ export class PostItemComponent {
   }
 
   onCheckedReaction() {
-    this.isLoading = true;
     this._feedService.getReactionsByPostId(this.post.id).subscribe({
       next: async (res) => {
         if (res.result) {
-          await this.checkingUserHasReacted(res.result); 
-          this.isLoading = false;
+          await this.checkingUserHasReacted(res.result);
         }
         else {
-          this.isLoading = false;
         }
       },
       error: (err) => {
         console.log(err);
-        this.isLoading = false;
       },
       complete: () => {
-        this.isLoading = false;
       }
     });
   }
@@ -136,7 +215,7 @@ export class PostItemComponent {
       });
   }
 
-  
+
   onComment(post: FeedPost) {
     const data = { title: 'Comment', post: post };
     this.dialogs
@@ -146,6 +225,7 @@ export class PostItemComponent {
           dismissible: false,
           size: 'auto',
           data: data,
+          appearance: 'comment-dialog',
         }
       )
       .subscribe((data) => {

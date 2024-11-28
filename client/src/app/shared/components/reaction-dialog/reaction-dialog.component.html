@@ -1,11 +1,15 @@
 @if(reactions) {
     <div class="reaction-item">
         @for (item of reactions; track $index) {
-            <span (click)="onClickReaction(item.reactionType)" class="reaction-emoji"
+            <di (click)="onClickReaction(item.reactionType)" class="reaction-emoji"
                 [tuiHint]="item.label"
+                [ngStyle]="isReacted && reactedReactionType === item.reactionType ? {'transform': 'scale(1.2)'} : {}"
+                [ngClass]="{
+                    'reacted-icon': isReacted && reactedReactionType === item.reactionType
+                  }"
             >
                 {{item.emoji}}
-            </span>
+            </di>
         }
     </div>
 }

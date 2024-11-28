@@ -1,18 +1,25 @@
-<div class="d-flex flex-row gap-3 justify-content-between" style="padding: 0 22px 0 22px; height: 100px; align-items: center;">
-    <div class="d-flex flex-row gap-3">
+<div class="d-flex flex-row gap-3 justify-content-between" style="
+    padding: 0 22px 0 22px; height: 100px; align-items: center;
+    ">
+    <div class="d-flex flex-row gap-3 align-items-center">
         <div class="button-action color-primary-header-item" (click)="onToggleSidebar()">
             <tui-icon 
             icon="@tui.menu"
-            class="primary-color"
+            class=""
             >
             </tui-icon>
         </div>
-        <h2 class="color-primary-header-item">Social Marketplace</h2>
+            <ng-lottie
+                [options]="options" width="100px" height="100px"
+            >
+
+            </ng-lottie>
     </div>
     <div class="search-bar">
         <tui-icon class="p-3 mx-3 primary-color" 
+            (click)="focusSearchInput()" icon="@tui.search"
             
-            (click)="focusSearchInput()" icon="@tui.search">
+            >
         </tui-icon>
         <input #inputSearch class="input-search"  style="border: none; flex: 1;" [placeholder]="placeholder.search" type="search">
     </div>
@@ -23,7 +30,7 @@
                     tuiDropdownHover
                     [tuiDropdown]="userDialog"    
                 >
-                    <tui-icon class="primary-color" 
+                    <tui-icon class="" 
                         
                         icon="@tui.user">
                     </tui-icon>
@@ -34,7 +41,7 @@
                     ></app-user-dialog>
                 </ng-template>
                 <span>
-                    <strong class="f-s-24">{{user.fullName}}</strong>
+                    <strong class="f-s-24" style="color: white">{{user.fullName}}</strong>
                 </span>
             </div>
         }
@@ -51,7 +58,7 @@
                     120
                 </tui-badge-notification>
                 <tui-icon 
-                    class="d-flex align-items-center primary-color" 
+                    class="d-flex align-items-center " 
                     icon="@tui.bell">
                 </tui-icon>
             </tui-badged-content> 
@@ -62,7 +69,7 @@
             (click)="logOut()"
         >
                 <tui-icon 
-                class="primary-color"
+                class=""
                 icon="@tui.log-out"
             >
         </tui-icon>

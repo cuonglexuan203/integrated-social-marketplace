@@ -1,15 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, INJECTOR, ViewChild } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RxFormBuilder, RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
-import { TuiButton, TuiDialogContext, TuiIcon, TuiLink } from '@taiga-ui/core';
+import { TuiButton, TuiDialogContext, TuiDialogService, TuiIcon, TuiLink } from '@taiga-ui/core';
 import { TuiAvatar, TuiFiles, TuiStepper } from '@taiga-ui/kit';
-import { injectContext } from '@taiga-ui/polymorpheus';
+import { injectContext, PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { CreatePostModel } from '../../../core/models/feed/post.model';
 import { Helper } from '../../../core/utils/helper';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import { TuiInputTagModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { FeedService } from '../../../core/services/feed/feed.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { EnlargeImageComponentComponent } from '../enlarge-image-component/enlarge-image-component.component';
+import { MediaModel } from '../../../core/models/media/media.model';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-create-post-dialog',
@@ -37,13 +41,20 @@ export class CreatePostDialogComponent {
 
   form!: FormGroup;
   user: any;
+
   data: any;
   title: string = '';
+
   currentTime: Date = new Date();
-  showFileInput = false;
   timeUpdateInterval: any;
+
+  showFileInput = false;
+
   uploadedFile: File[] = [];
   formData: FormData = new FormData();
+
+  private readonly injector = inject(INJECTOR);
+  private readonly dialogs = inject(TuiDialogService);
 
   public readonly context = injectContext<TuiDialogContext<any>>();
 
@@ -51,7 +62,8 @@ export class CreatePostDialogComponent {
     private formBuilder: RxFormBuilder,
     private cdr: ChangeDetectorRef,
     private alertService: AlertService,
-    private _feedService: FeedService
+    private _feedService: FeedService,
+    private sanitizer: DomSanitizer
   ) {
     this.data = this.context.data;
     this.form = this.formBuilder.formGroup(CreatePostModel, {});
@@ -66,9 +78,29 @@ export class CreatePostDialogComponent {
     if (this.timeUpdateInterval) {
       clearInterval(this.timeUpdateInterval);
     }
+
+    this.data = null;
+    // this.checkDataHasChanged();
   }
 
+  // checkDataHasChanged() {
+  //   if (this.form?.dirty) {
+  //     this.dialogs.open(
+  //       new PolymorpheusComponent(ConfirmationDialogComponent, this.injector), {
+  //       data: {
+  //         title: 'Are you sure you want to leave?',
+  //         description: 'Your changes will be lost.'
+  //       },
+  //       size: 'auto',
+  //       appearance: 'lorem-ipsum',
+  //     }).subscribe((data) => {
+  //       this.context.completeWith(data);
+  //     });
+  //   }
+  // }
+
   ngAfterContentChecked() {
+
     this.cdr.detectChanges();
   }
 
@@ -80,6 +112,14 @@ export class CreatePostDialogComponent {
 
   getCurrentTime() {
     this.currentTime = new Date(Helper.getCurrentTime());
+  }
+
+  handleMedia(media: MediaModel) {
+    media.url = this.handleUrlLargeMedia(media.url);
+  }
+
+  handleUrlLargeMedia(url: string): string {
+    return url.replace('/upload/', '/upload/w_1000/');
   }
 
   startTimeUpdate() {
@@ -95,6 +135,7 @@ export class CreatePostDialogComponent {
   }
 
 
+
   toggleFileInput() {
     this.showFileInput = !this.showFileInput;
   }
@@ -106,7 +147,7 @@ export class CreatePostDialogComponent {
         const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
         const allowedVideoExtensions = ['.mp4', '.mpeg', '.quicktime'];
         if (allowedImageExtensions.includes(files[i].name.substring(files[i].name.lastIndexOf('.'))) || allowedVideoExtensions.includes(files[i].name.substring(files[i].name.lastIndexOf('.')))) {
-          if(files[i].size < 10000000) {
+          if (files[i].size < 10000000) {
             this.uploadedFile.push(files[i]);
           }
           else {
@@ -119,6 +160,8 @@ export class CreatePostDialogComponent {
       }
       this.form.get('files')?.setValue(this.uploadedFile);
     }
+    console.log(this.uploadedFile);
+
   }
 
   removeFile(file: File) {
@@ -126,13 +169,22 @@ export class CreatePostDialogComponent {
   }
 
   setupDataForPost() {
-      this.uploadedFile.forEach(file => {
-        this.formData.append('files', file);
+    this.uploadedFile.forEach(file => {
+      this.formData.append('files', file);
+    });
+    this.formData.append('userId', this.user?.id);
+    this.formData.append('contentText', this.form.get('contentText')?.value);
+
+    let tags = this.form.get('tags')?.value;
+
+    if (tags) {
+      tags.forEach((tag: string) => {
+        this.formData.append('tags', tag);
       });
-      this.formData.append('userId', this.user?.id);
-      this.formData.append('contentText', this.form.get('contentText')?.value);
-      this.formData.append('tags', this.form.get('tags')?.value);
+    }
+
   }
+
 
   onPost() {
     this.setupDataForPost();
@@ -140,10 +192,10 @@ export class CreatePostDialogComponent {
     if (this.form.valid) {
       this._feedService.createPost(this.formData).subscribe({
         next: (res) => {
-          if (res){
+          if (res) {
             this.isLoading = false;
             this.alertService.showSuccess('Create a new post successfully', 'Success');
-            this.context.completeWith(this.form.value);
+            this.context.completeWith(res?.result);
           }
         },
         error: (error) => {
@@ -155,6 +207,58 @@ export class CreatePostDialogComponent {
         }
       })
     }
+  }
+
+  getFileUrl(file: File): SafeUrl | null {
+    if (!file) return null;
+
+    const objectUrl = URL.createObjectURL(file);
+    return this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+  }
+
+  isImage(file: File): boolean {
+    const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    return allowedImageExtensions.includes(fileExtension);
+  }
+
+  isVideo(file: File): boolean {
+    const allowedVideoExtensions = ['.mp4', '.mpeg', '.quicktime'];
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    return allowedVideoExtensions.includes(fileExtension);
+  }
+
+
+  enlargeMedia(file: File) {
+    console.log(file, "before");
+
+    let media: MediaModel = {
+      publicId: '',
+      url: '',
+      contentType: file.type.split('/')[0],
+      thumbnailUrl: '',
+      duration: 0,
+      width: 0,
+      height: 0,
+      fileSize: 0,
+      format: '',
+    }
+    const fileUrl = URL.createObjectURL(file);
+    media.url = fileUrl as any;
+    const type = 'local';
+    this.dialogs
+      .open(
+        new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+        {
+          data: { media, type },
+          size: 'auto',
+          appearance: 'lorem-ipsum',
+
+        }
+      )
+      .subscribe((data) => {
+        console.log(data);
+      });
   }
 
 }

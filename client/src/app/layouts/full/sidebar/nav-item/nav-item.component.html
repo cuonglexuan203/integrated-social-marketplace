@@ -5,11 +5,13 @@
                     [tuiHint]="item.tooltip"
                     tuiHintDirection="top-left"
                     tuiHintPointer
-                    [routerLink]="item.route"
                 >
                     <tui-icon 
                         [icon]="item.iconName"
                         class="primary-color"
+                        [style.height.px]="'18'"
+                        [style.width.px]="'18'"
+                        
                         >
                     </tui-icon>
                 </div>
@@ -20,26 +22,22 @@
 }
 @else {
     @if (item) {
-        <div class="sidenav-container">
-            <!-- @if (item.navCap) {
-                <h4 class="align-items-center d-flex justify-content-center" mat-subheader><strong>{{item.navCap}}</strong></h4>
-            } -->
+        <div class="sidenav-container" (click)="onClickNavItem(item.displayName)">
             <div class="d-flex flex-row nav-item gap-3" style="padding-left: 10px;"
-                [routerLink]="item.route"
-                [routerLinkActive]="['active']"
-                [routerLinkActiveOptions]="{exact: true}"
             >
                 @if (item.iconName) {
                     <div class="button-action">
                         <tui-icon 
                             [icon]="item.iconName"
                             class="primary-color"
+                            [style.height.px]="'18'"
+                            [style.width.px]="'18'"
                             >
                     </tui-icon>
                     </div>
                 }
                 @if (item.displayName) {
-                    <div class="nav-item-name">
+                    <div class="nav-item-name font-14">
                         <span>{{item.displayName}}</span>
                     </div>   
                 }

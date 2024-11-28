@@ -172,3 +172,8 @@ h1 {
   color: #666;
   font-size: 14px;
 }
+
+.submit-button .spinner-border {
+    vertical-align: middle;
+    margin-right: 5px;
+}

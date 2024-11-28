@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { TuiButton, TuiDialogContext, TuiIcon, TuiLink, TuiLoader } from '@taiga-ui/core';
-import { injectContext } from '@taiga-ui/polymorpheus';
+import { Component, ChangeDetectorRef, NgZone, INJECTOR, inject, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild } from '@angular/core';
+import { TuiButton, TuiDialogContext, TuiDialogService, TuiIcon, TuiLink, TuiLoader } from '@taiga-ui/core';
+import { injectContext, PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { FeedPost } from '../../../core/models/feed/feed.model';
 import { CommonModule } from '@angular/common';
 import { TuiAvatar, TuiCarousel, TuiFiles, TuiPagination, TuiSkeleton } from '@taiga-ui/kit';
@@ -15,7 +15,9 @@ import { UserResponseModel } from '../../../core/models/user/user.model';
 import { Helper } from '../../../core/utils/helper';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import { CommentService } from '../../../core/services/comment/comment.service';
-
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { EnlargeImageComponentComponent } from '../enlarge-image-component/enlarge-image-component.component';
+import { Comment } from '../../../core/models/comment/comment.model';
 
 @Component({
   selector: 'app-comment-post-dialog',
@@ -38,47 +40,87 @@ import { CommentService } from '../../../core/services/comment/comment.service';
     TuiLoader,
   ],
   templateUrl: './comment-post-dialog.component.html',
-  styleUrl: './comment-post-dialog.component.css'
+  styleUrls: ['./comment-post-dialog.component.css'],
+
 })
 export class CommentPostDialogComponent {
+  private readonly injector = inject(INJECTOR);
+  private readonly dialogs = inject(TuiDialogService);
+
   data: any;
   post: FeedPost;
-  
+
   currentIndex: number = 0;
   currentImage: MediaModel | null;
   showFileInput: boolean = false;
-  
+  uploadedFile: File | null = null;
+
   form!: FormGroup;
   formData: FormData = new FormData();
-  
+
   user: UserResponseModel;
+  comments: Comment[] = [];
 
   isLoading: boolean = false;
+
+  typeCloudinary = 'cloudinary';
+  typeLocal = 'local';
+
+  pendingComments: Comment[] = [];
   public readonly context = injectContext<TuiDialogContext<any>>();
+
+  @ViewChild('commentContainer') commentContainer!: ElementRef;
 
   constructor(
     private formBuilder: RxFormBuilder,
     private _commentService: CommentService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private sanitizer: DomSanitizer,
+
   ) {
     this.data = this.context.data;
     this.user = Helper.getUserFromLocalStorage();
     this.form = this.formBuilder.formGroup(CommentRequestModel, {});
   }
 
-  sortComments(a: any, b: any) {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  }
-
   ngOnInit() {
     this.post = this.data.post;
-    this.post.comments = this.post.comments.sort(this.sortComments);
-    this.post.comments.map((comment: any) => {
-      console.log(comment.media[0]);
-    });  
-    if (this.post?.media?.length > 0) {
-      this.currentImage = this.post.media[0];
-    }
+    this.getCommentsPost();
+  }
+
+  sortComments(a: any, b: any): number {
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+    return dateB - dateA;
+  }
+
+
+
+  getCommentsPost() {
+    this.isLoading = true;
+    this._commentService.getCommentsByPostId(this.post.id).subscribe({
+      next: (res) => {
+        if (res) {
+          this.comments = res.result;
+          if (this.comments)
+            this.comments = this.comments.sort(this.sortComments);
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    });
+  }
+
+
+  ngAfterViewChecked(): void {
+    // Automatically scroll to bottom whenever the view is checked
+    this.scrollToBottom();
   }
 
 
@@ -88,7 +130,6 @@ export class CommentPostDialogComponent {
       this.currentImage = this.post.media[index];
     }
   }
-
 
   autoResize(event: any): void {
     const textarea = event.target;
@@ -107,10 +148,10 @@ export class CommentPostDialogComponent {
 
   toggleFileInput() {
     this.showFileInput = !this.showFileInput;
-
   }
 
   removeFile() {
+    this.uploadedFile = null;
     this.form.get('media')?.setValue(null);
   }
 
@@ -120,34 +161,38 @@ export class CommentPostDialogComponent {
 
     this.formData.append('postId', this.post.id);
     this.formData.append('userId', this.user.id);
-    this.formData.append('commentText', this.form.get('commentText')?.value);
-
+    if (this.form.get('commentText')?.value) {
+      this.formData.append('commentText', this.form.get('commentText')?.value);
+    }
     const mediaControl = this.form.get('media');
     if (mediaControl?.value) {
       this.formData.append('media', mediaControl.value);
     }
   }
 
-  resetData () {
+  resetData() {
     this.formData = new FormData();
     this.form.reset();
+    this.uploadedFile = null;
     this.showFileInput = false;
   }
 
+  
+
   onSubmit(event: any) {
     event.preventDefault();
-    this.setupDataForComment()
+    this.setupDataForComment();
     this.isLoading = true;
     if (this.form.valid) {
       this._commentService.createComment(this.formData).subscribe({
         next: (res) => {
           if (res) {
-            this.alertService.showSuccess('Comment', 'Comment created successfully');
-            this.resetData();
-            this.post.comments.push(res?.result);
+            this.alertService.showSuccess('Comment created successfully', 'Comment');
+            this.comments.push(res.result);
+
+            this.scrollToBottom();
             this.isLoading = false;
-          }
-          else {
+          } else {
             this.isLoading = false;
           }
         },
@@ -159,10 +204,74 @@ export class CommentPostDialogComponent {
         complete: () => {
           this.resetData();
           this.isLoading = false;
+          this.scrollToBottom();
         }
-      })
+      });
     }
   }
 
+  scrollToBottom(): void {
+    if (this.commentContainer) {
+      const element = this.commentContainer.nativeElement;
+      element.scrollTop = element.scrollHeight;
+    }
+  }
 
+  onFileUpload(event: Event): void {
+    const files = (event.target as HTMLInputElement).files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+      const allowedVideoExtensions = ['.mp4', '.avi', '.flv', '.mov', '.wmv'];
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+      if (allowedImageExtensions.includes(fileExtension) || allowedVideoExtensions.includes(fileExtension)) {
+        if (file.size < 10000000) {
+          this.uploadedFile = file;
+          this.form.get('media')?.setValue(file);
+        } else {
+          this.alertService.showError('File size is too large', 'Error');
+        }
+      } else {
+        this.alertService.showError('Only image and video files are allowed', 'Error');
+      }
+    }
+  }
+
+  isImage(file: File): boolean {
+    const allowedImageExtensions = ['.png', '.jpg', '.jpeg', '.gif'];
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    return allowedImageExtensions.includes(fileExtension);
+  }
+
+  isVideo(file: File): boolean {
+    const allowedVideoExtensions = ['.mp4', '.avi', '.flv', '.mov', '.wmv'];
+    const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+    return allowedVideoExtensions.includes(fileExtension);
+  }
+
+  getFileUrl(file: File): SafeUrl | null {
+    if (!file) return null;
+
+    const objectUrl = URL.createObjectURL(file);
+    return this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+  }
+
+  enlargeMedia(media: MediaModel, type: string) {
+    this.dialogs
+      .open(
+        new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+        {
+          data: { media, type },
+          size: 'auto',
+          appearance: 'lorem-ipsum',
+        }
+      )
+      .subscribe((data) => {
+        console.log(data);
+      });
+  }
+
+  handleUrlLargeMedia(url: string): string {
+    return url.replace('/upload/', '/upload/w_800/');
+  }
 }

@@ -15,7 +15,7 @@ export const navItems: NavItem[] = [
         displayName: 'User Profile',
         iconName: '@tui.contact',
         bgColor: 'white',
-        route: 'user/user-profile',
+        route: 'user/user-profile/:userName',
         tooltip: 'User Profile'
     },
     {
@@ -26,25 +26,10 @@ export const navItems: NavItem[] = [
         tooltip: 'Chat'
     },
     {
-        displayName: 'Create Post',
-        iconName: '@tui.plus',
-        bgColor: 'white',
-        route: '/create-post',
-        tooltip: 'Create Post'
-    },
-    {
         displayName: 'Saved Posts',
         iconName: '@tui.file-heart',
         bgColor: 'white',
         route: '/saved-posts',
         tooltip: 'Saved Posts'
     },
-    {
-        displayName: 'Cart',
-        iconName: '@tui.shopping-cart',
-        bgColor: 'white',
-        route: '/cart',
-        tooltip: 'Cart'
-    }
-
 ]

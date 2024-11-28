@@ -17,6 +17,14 @@ export class Helper {
         }
     }
 
+    static setUserToLocalStorage(user: any) {
+        try {
+            window.localStorage.setItem('user', JSON.stringify(user));
+        } catch (ex) {
+            console.error(ex);
+        }
+    }
+
     static getCurrentTime() {
         return new Date().getTime();
     }

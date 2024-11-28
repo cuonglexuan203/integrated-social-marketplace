@@ -15,9 +15,12 @@ export const authOptions = {
             failure: 'login',
         }
     },
-
     logout: {
         endpoint: '/logout',
+        method: 'post',
+    },
+    register: {
+        endpoint: '/register',
         method: 'post',
     },
     token: {

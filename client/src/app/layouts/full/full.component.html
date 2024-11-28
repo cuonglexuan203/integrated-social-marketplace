@@ -1,15 +1,24 @@
-<div class="position-relative d-flex flex-column" style="min-height: 100vh; padding: 24px;"
+<div *ngIf="!showContent" class="loading-container">
+  <ng-lottie [options]="options"></ng-lottie>
+  <span>
+    The system is loading, please wait...
+  </span>
+</div>
+
+<div *ngIf="showContent" class="position-relative d-flex flex-column" style="min-height: 100vh; padding: 24px 0px; background-color: #f0f0f0;;"
 >
   <!-- Fixed header -->
     <app-header class="header position-fixed w-100" 
-                style="top: 0; left: 0; z-index: 1001;" 
+                style="top: 0; left: 0; z-index: 1001; background-color: #71AAEB;" 
+                
                 (toggleSidebar)="handleToggle()">
     </app-header>
 
-  <div class="d-flex flex-row" style="padding-top: 60px; min-height: calc(100vh - 84px);">
+  <div class="d-flex flex-row" style="padding-top: 60px; min-height: calc(100vh - 84px);
+  ">
     <!-- Fixed sidebar -->
     <div class="sidebar position-fixed mt-4" 
-         style="top: 84px; height: calc(100vh - 84px); border-right: 1px solid #e8e1e1; z-index: 1000; overflow-y: auto;"
+         style="background-color: white; top: 84px; height: calc(100vh - 84px); border-right: 1px solid #e8e1e1; z-index: 1000; overflow-y: auto;"
          [ngStyle]="{'width': isToggled ? 'calc(15%)' : 'calc(5%)'}">
       <app-sidebar></app-sidebar>
       <div class="sidebar-content">
@@ -28,5 +37,13 @@
         <router-outlet></router-outlet>
       </div>
     </div>
+  </div>
+
+  <div class="ai-assistant-icon">
+    <ng-lottie
+      [options]="options2"
+    >
+
+    </ng-lottie>
   </div>
 </div>  

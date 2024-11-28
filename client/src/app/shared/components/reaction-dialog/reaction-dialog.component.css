@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 15px 15px;
+    padding: 20px 15px;
     cursor: pointer;
     transition: transform 0.2s;
     gap: 10px;
@@ -18,3 +18,20 @@
     transition: transform 0.3s ease-in-out; /* Add transition for smooth scaling */
 
 }
+
+.reacted-icon {
+    position: relative;
+  }
+  
+  .reacted-icon::after {
+    content: '';
+    position: absolute;
+    bottom: -13px; /* Adjust to position the dot below the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px; /* Adjust size */
+    height: 6px; /* Adjust size */
+    background-color: blue; /* The color of the dot */
+    border-radius: 50%; /* Make it a circle */
+    display: block; /* Ensure it's visible */
+  }

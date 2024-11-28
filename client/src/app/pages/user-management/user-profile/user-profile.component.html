@@ -1,1 +1,290 @@
-<p>user-profile works!</p>
+@if (user) {
+    <div class="w-100 user-profile-container"
+    >
+        <!-- Cover Photo Section -->
+        <div class="cover-photo">
+            
+        </div>
+    
+        <!-- Profile Info Section -->
+        <div class="header-profile"
+        >
+            <div class="profile-main-info"
+
+            >
+                <!-- Profile Picture -->
+                <div class="profile-picture-container"
+                >
+                    <tui-avatar
+                        [src]="isCheckingUserLoggedIn ? userLoggedIn.profilePictureUrl : user.profilePictureUrl"
+                        [size]="'xxl'"
+                        class="profile-picture"
+                        [tuiSkeleton]="isLoading"
+
+                    >
+                    </tui-avatar>
+                    <div class="online-indicator"></div>
+                </div>
+    
+                <!-- Name and Actions -->
+                <div class="profile-actions">
+                    <div class="profile-name-section"
+                    >
+                        <h2 class="profile-name"
+                            [tuiSkeleton]="isLoading"
+
+                        >{{isCheckingUserLoggedIn ? userLoggedIn.fullName : user.fullName}}</h2>
+                        <button *ngIf="isCheckingUserLoggedIn" class="edit-profile-btn"
+                            (click)="editUserProfile()"
+                            [tuiSkeleton]="isLoading"
+                        >
+                            Edit profile
+                        </button>
+
+                        <button *ngIf="!isCheckingUserLoggedIn && !user?.isFollowing" class="follow-button"
+                            [tuiSkeleton]="isLoading"
+                            >
+                            <tui-icon class="font-14" icon="@tui.user-plus"></tui-icon>
+                                Follow
+                        </button>
+
+                        <button *ngIf="!isCheckingUserLoggedIn && user?.isFollowing" class="follow-button"
+                            [tuiSkeleton]="isLoading"
+                            >
+                            <tui-icon class="font-14" icon="@tui.user-check"></tui-icon>
+                                Following
+                        </button>
+
+
+                    </div>
+                    <div *ngIf="isCheckingUserLoggedIn" class="action-buttons">
+                        <button class="button-more"
+                            [tuiSkeleton]="isLoading"
+                        >
+                            <span>More</span>
+                            <tui-icon icon="@tui.chevron-down"></tui-icon>
+                        </button>
+                    </div>
+                    <div *ngIf="!isCheckingUserLoggedIn" class="action-buttons">
+                        <button class="button-more"
+                            [tuiSkeleton]="isLoading"
+                        >
+                            <span>Chat</span>
+                            <tui-icon icon="@tui.message-square-text"></tui-icon>
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    
+        <!-- Content Section -->
+        <div class="content-profile">
+            <div class="content-layout">
+                <div *ngIf="isCheckingUserLoggedIn" class="w-60 d-flex flex-column">
+                    <div class="w-70">
+                        <button class="create-button"
+                            [tuiSkeleton]="isLoading"
+                            (click)="createNewPost()"
+                        >
+                          <tui-icon icon="@tui.calendar-plus"></tui-icon>
+                          <span *ngIf="user.fullName">{{user.fullName}}, Do you want to create a new post?</span>
+                        </button>
+                    </div>
+                      
+                      <div class="filter-section w-80 mt-3"
+                      >
+                        <button (click)="getPosts()"
+                            [tuiSkeleton]="isLoading"
+                            [ngStyle]="{'background-color': getStateFilter() === 'All' ? '#71AAEB' : 'gainsboro',
+                                        'color': getStateFilter() === 'All' ? 'white' : 'black'
+                            }"
+                        >
+                            <tui-icon icon="@tui.square-library"></tui-icon>
+                            <span>All posts</span>
+                          </button>
+                        <button (click)="filterSavedPosts()"
+                            [tuiSkeleton]="isLoading"
+                            [ngStyle]="{'background-color': getStateFilter() === 'SavedPosts' ? '#71AAEB' : 'gainsboro',
+                            'color': getStateFilter() === 'SavedPosts' ? 'white' : 'black'
+                            }"
+                        >
+                          <tui-icon icon="@tui.bookmark"></tui-icon>
+                          <span>Saved Posts</span>
+                        </button>
+                        <button (click)="filterCommentedPosts()"
+                            [tuiSkeleton]="isLoading"
+                            [ngStyle]="{'background-color': getStateFilter() === 'CommentedPosts' ? '#71AAEB' : 'gainsboro',
+                            'color': getStateFilter() === 'CommentedPosts' ? 'white' : 'black'
+                             }"
+                        >
+                          <tui-icon icon="@tui.message-square"></tui-icon>
+                          <span>Commented Posts</span>
+                        </button>
+                        <button (click)="filterReactedPost()"
+                            [tuiSkeleton]="isLoading"
+                            [ngStyle]="{'background-color': getStateFilter() === 'ReactedPosts' ? '#71AAEB' : 'gainsboro',
+                            'color': getStateFilter() === 'ReactedPosts' ? 'white' : 'black'
+                             }"
+                        >
+                          <tui-icon icon="@tui.heart"></tui-icon>
+                          <span>Reacted Posts</span>
+                        </button>
+                      </div>
+                </div>
+                
+                <div class="follower w-30"
+                    [tuiSkeleton]="isLoading"
+                    
+                >
+                    <div class="follower-header">
+                        <span class="following-text">Following:</span>
+                        <span class="following-count">1</span>
+                    </div>
+                    <div class="follower-item">
+                        <tui-avatar [size]="'m'">
+                            <tui-icon icon="@tui.user"></tui-icon>
+                        </tui-avatar>
+                        <span class="follower-name">Quang Trieu</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        @if(posts.length) {
+            @for (post of posts; track $index) {
+                <div class="post-container">
+                    <app-post-item [post]="post"></app-post-item>
+                </div>
+            }
+            <div *ngIf="loadingPosts && !isAllPostsLoaded" class="d-flex justify-content-center align-items-center loading-container">
+                <div class="spinner"></div>
+                <span>Loading...</span>
+            </div>
+            <div *ngIf="isAllPostsLoaded">
+                <div class="no-post-container">
+                    <div class="no-post-icon-wrapper">
+                        <tui-icon 
+                            icon="@tui.frown" 
+                            class="text-blue-500"
+                            style="width: 64px; height: 64px;"
+                        ></tui-icon>
+                    </div>
+                    <h3 class="no-post-title">
+                        No More Posts
+                    </h3>
+                    <p class="no-post-description">
+                        You have reached the end of the posts. Check back later for more posts!
+                    </p>
+                    <span class="primary-color" style="cursor: pointer;" (click)="backToTop()">
+                        <tui-icon icon="@tui.arrow-up"></tui-icon>
+                        <span>Back to top</span>
+                    </span>
+                </div>
+            </div>
+        }
+        @else {
+            @if (isCheckingUserLoggedIn) {
+                @if (getStateFilter() === 'All') {
+                    <div class="no-post-container">
+                        <div class="no-post-icon-wrapper">
+                            <tui-icon 
+                                icon="@tui.frown" 
+                                class="text-blue-500"
+                                style="width: 64px; height: 64px;"
+                            ></tui-icon>
+                        </div>
+                        <h3 class="no-post-title">
+                            No Posts Yet
+                        </h3>
+                        <p class="no-post-description">
+                            You hasn't got any posts. Create your first post!
+                        </p>
+                        <button 
+                            class="create-post-btn"
+                            (click)="createNewPost()"
+                            >
+                            Create First Post
+                        </button>
+                    </div>
+                }
+
+                @if (getStateFilter() === 'SavedPosts') {
+                    <div class="no-post-container">
+                        <div class="no-post-icon-wrapper">
+                            <tui-icon 
+                                icon="@tui.bookmark" 
+                                class="text-blue-500"
+                                style="width: 64px; height: 64px;"
+                            ></tui-icon>
+                        </div>
+                        <h3 class="no-post-title">
+                            No Saved Posts Yet
+                        </h3>
+                        <p class="no-post-description">
+                            You haven't saved any posts yet. Save your favorite posts to read them later!
+                        </p>
+                    </div>
+                }
+
+                @if (getStateFilter() === 'CommentedPosts') {
+                    <div class="no-post-container">
+                        <div class="no-post-icon-wrapper">
+                            <tui-icon 
+                                icon="@tui.message-square" 
+                                class="text-blue-500"
+                                style="width: 64px; height: 64px;"
+                            ></tui-icon>
+                        </div>
+                        <h3 class="no-post-title">
+                            No Commented Posts Yet
+                        </h3>
+                        <p class="no-post-description">
+                            You haven't commented on any posts yet. Start commenting on posts to share your thoughts!
+                        </p>
+                    </div>
+                }
+
+                @if (getStateFilter() === 'ReactedPosts') {
+                    <div class="no-post-container">
+                        <div class="no-post-icon-wrapper">
+                            <tui-icon 
+                                icon="@tui.heart" 
+                                class="text-blue-500"
+                                style="width: 64px; height: 64px;"
+                            ></tui-icon>
+                        </div>
+                        <h3 class="no-post-title">
+                            No Reacted Posts Yet
+                        </h3>
+                        <p class="no-post-description">
+                            You haven't reacted to any posts yet. React to posts to show your feelings!
+                        </p>
+                    </div>
+                }
+            }
+
+            @else {
+                <div class="no-post-container">
+                    <div class="no-post-icon-wrapper">
+                        <tui-icon 
+                            icon="@tui.frown" 
+                            class="text-blue-500"
+                            style="width: 64px; height: 64px;"
+                        ></tui-icon>
+                    </div>
+                    <h3 class="no-post-title">
+                        No Posts Yet
+                    </h3>
+                    <p class="no-post-description">
+                        This user hasn't got any posts. Check back later or encourage them to create their first post!
+                    </p>
+                </div>
+            }
+            
+        }
+        
+    </div>
+}

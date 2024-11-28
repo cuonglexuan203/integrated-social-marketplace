@@ -44,6 +44,12 @@
             >
             <i>tags</i>
         </tui-input-tag>
+        <div *ngFor="let file of uploadedFile; let i = index" class="uploaded-file-container">
+            <img *ngIf="isImage(file)"  (click)="enlargeMedia(file)" [src]="getFileUrl(file)" width="200" height="200" alt="Uploaded Image">
+            <video *ngIf="isVideo(file)" (click)="enlargeMedia(file)" [src]="getFileUrl(file)" width="200" height="200" controls></video>
+            <button type="button" (click)="removeFile(file)" class="remove-file-button">X</button>
+        </div>
+
         <label tuiInputFiles *ngIf="showFileInput" class="mt-3 p-3">
             <input
                 tuiInputFiles
@@ -79,14 +85,8 @@
                 </ng-template>
             </ng-template>
         </label>
-        @for (file of uploadedFile; track $index) {
-            <tui-files class="mt-2">
-                <tui-file
-                    [file]="file"
-                    (remove)="removeFile(file)"
-                />
-            </tui-files>
-        }
+
+        
         
     </form>
     

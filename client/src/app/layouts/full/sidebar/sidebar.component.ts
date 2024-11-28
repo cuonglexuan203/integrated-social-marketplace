@@ -13,6 +13,7 @@ import { BrandingComponent } from './branding.component';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
+
   constructor() { }
 
 

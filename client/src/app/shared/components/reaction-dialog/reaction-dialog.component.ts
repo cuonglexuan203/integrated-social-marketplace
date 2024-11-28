@@ -8,6 +8,7 @@ import { FeedService } from '../../../core/services/feed/feed.service';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import { ReactionRequestModel } from '../../../core/models/reaction/reaction.model';
 import { reactions } from '../../../core/constances/reaction';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-reaction-dialog',
@@ -15,12 +16,15 @@ import { reactions } from '../../../core/constances/reaction';
   imports: [
     TuiHint,
     TuiTooltip,
+    CommonModule
   ],
   templateUrl: './reaction-dialog.component.html',
   styleUrl: './reaction-dialog.component.css'
 })
 export class ReactionDialogComponent {
   @Input() postItem: FeedPost;
+  @Input() reactedReactionType: any;
+  @Input() isReacted: boolean;
   @Output() onReaction: EventEmitter<any> = new EventEmitter<any>();
   user: UserResponseModel;
   reactions = reactions;
@@ -31,8 +35,10 @@ export class ReactionDialogComponent {
 
   }
 
-  onClickReaction(reactionType: string) {
-    if (reactionType) {
+  onClickReaction(reactionType: number) {
+    console.log(reactionType);
+    
+    if (reactionType !== null && reactionType !== undefined) {
       this.onReaction.emit(reactionType);
     }
   }

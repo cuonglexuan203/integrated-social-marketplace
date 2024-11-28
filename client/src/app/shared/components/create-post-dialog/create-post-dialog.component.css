@@ -45,3 +45,22 @@
     vertical-align: middle;
     margin-right: 5px;
 }
+
+.uploaded-file-container {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+  }
+  
+  .remove-file-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }

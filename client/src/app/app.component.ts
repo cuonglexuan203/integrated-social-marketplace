@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ReactiveFormConfig } from '@rxweb/reactive-form-validators';
+import { compare, ReactiveFormConfig } from '@rxweb/reactive-form-validators';
 import { FormValidationMessage } from './core/enums/form-validation/form-validation.enums';
 import { TuiRoot } from '@taiga-ui/core';
 

@@ -13,8 +13,8 @@ import { UserService } from '../../../core/services/user/user.service';
 import { UserResponseModel } from '../../../core/models/user/user.model';
 import { Helper } from '../../../core/utils/helper';
 import { Router } from '@angular/router';
+import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 
-import {WA_LOCAL_STORAGE, WA_WINDOW} from '@ng-web-apis/common';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -30,6 +30,7 @@ import {WA_LOCAL_STORAGE, WA_WINDOW} from '@ng-web-apis/common';
     TuiDropdown,
     TuiDataList,
     UserDialogComponent,
+    LottieComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
@@ -37,11 +38,18 @@ import {WA_LOCAL_STORAGE, WA_WINDOW} from '@ng-web-apis/common';
 export class HeaderComponent {
   user: UserResponseModel;
   userId: string;
+
   @ViewChild('inputSearch') inputSearch: ElementRef;
   @Output() toggleSidebar = new EventEmitter<void>();
+
   placeholder = Placeholder;
   tooltipHeaderAction = TooltipHeaderAction;
 
+
+  options: AnimationOptions = {
+    path: 'assets/animations/logo.json',
+    loop: true,
+  };
 
   
   constructor(

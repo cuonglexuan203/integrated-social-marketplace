@@ -113,3 +113,23 @@
     gap: 5px;
     flex-direction: column;
 }
+
+
+tui-dialog[data-appearance='lorem-ipsum'] .t-content {
+    padding: 0px !important;
+}
+
+tui-dialog[data-appearance='comment-dialog'] .t-content {
+    padding: 0px !important;
+}
+
+.tags {
+    display: flex;
+    gap: 5px;
+    width: fit-content;
+    background-color: #f1f1f1 !important;
+    flex-wrap: wrap;
+    color: #71AAEB !important;
+    font-weight: bold !important;
+  }
+  

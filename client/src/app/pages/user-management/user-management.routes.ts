@@ -37,7 +37,7 @@ export const UserManagementRoutes: Routes = [
         ]
     },
     {
-        path: 'user-profile',
+        path: 'user-profile/:userName',
         component: UserProfileComponent,
     }
 ]

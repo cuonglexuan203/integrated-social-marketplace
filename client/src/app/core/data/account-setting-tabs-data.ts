@@ -9,8 +9,8 @@ export const AccountSettingTabsData: TabsModel[] = [
         routerLink: '/user/account-settings/security',
         caption: 'Security',
     },
-    {
-        routerLink: '/user/account-settings/social-media',
-        caption: 'Social Media',
-    }
+    // {
+    //     routerLink: '/user/account-settings/social-media',
+    //     caption: 'Social Media',
+    // }
 ];
