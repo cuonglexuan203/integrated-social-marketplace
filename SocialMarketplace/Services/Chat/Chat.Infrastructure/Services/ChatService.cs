@@ -1,4 +1,5 @@
-﻿using Chat.Application.Interfaces.Services;
+﻿using Chat.Application.Dtos;
+using Chat.Application.Interfaces.Services;
 using Chat.Core.Common.Constants;
 using Chat.Core.Entities;
 using Chat.Core.Specs;
@@ -64,6 +65,17 @@ namespace Chat.Infrastructure.Services
                 .Find(room => room.ParticipantIds.Contains(userId))
                 .ToListAsync(cancellationToken);
             return rooms;
+        }
+
+        public async Task<List<Message>> SearchMessagesAsync(string roomId, string keyword, CancellationToken cancellationToken = default)
+        {
+            var filter = Builders<Message>.Filter.And(
+            Builders<Message>.Filter.Eq(msg => msg.RoomId, roomId),
+            Builders<Message>.Filter.Text(keyword)
+            );
+
+            var messages = await _messages.Find(filter).ToListAsync();
+            return messages;
         }
     }
 }

@@ -25,5 +25,29 @@ namespace Chat.Infrastructure.Persistence.DbContext
 
             #endregion
         }
+
+        public async Task InitializeAsync()
+        {
+            await CreateMessageTextIndexAsync();
+        }
+
+        public async Task CreateMessageTextIndexAsync()
+        {
+            var indexes = await Messages.Indexes.ListAsync();
+            var existingIndexes = await indexes.ToListAsync();
+
+            bool indexExists = existingIndexes.Any(index =>
+            {
+                var definition = index["key"].AsBsonDocument;
+                return definition.Contains(nameof(Message.ContentText)) && definition[nameof(Message.ContentText)].ToString() == "text";
+            });
+
+            if (!indexExists)
+            {
+                var indexKeys = Builders<Message>.IndexKeys.Text(m => m.ContentText);
+                var indexModel = new CreateIndexModel<Message>(indexKeys);
+                await Messages.Indexes.CreateOneAsync(indexModel);
+            }
+        }
     }
 }

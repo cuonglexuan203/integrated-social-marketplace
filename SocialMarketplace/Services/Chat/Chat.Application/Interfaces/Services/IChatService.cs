@@ -1,4 +1,5 @@
-﻿using Chat.Core.Entities;
+﻿using Chat.Application.Dtos;
+using Chat.Core.Entities;
 using Chat.Core.Specs;
 
 namespace Chat.Application.Interfaces.Services
@@ -9,5 +10,6 @@ namespace Chat.Application.Interfaces.Services
         Task<Pagination<Message>> GetMessageHistoryAsync(string roomId, MessageSpecParams messageParams, CancellationToken cancellationToken = default);
         Task<Message> SaveMessageAsync(Message message, CancellationToken cancellationToken = default);
         Task<List<ChatRoom>> GetUserRoomsAsync(string userId, CancellationToken cancellationToken = default);
+        Task<List<Message>> SearchMessagesAsync(string roomId, string keyword, CancellationToken cancellationToken = default);
     }
 }
