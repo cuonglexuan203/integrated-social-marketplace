@@ -71,6 +71,8 @@ services:
       - DatabaseSettings__DatabaseName=ChatDb
       - DatabaseSettings__ChatRoomCollection=ChatRooms
       - DatabaseSettings__MessageCollection=Messages
+      - Microservices__Identity__BaseUrl=http://identity.api/api/v1/
+      - Microservices__Feed__BaseUrl=http://feed.api/api/v1/
     depends_on:
       - chatdb
     ports:

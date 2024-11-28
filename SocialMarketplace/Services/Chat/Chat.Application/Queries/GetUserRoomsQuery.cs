@@ -22,16 +22,19 @@ namespace Chat.Application.Queries
     {
         private readonly ILogger<GetUserRoomsHandler> _logger;
         private readonly IChatService _chatService;
+        private readonly IChatRoomMappingService _chatRoomMappingService;
 
-        public GetUserRoomsHandler(ILogger<GetUserRoomsHandler> logger, IChatService chatService)
+        public GetUserRoomsHandler(ILogger<GetUserRoomsHandler> logger, IChatService chatService, IChatRoomMappingService chatRoomMappingService)
         {
             _logger = logger;
             _chatService = chatService;
+            _chatRoomMappingService = chatRoomMappingService;
         }
         public async Task<IList<ChatRoomDto>> Handle(GetUserRoomsQuery request, CancellationToken cancellationToken)
         {
             var rooms = await _chatService.GetUserRoomsAsync(request.UserId, cancellationToken);
-            var roomDtos = ChatMapper.Mapper.Map<List<ChatRoomDto>>(rooms);
+            var roomDtos = await _chatRoomMappingService.MapToDtosAsync(rooms);
+
             foreach (var roomDto in roomDtos)
             {
                 var messagePage = await _chatService.GetMessageHistoryAsync(roomDto.Id, new Core.Specs.MessageSpecParams
