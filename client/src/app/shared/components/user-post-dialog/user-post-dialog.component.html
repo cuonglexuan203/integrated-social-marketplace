@@ -34,7 +34,7 @@
                     </div>
                     <div *ngIf="userLoggedIn.dateOfBirth" class="user-detail">
                       <span class="detail-label">Date of Birth:</span>
-                      <span class="detail-value">{{ userLoggedIn.dateOfBirth }}</span>
+                      <span class="detail-value">{{ userLoggedIn.dateOfBirth | date }}</span>
                     </div>
                     <div *ngIf="userLoggedIn.email" class="user-detail">
                       <span class="detail-label">Email:</span>

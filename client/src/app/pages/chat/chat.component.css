@@ -2,4 +2,87 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: white;
+    height: 85vh;
+}
+
+
+@media screen and (max-width: 1024px) {
+    .w-30 {
+        width: 40%;
+    }
+    
+    .w-70 {
+        width: 60%;
+    }
+
+    .chatbox-container {
+        padding: 8px;
+    }
+
+    .sidebar-chat-container {
+        padding: 8px;
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+    .chat-container {
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .w-30, .w-70 {
+        width: 100%;
+    }
+
+    .sidebar-chat-container {
+        height: auto;
+        max-height: 50vh;
+        border-right: none;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .chatbox-container {
+        height: 50vh;
+    }
+
+    .chatbox-footer {
+        padding: 8px;
+    }
+
+    .sidebar-chat-header,
+    .chatbox-header {
+        padding: 8px;
+    }
+
+    .label-container {
+        padding: 8px;
+    }
+
+    tui-avatar[size="l"] {
+        --tui-avatar-size: 40px;
+    }
+
+    .search-conversation {
+        margin: 8px 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .chatbox-header .d-flex,
+    .sidebar-chat-header .d-flex {
+        gap: 8px;
+    }
+
+    .chatbox-footer {
+        gap: 8px;
+    }
+
+    tui-icon {
+        --tui-icon-size: 16px;
+    }
+
+    .sidebar-chat-content {
+        max-height: 40vh;
+    }
 }

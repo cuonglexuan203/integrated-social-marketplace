@@ -4,13 +4,12 @@
     gap: 20px;
 }
 
-/* Cover Photo Styles */
 .cover-photo {
     height: 200px;
     background-color: gainsboro;
     border-radius: 8px 8px 0 0;
     position: relative;
-    margin-bottom: -50px; /* Overlap with profile section */
+    margin-bottom: -50px;
 }
 
 .change-cover-btn {
@@ -28,7 +27,6 @@
     cursor: pointer;
 }
 
-/* Profile Header Styles */
 .header-profile {
     background: white;
     border: 1px solid #e8e1e1;
@@ -42,12 +40,12 @@
 .profile-main-info {
     display: flex;
     gap: 20px;
-    padding-top: 30px; /* Space for overlapping profile picture */
+    padding-top: 30px;
 }
 
 .profile-picture-container {
     position: relative;
-    margin-top: -100px; /* Pull up the profile picture */
+    margin-top: -100px; 
 }
 
 .profile-picture {
@@ -108,6 +106,7 @@
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s;
+    box-shadow: 0 4px 12px rgba(113, 170, 235, 0.2);
 }
 
 .follow-button:hover {
@@ -120,7 +119,6 @@
     cursor: pointer;
 }
 
-/* Button Styles */
 .button-more {
     display: flex;
     align-items: center;
@@ -138,7 +136,6 @@
     background-color: #e4e6eb;
 }
 
-/* Content Section Styles */
 .content-layout {
     display: flex;
     gap: 20px;
@@ -156,6 +153,7 @@
     border-radius: 10px;
     padding: 16px;
     background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .follower-header {
@@ -230,50 +228,88 @@
     gap: 10px;
 
 }
-
-.new-post,
 .filter-section {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.new-post button,
-.filter-section button {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #71AAEB;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.new-post button:hover,
-.filter-section button:hover {
-  background-color: #0056b3;
-}
-
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 8px;
+    border-radius: 12px;
+  }
+  
+  .filter-section button {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .filter-section button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filter-section button[style*="background-color: #71AAEB"] {
+    box-shadow: 0 4px 12px rgba(113, 170, 235, 0.2);
+  }
+  
+  .filter-section button[style*="background-color: gainsboro"]:hover {
+    background-color: #e0e0e0 !important;
+  }
+  
+  .filter-section tui-icon {
+    font-size: 18px;
+  }
+  
+  @media (max-width: 768px) {
+    .w-60, .w-70, .w-80 {
+      width: 95%;
+    }
+  
+    .filter-section {
+      flex-direction: column;
+    }
+  
+    .filter-section button {
+      width: 100%;
+    }
+  }
 .post-list {
   margin-top: 20px;
 }
 
 .create-button {
+    width: 100%;
+    padding: 16px 24px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 10px 20px;
-    border: none;
-    background-color: gainsboro;
-    border-radius: 5px;
+    gap: 12px;
     cursor: pointer;
-    transition: background-color 0.3s;
-    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    color: #495057;
+  }
+  
+
+.create-button:hover {
+  background-color: #f1f3f5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+.create-button tui-icon {
+    color: #71AAEB;
+}
 
 .no-post-container {
     display: flex;
@@ -287,6 +323,7 @@
     text-align: center;
     gap: 16px;
     border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .no-post-icon-wrapper {
@@ -367,4 +404,158 @@
     display: flex;
     inline-size: fit-content;
     margin: 1rem 0;
-} 
+}
+
+
+
+
+
+@media screen and (max-width: 1200px) {
+  .content-layout {
+    flex-direction: column;
+  }
+
+  .w-30, .w-60, .w-70, .w-80 {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .post-container {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .follower {
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .user-profile-container {
+    gap: 15px;
+  }
+
+  .cover-photo {
+    height: 150px;
+    margin-bottom: -40px;
+  }
+
+  .profile-main-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .profile-picture-container {
+    margin-top: -60px;
+  }
+
+  .profile-picture {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .profile-name-section {
+    align-items: center;
+  }
+
+  .profile-name {
+    font-size: 20px;
+  }
+
+  .action-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .header-profile {
+    padding: 15px;
+  }
+
+  .filter-section {
+    padding: 5px;
+    gap: 8px;
+  }
+
+  .filter-section button {
+    min-width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .create-button {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .no-post-container {
+    padding: 20px;
+    min-height: 250px;
+  }
+
+  .no-post-icon-wrapper {
+    padding: 12px;
+  }
+
+  .no-post-title {
+    font-size: 18px;
+  }
+
+  .no-post-description {
+    font-size: 14px;
+  }
+
+  .follower-items-container {
+    gap: 12px;
+  }
+
+  .follower-item {
+    padding: 8px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .cover-photo {
+    height: 120px;
+  }
+
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-name {
+    font-size: 18px;
+  }
+
+  .follow-button, 
+  .button-more {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .follower-header {
+    font-size: 14px;
+  }
+
+  .create-post-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .spinner {
+    width: 30px;
+    height: 30px;
+  }
+
+  .loading-container span {
+    font-size: 1em;
+  }
+}

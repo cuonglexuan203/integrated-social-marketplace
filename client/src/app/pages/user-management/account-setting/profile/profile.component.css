@@ -1,34 +1,152 @@
-.header-profile {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;    
+/* profile.component.css */
+
+.profile-form {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
+.header-profile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.user-profile-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
 
 .avatar-container {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .avatar-edit-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #333;
-    color: #fff;
-    border-radius: 50%;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .avatar-container:hover .avatar-edit-icon {
-    opacity: 0.5;
+  position: relative;
+  transition: transform 0.3s ease;
+}
 
+.avatar-container:hover {
+  transform: scale(1.05);
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border: 4px solid #f0f0f0;
+  border-radius: 50%;
+}
+
+.avatar-edit-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.avatar-container:hover .avatar-edit-button {
+  opacity: 1;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.user-email {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #7f8c8d;
+}
+
+.save-profile-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #71AAEB;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-profile-button:hover {
+  background-color: #0056b3;
+}
+
+.divider {
+  height: 1px;
+  background-color: #ecf0f1;
+  margin: 2rem 0;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.form-field {
+  flex: 1;
+  min-width: 0;
+}
+
+:host ::ng-deep {
+  .tui-input {
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
   }
+
+  .tui-input:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .tui-input__wrapper {
+    background-color: #f8f9fa;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .header-profile {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .user-profile-section {
+    flex-direction: column;
+  }
+}

@@ -1,17 +1,29 @@
+/* sidebar-chat.component.css */
+
 .sidebar-chat-container {
     border-right: 1px solid #e5e5e5;
     height: 85vh;
-    padding: 10px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .sidebar-chat-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 8px 0;
+}
+
+.sidebar-chat-header h4 {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.search-conversation {
+    width: 100%;
+    margin: 8px 0;
 }
 
 .sidebar-chat-content {
@@ -20,10 +32,129 @@
     cursor: pointer;
     flex-grow: 1;
     overflow-y: auto;
+    scrollbar-width: thin;
 }
 
-.sidebar-chat-footer {
-    margin-top: auto;
-   
+.label-container {
+    padding: 8px;
+    transition: background-color 0.2s ease;
 }
 
+/* .label-container:hover {
+    background-color: #f5f5f5;
+} */
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px) {
+    .sidebar-chat-content {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .label-container {
+        padding: 6px;
+    }
+
+    .tui-avatar-user {
+        font-size: 1rem;
+    }
+
+    [tuiTitle] {
+        font-size: 14px;
+    }
+
+    [tuiSubTitle] {
+        font-size: 12px;
+        color: #666;
+    }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+    .sidebar-chat-content {
+        max-height: 250px;
+    }
+
+    .label-container {
+        padding: 4px;
+    }
+
+    tui-avatar[size="l"] {
+        --tui-avatar-size: 32px;
+    }
+}
+/* Tablet */
+@media screen and (max-width: 1024px) {
+    .sidebar-chat-container {
+        padding: 12px;
+    }
+
+    .label-container {
+        padding: 6px;
+    }
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+    .sidebar-chat-container {
+        height: auto;
+        max-height: 100vh;
+        border-right: none;
+        padding: 8px;
+    }
+
+    .sidebar-chat-header h4 {
+        font-size: 1.1rem;
+    }
+
+    .search-conversation {
+        margin: 4px 0;
+    }
+
+    tui-avatar[size="l"] {
+        --tui-avatar-size: 40px;
+    }
+
+    .label-container {
+        padding: 4px;
+    }
+
+    .sidebar-chat-content {
+        max-height: calc(100vh - 200px);
+    }
+
+    .d-flex.flex-row.gap-3 {
+        gap: 8px !important;
+    }
+
+    tui-icon {
+        --tui-icon-size: 16px;
+    }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+    .sidebar-chat-container {
+        gap: 8px;
+    }
+
+    .sidebar-chat-header {
+        padding: 4px 0;
+    }
+
+    tui-avatar[size="l"] {
+        --tui-avatar-size: 32px;
+    }
+
+    [tuiTitle] {
+        font-size: 14px;
+    }
+
+    [tuiSubTitle] {
+        font-size: 12px;
+    }
+
+    .sidebar-chat-footer label {
+        font-size: 12px;
+    }
+}
