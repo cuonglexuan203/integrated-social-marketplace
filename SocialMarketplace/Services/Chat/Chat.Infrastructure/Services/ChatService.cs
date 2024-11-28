@@ -51,5 +51,19 @@ namespace Chat.Infrastructure.Services
 
             return new Pagination<Message>(messageParams.PageIndex, messageParams.PageSize, countTask.Result, dataTask.Result);
         }
+
+        public async Task<Message> SaveMessageAsync(Message message, CancellationToken cancellationToken = default)
+        {
+            await _messages.InsertOneAsync(message);
+            return message;
+        }
+
+        public async Task<List<ChatRoom>> GetUserRoomsAsync(string userId, CancellationToken cancellationToken = default)
+        {
+            var rooms = await _rooms
+                .Find(room => room.ParticipantIds.Contains(userId))
+                .ToListAsync(cancellationToken);
+            return rooms;
+        }
     }
 }

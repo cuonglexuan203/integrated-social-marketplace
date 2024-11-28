@@ -2,9 +2,9 @@
 {
     public class PostReferenceDto
     {
-        public string PostId { get; set; }
+        public string Id { get; set; }
         public string ContentText { get; set; }
         public string Link { get; set; }
-        public string ThunbnailUrl { get; set; }
+        public ICollection<MediaDto> Media { get; set; } = new List<MediaDto>();
     }
 }

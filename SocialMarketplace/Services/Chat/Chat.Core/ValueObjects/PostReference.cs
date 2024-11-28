@@ -6,9 +6,9 @@ namespace Chat.Core.ValueObjects
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string PostId { get; set; }
+        public string Id { get; set; } // post id
         public string ContentText { get; set; }
         public string Link { get; set; }
-        public string ThunbnailUrl { get; set; }
+        public ICollection<Media> Media { get; set; } = new List<Media>();
     }
 }

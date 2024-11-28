@@ -33,6 +33,7 @@ namespace Chat.API
         {
             #region binding configuration
             services.Configure<DatabaseSettings>(_configuration.GetSection("DatabaseSettings"));
+            services.Configure<CloudinarySettings>(_configuration.GetSection(nameof(CloudinarySettings)));
             services.Configure<JwtSettings>(_configuration.GetSection("Jwt"));
             var dbSettings = _configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>();
             var jwtSettings = _configuration.GetSection("Jwt").Get<JwtSettings>();
@@ -135,6 +136,8 @@ namespace Chat.API
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IChatRoomMappingService, ChatRoomMappingService>();
             services.AddHttpClient<IIdentityService, IdentityService>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+            services.AddScoped<IFeedService, FeedService>();
 
             #endregion
 

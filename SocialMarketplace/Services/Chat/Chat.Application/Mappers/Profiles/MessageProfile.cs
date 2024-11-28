@@ -10,11 +10,11 @@ namespace Chat.Application.Mappers.Profiles
     {
         public MessageProfile()
         {
-            CreateMap<Message, MessageDto>();
-            CreateMap<Media, MediaDto>();
-            CreateMap<Reaction, ReactionDto>();
-            CreateMap<MessageReadInfo, MessageReadInfoDto>();
-            CreateMap<PostReference, PostReferenceDto>();
+            CreateMap<Message, MessageDto>().ReverseMap();
+            CreateMap<Media, MediaDto>().ReverseMap();
+            CreateMap<Reaction, ReactionDto>().ReverseMap();
+            CreateMap<MessageReadInfo, MessageReadInfoDto>().ReverseMap();
+            CreateMap<PostReference, PostReferenceDto>().ReverseMap();
         }
     }
 }

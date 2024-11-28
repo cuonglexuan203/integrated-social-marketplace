@@ -1,8 +1,8 @@
-﻿using Chat.Application.Queries;
+﻿using Chat.Application.Commands;
+using Chat.Application.Queries;
 using Chat.Core.Specs;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
 
 namespace Chat.API.Hubs
 {
@@ -29,8 +29,27 @@ namespace Chat.API.Hubs
         {
             var room = await _mediator.Send(new GetOrCreateRoomQuery(userId, targetUserId));
             await Groups.AddToGroupAsync(Context.ConnectionId, room.Id);
-            var messageHistory = await _mediator.Send(new GetMessageHistoryQuery(room.Id, new MessageSpecParams()));
-            await Clients.Caller.SendAsync("ReceiveMessageHistory", messageHistory);
+            var messageHistory = await _mediator.Send(new GetMessageHistoryQuery(room.Id, new MessageSpecParams
+            {
+                PageSize = 100,
+            }));
+            await Clients.Caller.SendAsync("ReceiveMessageHistory", room.Id, messageHistory);
+        }
+
+        public async Task SendMessage(string roomId, SaveMessageCommand command)
+        {
+            var message = await _mediator.Send(command);
+            await Clients.Group(roomId).SendAsync("ReceiveMessage", message);
+        }
+
+        public async Task LeaveRoom(string roomId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
+        }
+
+        public async Task TypingIndicator(string roomId, string userId, bool isTyping)
+        {
+            await Clients.Group(roomId).SendAsync("TypingIndicator", userId, isTyping);
         }
 
         //public async Task JoinRoom(string roomId)
