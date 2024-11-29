@@ -1,12 +1,11 @@
-﻿
-namespace Feed.Core.Enums
+﻿namespace Feed.Core.Enums
 {
     public enum ReportType
     {
         Spam,
-        Scam,
-        Fake,
-        HateSpeech,
         Harassment,
+        HateSpeech,
+        Fake,
+        Scam,
     }
 }
