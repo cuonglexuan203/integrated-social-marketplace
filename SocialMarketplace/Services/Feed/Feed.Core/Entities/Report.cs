@@ -14,6 +14,7 @@ namespace Feed.Core.Entities
         public string TargetUserId { get; set; }
         public string ReporterId { get; set; }
         public ReportType ReportType { get; set; }
+        public string ContentText { get; set; }
         public bool Validity { get; set; }
         public float ReportImpactScore { get; set; } // severity weight * reporter credibility
 

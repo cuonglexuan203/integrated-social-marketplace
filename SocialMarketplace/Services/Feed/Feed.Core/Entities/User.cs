@@ -11,5 +11,6 @@ namespace Feed.Core.Entities
         public ICollection<string> Roles { get; set; }
         public string ProfilePictureUrl { get; set; }
         public string ProfileUrl { get; set; }
+        public float CredibilityScore { get; set; }
     }
 }

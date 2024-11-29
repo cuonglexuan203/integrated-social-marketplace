@@ -11,5 +11,6 @@ namespace Feed.Application.DTOs
         public string ProfilePictureUrl { get; set; }
         public string ProfileUrl { get; set; }
         public bool? IsFollowing { get; set; }
+        public float CredibilityScore { get; set; }
     }
 }
