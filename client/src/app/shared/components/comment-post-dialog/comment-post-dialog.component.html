@@ -9,6 +9,7 @@
                     [style.--tui-carousel-padding]="0"
                     [(index)]="currentIndex"
                 >   
+                    
                     <ng-container class="media" *ngFor="let item of post.media">
                         @if(item?.contentType === 'image') {
                             <img 

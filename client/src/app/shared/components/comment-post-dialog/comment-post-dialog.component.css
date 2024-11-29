@@ -10,24 +10,6 @@ tui-dialog[data-appearance='comment-dialog'] .t-content {
     display: flex;
 }
 
-  .prev-button {
-    color: #fff !important;
-    border: none !important;
-    padding: none !important;
-    border-radius: 5px !important;
-    cursor: pointer !important;
-    z-index: 9999;
-    position: absolute;
-}
-.next-button {
-    color: #fff !important;
-    border: none !important;
-    border-radius: 5px !important;
-    cursor: pointer !important;
-    z-index: 9999;
-    position: absolute;
-    transform: translateX(1950%);
-}
 
 .right-header {
     display: flex;
@@ -121,14 +103,14 @@ tui-dialog[data-appearance='comment-dialog'] .t-content {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    margin-right: 10px;
 }
 
 .carousel-image,
 .carousel-video {
-    padding: 5px;
     display: block; 
     width: 100%;
-    height: 100%;
+    height: 100%
 }
 
 .carousel-video {

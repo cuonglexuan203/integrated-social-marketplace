@@ -18,6 +18,7 @@ import { CommentService } from '../../../core/services/comment/comment.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { EnlargeImageComponentComponent } from '../enlarge-image-component/enlarge-image-component.component';
 import { Comment } from '../../../core/models/comment/comment.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-comment-post-dialog',
@@ -44,10 +45,10 @@ import { Comment } from '../../../core/models/comment/comment.model';
 
 })
 export class CommentPostDialogComponent {
-  @Output() commentsPost: EventEmitter<Comment[]> = new EventEmitter<Comment[]>();
-  
+
   private readonly injector = inject(INJECTOR);
   private readonly dialogs = inject(TuiDialogService);
+
 
   data: any;
   post: FeedPost;
@@ -88,7 +89,17 @@ export class CommentPostDialogComponent {
   ngOnInit() {
     this.post = this.data.post;
     this.getCommentsPost();
+    // this.handleMedia();
   }
+
+  handleMedia() {
+    if (this.post?.media && this.post.media.length > 0) {
+      this.post.media.map((media) => {
+        this.handleUrlLargeMedia(media.url);
+      });
+    }
+  }
+
 
   sortComments(a: any, b: any): number {
     const dateA = new Date(a.createdAt).getTime();
@@ -179,7 +190,7 @@ export class CommentPostDialogComponent {
     this.showFileInput = false;
   }
 
-  
+
 
   onSubmit(event: any) {
     event.preventDefault();
@@ -190,7 +201,6 @@ export class CommentPostDialogComponent {
         next: (res) => {
           if (res) {
             this.comments.push(res.result);
-            this.commentsPost.emit(this.comments); // Emit the comments to the parent component
             this.scrollToBottom();
             this.isLoading = false;
           } else {
@@ -261,17 +271,17 @@ export class CommentPostDialogComponent {
     if (type === 'cloudinary') {
       const media = mediaLarge as MediaModel;
       this.dialogs
-      .open(
-        new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
-        {
-          data: { media, type },
-          size: 'auto',
-          appearance: 'lorem-ipsum',
-        }
-      )
-      .subscribe((data) => {
-        console.log(data);
-      });
+        .open(
+          new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+          {
+            data: { media, type },
+            size: 'auto',
+            appearance: 'lorem-ipsum',
+          }
+        )
+        .subscribe((data) => {
+          console.log(data);
+        });
     }
     else {
       let media: MediaModel = {
@@ -288,23 +298,23 @@ export class CommentPostDialogComponent {
       const fileUrl = URL.createObjectURL(mediaLarge);
       media.url = fileUrl as any;
       this.dialogs
-      .open(
-        new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
-        {
-          data: { media, type },
-          size: 'auto',
-          appearance: 'lorem-ipsum',
+        .open(
+          new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+          {
+            data: { media, type },
+            size: 'auto',
+            appearance: 'lorem-ipsum',
 
-        }
-      )
-      .subscribe((data) => {
-        console.log(data);
-      });
+          }
+        )
+        .subscribe((data) => {
+          console.log(data);
+        });
     }
-   
+
   }
 
   handleUrlLargeMedia(url: string): string {
-    return url.replace('/upload/', '/upload/w_800/');
+    return url.replace('/upload/', '/upload/w_1000/');
   }
 }

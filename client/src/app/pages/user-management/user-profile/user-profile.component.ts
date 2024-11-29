@@ -303,7 +303,7 @@ export class UserProfileComponent {
       }
     ).subscribe({
       next: (data: any) => {
-        this.posts.push(data);
+        this.posts.unshift(data);
       },
       error: (error) => {
         console.error(error);

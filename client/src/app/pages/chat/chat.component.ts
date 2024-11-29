@@ -9,13 +9,15 @@ import { ChatHubService } from '../../core/services/chat-hub/chat-hub.service';
 import { ActivatedRoute } from '@angular/router';
 import { UserResponseModel } from '../../core/models/user/user.model';
 import { UserService } from '../../core/services/user/user.service';
+import { TuiSkeleton } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
   imports: [
     SidebarChatComponent,
-    ChatboxComponent
+    ChatboxComponent,
+    TuiSkeleton
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
@@ -27,6 +29,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   receiverId: string;
   userId: string;
   selectedRoom: ChatRoom | null = null;
+
+  isLoading: boolean = false;
 
   private tokenSubscription: Subscription;
   private roomSubscription: Subscription;
@@ -79,17 +83,31 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   loadUserRooms() {
-    this.roomSubscription = this.chatService.getUserRooms(this.userId).subscribe(rooms => {
-      this.rooms = rooms;
-
-      if (rooms.length > 0 && !this.receiverId) {
-        this.selectRoom(rooms[0]);
-      }
-      if (this.receiverId) {
-        this.handleSelectRoom();  
+    this.isLoading = true;
+    this.roomSubscription = this.chatService.getUserRooms(this.userId).subscribe({
+      next: (res) => {
+        if (res) {
+          this.rooms = res
+          if (this.rooms.length > 0 && !this.receiverId) {
+            this.selectRoom(this.rooms[0]);
+          }
+          if (this.receiverId) {
+            this.handleSelectRoom();
+          }
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     });
   }
+
+
 
   async joinRoom() {
     if (this.userId && this.receiverId) {
@@ -125,4 +143,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     const otherUser = room.participants?.filter(p => p.id != this.userId);
     this.chatHubService.joinRoom(this.userId, otherUser?.[0]?.id);
   }
+
+  
 }

@@ -1,5 +1,6 @@
 @if (selectedRoom) {
     <div class="chatbox-container">
+    
         <div class="chatbox-header">
             <div>
                 <div tuiCell>
@@ -11,11 +12,30 @@
                 </div>
             </div>
             <div class="d-flex flex-row gap-3">
+          
                 @for (item of chatBoxHeaderData; track $index) {
-                <tui-icon [icon]="item.iconName || ''" [style.width.px]="'18'" [style.height.px]="'18'"
-                    class="primary-color" style="cursor: pointer;">
-    
-                </tui-icon>
+                    <tui-icon tuiDropdownOpen
+                                [tuiDropdown]="item.action === 'Search' ? searchInbox : ''" [icon]="item.iconName || ''" [style.width.px]="'18'" [style.height.px]="'18'"
+                        class="primary-color" style="cursor: pointer;">
+        
+                    </tui-icon>
+                    
+
+                    <ng-template #searchInbox>
+                        <div class="dropdown d-flex flex-row align-items-center ">
+                            <tui-input
+                                class="form-field"
+                                [(ngModel)]="searchValue"
+                                style="width: 40vw;"
+                                (input)="onSearch()"
+                            >
+                                Search Message
+                                <input tuiTextfieldLegacy placeholder="Search"/>
+                               
+                            </tui-input>
+                        </div>
+                    </ng-template>
+                    
                 }
             </div>
         </div>
@@ -25,11 +45,11 @@
                     <div *ngFor="let message of messages" class="message" [ngClass]="{'sent': message.senderId !== userId, 'received': message.senderId === userId}">
                         <div *ngIf="message.attachedPosts">
                             <div *ngFor="let post of message.attachedPosts" class="attached-post">
-                                <img *ngIf="post.media && post.media.length > 0" [src]="post.media[0].thumbnailUrl || post.media[0].url" alt="Thumbnail" class="thumbnail">
-                                <div class="content-text">{{ post.contentText }}</div>
+                                <img [tuiSkeleton]="isLoading" *ngIf="post.media && post.media.length > 0" [src]="post.media[0].thumbnailUrl || post.media[0].url" alt="Thumbnail" class="thumbnail">
+                                <div [tuiSkeleton]="isLoading" class="content-text">{{ post.contentText }}</div>
                             </div>
                         </div>
-                        <div *ngIf="message.contentText" class="message-content">
+                        <div [tuiSkeleton]="isLoading" *ngIf="message.contentText" class="message-content">
                             {{ message.contentText }}
                         </div>
                         <div *ngIf="typingUser" class="typing-indicator">
@@ -47,12 +67,16 @@
                                 [style.width.px]="'48'"
                                 [style.height.px]="'48'"
                             ></tui-icon>
-                            <span class="no-messages-text">Leave the first message</span>
+                            <span *ngIf="!searchValue" class="no-messages-text">Leave the first message</span>
+                            <span *ngIf="searchValue" class="no-messages-text">No message found</span>
+
                         </div>
                     </div>
                 </ng-container>
             </div>
         </div>
+   
+
         <div class="chatbox-footer">
             <div class="d-flex gap-3">
                 <tui-icon 

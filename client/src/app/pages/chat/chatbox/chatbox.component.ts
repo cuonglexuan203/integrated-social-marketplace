@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiDropdown, TuiDropdownOpen, TuiIcon, TuiTextfield } from '@taiga-ui/core';
-import { TuiAvatar, TuiBadgedContent, TuiSwitch } from '@taiga-ui/kit';
+import { TuiAvatar, TuiBadgedContent, TuiSkeleton, TuiSwitch } from '@taiga-ui/kit';
 import { TuiCell, TuiSearch } from '@taiga-ui/layout';
 import { ChatBoxHeaderData } from '../../../core/data/chatbox-header-data';
 import { TuiInputModule } from '@taiga-ui/legacy';
 import { ChatRoom } from '../../../core/models/chat/chat-room.model';
 import { Message } from '../../../core/models/chat/message.model';
-import { map, Observable, Subject } from 'rxjs';
+import { map, Observable, of, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ChatHubService } from '../../../core/services/chat-hub/chat-hub.service';
 import { SaveMessageCommand } from '../../../core/models/chat/save-message-command.model';
 import { UserResponseModel } from '../../../core/models/user/user.model';
 import { OrderByPipe } from '../../../core/pipes/order-by/orderby.pipe';
 import { AlertService } from '../../../core/services/alert/alert.service';
+import { ChatService } from '../../../core/services/chat/chat.service';
 
 @Component({
   selector: 'app-chatbox',
@@ -34,6 +36,7 @@ import { AlertService } from '../../../core/services/alert/alert.service';
     OrderByPipe,
     TuiDropdown,
     TuiDropdownOpen,
+    TuiSkeleton
   ],
   templateUrl: './chatbox.component.html',
   styleUrl: './chatbox.component.css'
@@ -47,8 +50,13 @@ export class ChatboxComponent {
   messages$: Observable<Message[]> = new Observable<Message[]>();
   reversedMessages$: Observable<Message[]>;
 
+  searchValue: string = '';
+  searchResults: Message[] = [];
+  private searchSubject: Subject<any> = new Subject<any>();
+
   newMessage: string = '';
   isTyping: boolean = false;
+  isLoading: boolean = false;
   typingTimer: any;
 
   userReceiver: UserResponseModel;
@@ -63,7 +71,9 @@ export class ChatboxComponent {
 
   constructor(
     private chatHubService: ChatHubService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private _chatService: ChatService,
+
   ) {
     this.messages$ = this.chatHubService.messages$.pipe(
       map(messages => messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
@@ -79,6 +89,55 @@ export class ChatboxComponent {
         this.typingUser = null;
       }
     });
+
+
+  }
+
+
+  performSearch() {
+    if (this.searchValue) {
+      this.isLoading = true;
+      this._chatService.searchMessages(this.selectedRoom!.id, this.searchValue).subscribe({
+        next: (response) => {
+          this.messages$ = of(response);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.alertService.showError('An error occurred while searching messages', 'Search Error');
+          this.isLoading = false
+        }
+
+      })
+    }
+    else {
+      this.messages$ = this.chatHubService.messages$.pipe(
+        map(messages => messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+      );
+    }
+
+  }
+
+  onSearch() {
+    this.searchSubject.next(this.searchValue);
+  }
+
+  ngOnDestroy() {
+    this.searchSubject.complete();
+  }
+
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(event: Event) {
+    const target = event.target as HTMLElement;
+    const messageElements = target.querySelectorAll('.message');
+    messageElements.forEach((element: any) => {
+      const rect = element.getBoundingClientRect();
+      if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+        element.classList.add('selected');
+      } else {
+        element.classList.remove('selected');
+      }
+    });
   }
 
   removeFile(index: number) {
@@ -88,19 +147,22 @@ export class ChatboxComponent {
 
   ngOnInit() {
     this.scrollToBottom();
+    this.searchSubject.pipe(debounceTime(300)).subscribe(() => {
+      this.performSearch()
+    });
   }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files) {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/webm'];
-      
+
       for (let i = 0; i < input.files.length; i++) {
         const file = input.files[i];
-        
+
         if (allowedTypes.includes(file.type)) {
           this.selectedFiles.push(file);
-          
+
           // Create preview URL
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -119,7 +181,7 @@ export class ChatboxComponent {
     if (changes['selectedRoom']) {
       const currentRoom = changes['selectedRoom'].currentValue;
       const previousRoom = changes['selectedRoom'].previousValue;
-  
+
       if (currentRoom && currentRoom !== previousRoom) {
         this.newMessage = '';
         this.selectedFiles = [];
@@ -132,7 +194,7 @@ export class ChatboxComponent {
 
   private scrollToBottom(): void {
     if (!this.chatboxContent) return;
-  
+
     setTimeout(() => {
       const contentElement = this.chatboxContent.nativeElement;
       contentElement.scrollTop = contentElement.scrollHeight;
@@ -141,7 +203,7 @@ export class ChatboxComponent {
 
   sendMessage() {
     console.log(this.selectedRoom);
-    
+
     if (!this.selectedRoom || !this.newMessage.trim()) return;
 
     const saveMessageCommand: SaveMessageCommand = {
@@ -158,6 +220,7 @@ export class ChatboxComponent {
       this.selectedRoom.messagePage.data[0].contentText = this.newMessage;
     }
     this.newMessage = '';
+    this.selectedFiles = [];
 
   }
 
@@ -187,5 +250,27 @@ export class ChatboxComponent {
     this.typingTimer = setTimeout(() => {
       this.chatHubService.typingIndicator(this.selectedRoom!.id, this.chatHubService.userId, false);
     }, 3000);
+  }
+
+  onSearchMessage() {
+    this.isLoading = true;
+    this.searchSubject.next(this.searchValue);
+  }
+
+  scrollToMessage(messageId: string) {
+    const messageElement = document.getElementById(messageId);
+    if (messageElement) {
+      messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      messageElement.classList.add('selected');
+      setTimeout(() => {
+        messageElement.classList.remove('selected');
+      }, 2000);
+    }
+  }
+
+  highlightSearchValue(text: string, searchValue: string): string {
+    if (!searchValue) return text;
+    const regex = new RegExp(`(${searchValue})`, 'gi');
+    return text.replace(regex, '<b>$1</b>');
   }
 }

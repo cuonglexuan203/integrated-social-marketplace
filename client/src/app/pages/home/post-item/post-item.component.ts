@@ -22,6 +22,7 @@ import { CommentService } from '../../../core/services/comment/comment.service';
 import { TuiTagModule } from '@taiga-ui/legacy';
 import { UserPostDialogComponent } from '../../../shared/components/user-post-dialog/user-post-dialog.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { CommentStateService } from '../../../core/services/state/comment-state/comment-state.service';
 
 
 @Component({
@@ -239,7 +240,6 @@ export class PostItemComponent {
   onCopy() {
     this.alertService.showSuccess('The link has been copied to your clipboard', 'Success');
   }
-
 
 }
 
