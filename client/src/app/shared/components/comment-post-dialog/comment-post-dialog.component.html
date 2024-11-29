@@ -128,12 +128,15 @@
                       class="uploaded-file"
                       *ngIf="uploadedFile && isImage(uploadedFile)"
                       [src]="getFileUrl(uploadedFile)"
+                        (click)="enlargeMedia(uploadedFile, typeLocal)"
                       alt="Uploaded Image"
                     />
                     <video
                       class="uploaded-file"
                       *ngIf="uploadedFile && isVideo(uploadedFile)"
                       [src]="getFileUrl(uploadedFile)"
+                      (click)="enlargeMedia(uploadedFile, typeLocal)"
+
                       controls
                     ></video>
                     <button *ngIf="uploadedFile" type="button" (click)="removeFile()" class="remove-file-button">

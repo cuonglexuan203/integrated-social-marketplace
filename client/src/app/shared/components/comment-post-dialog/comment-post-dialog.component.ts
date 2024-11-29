@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, NgZone, INJECTOR, inject, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone, INJECTOR, inject, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { TuiButton, TuiDialogContext, TuiDialogService, TuiIcon, TuiLink, TuiLoader } from '@taiga-ui/core';
 import { injectContext, PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { FeedPost } from '../../../core/models/feed/feed.model';
@@ -44,6 +44,8 @@ import { Comment } from '../../../core/models/comment/comment.model';
 
 })
 export class CommentPostDialogComponent {
+  @Output() commentsPost: EventEmitter<Comment[]> = new EventEmitter<Comment[]>();
+  
   private readonly injector = inject(INJECTOR);
   private readonly dialogs = inject(TuiDialogService);
 
@@ -187,9 +189,8 @@ export class CommentPostDialogComponent {
       this._commentService.createComment(this.formData).subscribe({
         next: (res) => {
           if (res) {
-            this.alertService.showSuccess('Comment created successfully', 'Comment');
             this.comments.push(res.result);
-
+            this.commentsPost.emit(this.comments); // Emit the comments to the parent component
             this.scrollToBottom();
             this.isLoading = false;
           } else {
@@ -256,8 +257,10 @@ export class CommentPostDialogComponent {
     return this.sanitizer.bypassSecurityTrustUrl(objectUrl);
   }
 
-  enlargeMedia(media: MediaModel, type: string) {
-    this.dialogs
+  enlargeMedia(mediaLarge: any, type: string) {
+    if (type === 'cloudinary') {
+      const media = mediaLarge as MediaModel;
+      this.dialogs
       .open(
         new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
         {
@@ -269,6 +272,36 @@ export class CommentPostDialogComponent {
       .subscribe((data) => {
         console.log(data);
       });
+    }
+    else {
+      let media: MediaModel = {
+        publicId: '',
+        url: '',
+        contentType: mediaLarge.type.split('/')[0],
+        thumbnailUrl: '',
+        duration: 0,
+        width: 0,
+        height: 0,
+        fileSize: 0,
+        format: '',
+      }
+      const fileUrl = URL.createObjectURL(mediaLarge);
+      media.url = fileUrl as any;
+      this.dialogs
+      .open(
+        new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+        {
+          data: { media, type },
+          size: 'auto',
+          appearance: 'lorem-ipsum',
+
+        }
+      )
+      .subscribe((data) => {
+        console.log(data);
+      });
+    }
+   
   }
 
   handleUrlLargeMedia(url: string): string {

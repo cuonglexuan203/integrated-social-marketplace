@@ -109,7 +109,7 @@ export class UserPostDialogComponent {
   }
 
   messageAction() {
-
+    this.router.navigate([`/chat/${this.user?.id}`]);
   }
 
 }

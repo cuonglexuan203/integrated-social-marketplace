@@ -212,7 +212,7 @@ export class PostItemComponent {
           data: data,
           dismissible: false,
         }
-      )
+    )
       .subscribe((data) => {
         console.log(data);
       });

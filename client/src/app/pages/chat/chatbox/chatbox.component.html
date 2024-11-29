@@ -32,6 +32,14 @@
                         <div *ngIf="message.contentText" class="message-content">
                             {{ message.contentText }}
                         </div>
+                        <div *ngIf="typingUser" class="typing-indicator">
+                            <div class="typing-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <span>{{ typingUser.fullName }} is typing...</span>
+                        </div>
                     </div>
                     <div *ngIf="!messages.length" class="no-messages">
                         <div class="message-item font-14 d-flex flex-column align-items-center">
@@ -65,12 +73,34 @@
                     </tui-input>
                 </div>
             </ng-template>
+            <div *ngIf="filePreviewUrls.length > 0" class="file-preview-container">
+                <div *ngFor="let preview of filePreviewUrls; let i = index" class="file-preview">
+                  <ng-container *ngIf="selectedFiles[i]?.type?.startsWith('image/')">
+                    <img [src]="preview" class="preview-image">
+                  </ng-container>
+                  <ng-container *ngIf="selectedFiles[i]?.type?.startsWith('video/')">
+                    <video [src]="preview" class="preview-video" controls></video>
+                  </ng-container>
+                  <button (click)="removeFile(i)" class="remove-file-btn">×</button>
+                </div>
+            </div>
             <input (keydown.enter)="sendMessage()" [(ngModel)]="newMessage" #inputChat class="input-chat" style="border: none; flex: 1; width: 100%;" placeholder="Write a message"
                 type="search">
             <div>
-                <tui-icon icon="@tui.smile-plus" class="primary-color">
-    
-                </tui-icon>
+               
+                <input 
+                    type="file" 
+                    #fileInput 
+                    (change)="onFileSelected($event)" 
+                    multiple 
+                    style="display: none;">
+                    <div class="d-flex gap-3">
+                        <tui-icon 
+                          (click)="fileInput.click()"
+                          class="primary-color" 
+                          icon="@tui.paperclip">
+                        </tui-icon>
+                    </div>
             </div>
         </div>
     </div>

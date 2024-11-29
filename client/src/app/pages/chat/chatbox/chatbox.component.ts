@@ -13,6 +13,7 @@ import { ChatHubService } from '../../../core/services/chat-hub/chat-hub.service
 import { SaveMessageCommand } from '../../../core/models/chat/save-message-command.model';
 import { UserResponseModel } from '../../../core/models/user/user.model';
 import { OrderByPipe } from '../../../core/pipes/order-by/orderby.pipe';
+import { AlertService } from '../../../core/services/alert/alert.service';
 
 @Component({
   selector: 'app-chatbox',
@@ -44,7 +45,7 @@ export class ChatboxComponent {
   @Input() selectedRoom: ChatRoom | null = null;
 
   messages$: Observable<Message[]> = new Observable<Message[]>();
-  reversedMessages$: Observable<Message[]> ;
+  reversedMessages$: Observable<Message[]>;
 
   newMessage: string = '';
   isTyping: boolean = false;
@@ -55,32 +56,92 @@ export class ChatboxComponent {
   isSent: boolean = false;
 
   postUrl: string;
-  constructor(private chatHubService: ChatHubService) {
-    this.messages$ = this.chatHubService.messages$;
-    console.log(this.messages$);
-    
-    this.reversedMessages$ = this.messages$.pipe(map((messages) => messages.filter((message) => message.createdAt).reverse()));
+
+  typingUser: UserResponseModel | null = null;
+  selectedFiles: File[] = [];
+  filePreviewUrls: string[] = [];
+
+  constructor(
+    private chatHubService: ChatHubService,
+    private alertService: AlertService
+  ) {
+    this.messages$ = this.chatHubService.messages$.pipe(
+      map(messages => messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+    );
+
+    this.chatHubService.typing$.subscribe(typingInfo => {
+      if (typingInfo && typingInfo.userId !== this.chatHubService.userId) {
+        // Find the typing user from room participants
+        this.typingUser = this.selectedRoom?.participants.find(
+          participant => participant.id === typingInfo.userId
+        ) || null;
+      } else {
+        this.typingUser = null;
+      }
+    });
   }
 
-
+  removeFile(index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.filePreviewUrls.splice(index, 1);
+  }
 
   ngOnInit() {
     this.scrollToBottom();
-
   }
 
- 
-
-  ngOnChanges(changes: SimpleChanges) {
-    this.getUserReceiver();
-    // Reset message input when room changes
-    if (changes['selectedRoom']) {
-      this.newMessage = '';
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/webm'];
+      
+      for (let i = 0; i < input.files.length; i++) {
+        const file = input.files[i];
+        
+        if (allowedTypes.includes(file.type)) {
+          this.selectedFiles.push(file);
+          
+          // Create preview URL
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.filePreviewUrls.push(e.target?.result as string);
+          };
+          reader.readAsDataURL(file);
+        }
+      }
     }
+    else {
+      this.alertService.showError('Please select a valid image or video file', 'Invalid file type');
+    }
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedRoom']) {
+      const currentRoom = changes['selectedRoom'].currentValue;
+      const previousRoom = changes['selectedRoom'].previousValue;
+  
+      if (currentRoom && currentRoom !== previousRoom) {
+        this.newMessage = '';
+        this.selectedFiles = [];
+        this.filePreviewUrls = [];
+        this.scrollToBottom(); // Ensures proper scrolling on room change
+        this.getUserReceiver(); // Update receiver info for the new room
+      }
+    }
+  }
+
+  private scrollToBottom(): void {
+    if (!this.chatboxContent) return;
+  
+    setTimeout(() => {
+      const contentElement = this.chatboxContent.nativeElement;
+      contentElement.scrollTop = contentElement.scrollHeight;
+    });
   }
 
   sendMessage() {
+    console.log(this.selectedRoom);
+    
     if (!this.selectedRoom || !this.newMessage.trim()) return;
 
     const saveMessageCommand: SaveMessageCommand = {
@@ -88,25 +149,18 @@ export class ChatboxComponent {
       roomId: this.selectedRoom?.id,
       senderId: this.chatHubService.userId,
       attachedPostIds: this.postUrl ? [this.postUrl] : [],
-      // media:,
+      media: this.selectedFiles
     };
 
     // Send message through SignalR hub
     this.chatHubService.sendMessage(this.selectedRoom.id, saveMessageCommand);
+    if (this.selectedRoom?.messagePage?.data[0]) {
+      this.selectedRoom.messagePage.data[0].contentText = this.newMessage;
+    }
     this.newMessage = '';
 
   }
 
-  private scrollToBottom(): void {
-    try {
-      if (this.chatboxContent) {
-        this.chatboxContent.nativeElement.scrollTop = this.chatboxContent.nativeElement.scrollHeight;
-      }
-    } catch (err) {
-      console.error('Scroll to bottom error:', err);
-    }
-  }
-  
   getUserReceiver() {
     if (this.selectedRoom?.participants && this.chatHubService.userId) {
       this.selectedRoom?.participants.forEach((participant) => {
@@ -114,7 +168,7 @@ export class ChatboxComponent {
           this.userReceiver = participant;
           this.userId = participant.id;
         }
-      })
+      });
     }
   }
 
