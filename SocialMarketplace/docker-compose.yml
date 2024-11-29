@@ -2,6 +2,9 @@ services:
   portainer:
     image: portainer/portainer-ce
 
+  metabase:
+    image: metabase/metabase:latest
+
   identitydb:
     image: mcr.microsoft.com/mssql/server:2022-latest
 
@@ -39,4 +42,5 @@ volumes:
   chat_mongo_data:
   mongo_data:
   sqlserver_data:
-  portainer_data:  
+  portainer_data:
+  metabase_data:

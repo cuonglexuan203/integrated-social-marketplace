@@ -9,6 +9,17 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
   
+  metabase:
+    container_name: metabase
+    restart: always
+    hostname: metabase
+    ports:
+      - 9002:3000
+    depends_on:
+      - feeddb
+    volumes:
+      - metabase_data:/metabase-data
+
   identitydb:
     container_name: identitydb
     environment:
