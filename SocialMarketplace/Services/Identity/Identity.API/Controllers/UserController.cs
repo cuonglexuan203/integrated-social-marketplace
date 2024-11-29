@@ -13,7 +13,7 @@ using System.Net;
 
 namespace Identity.API.Controllers
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ApiController
     {
         private readonly IMediator _mediator;
