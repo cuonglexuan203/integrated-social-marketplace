@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output } from '@angular/core';
 import { SidebarChatComponent } from './sidebar-chat/sidebar-chat.component';
 import { ChatboxComponent } from './chatbox/chatbox.component';
 import { ChatService } from '../../core/services/chat/chat.service';
@@ -6,21 +6,31 @@ import { ChatRoom } from '../../core/models/chat/chat-room.model';
 import { NbAuthService } from '@nebular/auth';
 import { Subscription } from 'rxjs';
 import { ChatHubService } from '../../core/services/chat-hub/chat-hub.service';
+import { ActivatedRoute } from '@angular/router';
+import { UserResponseModel } from '../../core/models/user/user.model';
+import { UserService } from '../../core/services/user/user.service';
+import { TuiSkeleton } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
   imports: [
     SidebarChatComponent,
-    ChatboxComponent
+    ChatboxComponent,
+    TuiSkeleton
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  rooms: ChatRoom[] = [];
+  @Output() rooms: ChatRoom[] = [];
+  @Output() userReceiver: UserResponseModel;
+
+  receiverId: string;
   userId: string;
   selectedRoom: ChatRoom | null = null;
+
+  isLoading: boolean = false;
 
   private tokenSubscription: Subscription;
   private roomSubscription: Subscription;
@@ -28,18 +38,24 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private chatService: ChatService,
     private chatHubService: ChatHubService,
-    private authService: NbAuthService
-  ) {}
+    private authService: NbAuthService,
+    private activatedRoute: ActivatedRoute,
+    private _userService: UserService
+  ) { }
 
   ngOnInit(): void {
-    this.initializeUser();
+    this.setupData();
+  }
+
+  async setupData
+    () {
+    await this.initializeUser();
+    this.getReceiverId();
   }
 
   ngOnDestroy(): void {
-    // Disconnect from hub
     this.chatHubService.disconnectFromHub();
 
-    // Unsubscribe from all subscriptions
     if (this.tokenSubscription) {
       this.tokenSubscription.unsubscribe();
     }
@@ -48,28 +64,69 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initializeUser() {
+  getReceiverId() {
+    this.activatedRoute.params.subscribe(params => {
+      this.receiverId = params['receiverId'];
+    });
+  }
+
+  async initializeUser() {
     this.tokenSubscription = this.authService.onTokenChange().subscribe(async (token) => {
       if (token?.isValid()) {
         this.userId = token?.getPayload()?.userId;
-        
-        // Connect to SignalR hub
+
         await this.chatHubService.connectToHub(this.userId);
-        // Load user rooms
+        await this.joinRoom();
         this.loadUserRooms();
       }
     });
   }
 
-  private loadUserRooms() {
-    this.roomSubscription = this.chatService.getUserRooms(this.userId).subscribe(rooms => {
-      this.rooms = rooms;
-      
-      // Automatically select the first room if available
-      if (rooms.length > 0) {
-        this.selectRoom(rooms[0]);
+  loadUserRooms() {
+    this.isLoading = true;
+    this.roomSubscription = this.chatService.getUserRooms(this.userId).subscribe({
+      next: (res) => {
+        if (res) {
+          this.rooms = res
+          if (this.rooms.length > 0 && !this.receiverId) {
+            this.selectRoom(this.rooms[0]);
+          }
+          if (this.receiverId) {
+            this.handleSelectRoom();
+          }
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     });
+  }
+
+
+
+  async joinRoom() {
+    if (this.userId && this.receiverId) {
+      await this.chatHubService.joinRoom(this.userId, this.receiverId).finally(() => {
+        this.handleSelectRoom();
+
+      });
+    }
+  }
+
+
+  handleSelectRoom() {
+    if (this.rooms) {
+      this.rooms.forEach(room => {
+        if (room?.id === this.chatHubService.roomId) {
+          this.selectedRoom = room;
+        }
+      });
+    }
   }
 
   selectRoom(room: ChatRoom) {
@@ -86,4 +143,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     const otherUser = room.participants?.filter(p => p.id != this.userId);
     this.chatHubService.joinRoom(this.userId, otherUser?.[0]?.id);
   }
+
+  
 }

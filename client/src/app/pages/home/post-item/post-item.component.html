@@ -99,16 +99,27 @@
                     [style.--tui-carousel-padding]="0"
                     (indexChange)="onCarouselChange($event)"
                 >
-                    @for (item of post.media; track $index) {
-                        @if(item?.contentType === 'image') {
-                                <img *tuiItem src="{{ item?.url }}" class="carousel-image">
-                        }
-                        @if(item?.contentType === 'video') {
-                            <video [width]="'500'" [height]="'500'" *tuiItem src="{{ item?.url }}" controls class="carousel-video">
-                                Your browser does not support the video tag.
-                            </video>
-                        }
+                @for (item of post.media; track $index) {
+                    @if(item?.contentType === 'image') {
+                        <img 
+                            *tuiItem 
+                            src="{{ item?.url }}" 
+                            class="carousel-image"
+                        >
                     }
+                    @if(item?.contentType === 'video') {
+                        <video 
+                            [width]="'500'" 
+                            [height]="'500'" 
+                            *tuiItem 
+                            src="{{ item?.url }}" 
+                            controls 
+                            class="carousel-video"
+                        >
+                            Your browser does not support the video tag.
+                        </video>
+                    }
+                }
                 </tui-carousel>
                 
                 @if (currentIndex != post.media.length - 1) {
@@ -180,7 +191,18 @@
                 </div>
             </div>
 
-            <div>
+            <div class="d-flex gap-3">
+                <div class="item-footer-post"
+                    (click)="onCopy()"
+                    [cdkCopyToClipboard]="post.link || ''"
+                >
+                    <tui-icon class=""
+                        icon="@tui.copy"
+                        [style.height.px]="18"
+                        [style.width.px]="18"
+                        >
+                    </tui-icon>
+                </div>
                 <div class="item-footer-post"
                     (click)="onShare()"
                 >

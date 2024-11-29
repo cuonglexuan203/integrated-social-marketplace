@@ -3,7 +3,7 @@ import { UserResponseModel } from '../../../core/models/user/user.model';
 import { CommonModule } from '@angular/common';
 import { TuiAvatar } from '@taiga-ui/kit';
 import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word/first-letter-word.pipe';
-import { TuiIcon, TuiLoader } from '@taiga-ui/core';
+import { TuiDropdown, TuiIcon, TuiLoader } from '@taiga-ui/core';
 import { Router } from '@angular/router';
 import { Helper } from '../../../core/utils/helper';
 import { UserService } from '../../../core/services/user/user.service';
@@ -18,7 +18,6 @@ import { AlertService } from '../../../core/services/alert/alert.service';
     TuiAvatar,
     FirstLetterWordPipe,
     TuiIcon,
-    TuiLoader,
   ],
   templateUrl: './user-post-dialog.component.html',
   styleUrl: './user-post-dialog.component.css'
@@ -28,6 +27,7 @@ export class UserPostDialogComponent {
 
   userLoggedIn: UserResponseModel;
   @Input() user: any;
+  @Input() isFromFollow: boolean;
 
   isCheckedUserLoggedIn: boolean = false;
 
@@ -49,9 +49,6 @@ export class UserPostDialogComponent {
       }
     }
   }
-
-
- 
 
   getUserProfile() {
     this.router.navigate([`/user/user-profile/${this.user?.userName}`]);
@@ -112,7 +109,7 @@ export class UserPostDialogComponent {
   }
 
   messageAction() {
-
+    this.router.navigate([`/chat/${this.user?.id}`]);
   }
 
 }

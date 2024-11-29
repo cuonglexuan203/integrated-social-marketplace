@@ -43,4 +43,13 @@ export class UserService {
   isUserFollowing(dataSending: UserFollowModel): Observable<MarketplaceResponse<any>> {
     return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/IsUserFollowing`, dataSending);
   }
+
+  getUserFollowers(userId: string): Observable<MarketplaceResponse<UserResponseModel[]>> {
+    return this.http.get<MarketplaceResponse<UserResponseModel[]>>(`${this.apiBase}/GetUserFollowers/${userId}`);
+  }
+
+  getUserFollowings(userId: string): Observable<MarketplaceResponse<UserResponseModel[]>> { 
+    return this.http.get<MarketplaceResponse<UserResponseModel[]>>(`${this.apiBase}/GetUserFollowings/${userId}`);
+  }
+
 }

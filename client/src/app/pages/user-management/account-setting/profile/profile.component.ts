@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TuiButton, TuiDataList, TuiIcon, TuiLoader } from '@taiga-ui/core';
@@ -6,13 +6,14 @@ import {
   TuiAvatar, TuiDataListWrapper,
   TuiSkeleton,
 } from '@taiga-ui/kit';
-import { TuiComboBoxModule, TuiInputDateModule, TuiInputModule, TuiInputTagModule, TuiSelectModule, TuiTextareaModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
+import { TuiComboBoxModule, TuiInputDateModule, TuiInputDateTimeModule, TuiInputModule, TuiInputTagModule, TuiSelectModule, TuiTextareaModule, TuiTextfieldControllerModule } from '@taiga-ui/legacy';
 import { UserResponseModel } from '../../../../core/models/user/user.model';
 import { Helper } from '../../../../core/utils/helper';
 import { RxFormBuilder, RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { UserDetailsModel } from '../../../../core/models/user/user-details.model';
 import { UserService } from '../../../../core/services/user/user.service';
 import { AlertService } from '../../../../core/services/alert/alert.service';
+import {TuiDay, TuiTime} from '@taiga-ui/cdk';
 
 @Component({
   selector: 'app-profile',
@@ -36,6 +37,7 @@ import { AlertService } from '../../../../core/services/alert/alert.service';
     TuiInputTagModule,
     TuiComboBoxModule,
     TuiSkeleton,
+    TuiInputDateTimeModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -60,16 +62,21 @@ export class ProfileComponent {
     this.form = this.formBuilder.formGroup(UserDetailsModel, this.user);
   }
   ngOnInit() {
-    this.formGender(this.f['gender'].value)
+    this.setupData();
+   }
+
+  setupData() {
+    this.formGender()
+    this.form?.get('dateOfBirth')?.setValue(TuiDay.fromLocalNativeDate(new Date(this.user.dateOfBirth)));
   }
 
-  formGender(value: number) {
+  formGender() {
     const gender = this?.form?.get('gender')?.value;
     if (gender === 0) {
-      this?.form?.get('gender')?.setValue('Male')
+      this.form?.get('gender')?.setValue('Male')
     }
     if (gender === 1) {
-      this?.form?.get('gender')?.setValue('Female')
+      this.form?.get('gender')?.setValue('Female')
     }
   }
 
@@ -92,8 +99,8 @@ export class ProfileComponent {
 
   saveProfile() {
     if (this?.form?.valid) {
+      this.formatGender(this.form.get('gender')?.value);
       this.isLoading = true;
-      this.formatGender(this.f['gender'].value)
       this._userService.editUserProfile(this.form.value).subscribe({
         next: (res) => {
           if (res) {
@@ -102,7 +109,6 @@ export class ProfileComponent {
             this.form = this.formBuilder.formGroup(UserDetailsModel, this.user);
             this.alertService.showSuccess('Profile updated successfully', 'Success');
             this.isLoading = false;
-
           }
         },
         error: (err) => {
@@ -111,6 +117,7 @@ export class ProfileComponent {
           this.isLoading = false;
         },
         complete: () => {
+          this.setupData();
           this.isLoading = false;
         }
       })

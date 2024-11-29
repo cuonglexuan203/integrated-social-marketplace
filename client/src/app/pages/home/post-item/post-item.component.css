@@ -48,20 +48,23 @@
 
 
 .prev-button {
-    color: #fff !important;
-    border: none !important;
-    padding: none !important;
-    border-radius: 5px !important;
-    cursor: pointer !important;
-    z-index: 9999;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5); /* Add background for better visibility */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
     position: absolute;
 }
 .next-button {
-    color: #fff !important;
-    border: none !important;
-    border-radius: 5px !important;
-    cursor: pointer !important;
-    z-index: 9999;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5); /* Add background for better visibility */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
     position: absolute;
     transform: translateX(1950%);
 }
@@ -132,4 +135,6 @@ tui-dialog[data-appearance='comment-dialog'] .t-content {
     color: #71AAEB !important;
     font-weight: bold !important;
   }
-  
+
+
+

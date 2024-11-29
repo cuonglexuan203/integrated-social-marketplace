@@ -1,7 +1,7 @@
 import { Component, HostListener, inject, INJECTOR, Output } from '@angular/core';
 import { UserNewPostComponent } from '../../home/user-new-post/user-new-post.component';
 import { TuiAvatar, TuiSkeleton } from '@taiga-ui/kit';
-import { TuiDialogService, TuiIcon } from '@taiga-ui/core';
+import { TuiDialogService, TuiDropdown, TuiIcon, TuiLoader } from '@taiga-ui/core';
 import { UserResponseModel } from '../../../core/models/user/user.model';
 import { Helper } from '../../../core/utils/helper';
 import { PostItemComponent } from '../../home/post-item/post-item.component';
@@ -18,6 +18,7 @@ import { PostStateService } from '../../../core/services/state/post-state/post-s
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { CreatePostDialogComponent } from '../../../shared/components/create-post-dialog/create-post-dialog.component';
 import { UserFollowModel } from '../../../core/models/user/user-dialog.model';
+import { UserPostDialogComponent } from '../../../shared/components/user-post-dialog/user-post-dialog.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -29,6 +30,9 @@ import { UserFollowModel } from '../../../core/models/user/user-dialog.model';
     PostItemComponent,
     CommonModule,
     TuiSkeleton,
+    TuiDropdown,    
+    UserPostDialogComponent,
+    TuiLoader,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.css'
@@ -52,6 +56,11 @@ export class UserProfileComponent {
   loadingPosts: FeedPost[] = [];
   isAllPostsLoaded = false;
 
+  userFollowers: UserResponseModel[] = [];
+  userFollowings: UserResponseModel[] = [];
+
+  isFollowing: boolean = false;
+
   private paramMapSubscription: Subscription;
 
   constructor(
@@ -72,15 +81,15 @@ export class UserProfileComponent {
 
 
   async setUpData() {
-    this.getUserLoggedIn();
+    await this.getUserLoggedIn();
     await this.getUserFromUserName();
   }
 
-  getUserLoggedIn() {
+  async getUserLoggedIn() {
     this.userLoggedIn = Helper.getUserFromLocalStorage();
   }
 
-  
+
   setupPage() {
     this.page = {
       pageIndex: 1,
@@ -115,7 +124,7 @@ export class UserProfileComponent {
     this.isCheckingUserLoggedIn = false;
   }
 
-   checkIsUserFollowing() {
+  checkIsUserFollowing() {
     this.isLoading = true;
     const dataSending: UserFollowModel = {
       followerId: this.userLoggedIn.id,
@@ -127,7 +136,7 @@ export class UserProfileComponent {
         if (res?.result) {
           this.user.isFollowing = res?.result;
           this.isLoading = false;
-        } 
+        }
       },
       error: (error) => {
         console.log(error);
@@ -146,9 +155,11 @@ export class UserProfileComponent {
       if (newUsername !== this.userName) {
         this.userName = newUsername;
         this.resetData();
-        
+
         // Combine the calls into a single method
         await this.loadUserProfileData();
+        await this.getUserFollowers();
+        await this.getUserFollowing();
       }
     });
   }
@@ -160,7 +171,7 @@ export class UserProfileComponent {
         await this.getUserDetailByUserName(this.userName);
         this.setupPage();
         this.checkIsUserFollowing();
-        
+
         // Load posts after user details are fetched
         await this.getPosts();
       } catch (error) {
@@ -199,9 +210,9 @@ export class UserProfileComponent {
   onWindowScroll(event: any) {
     // Only trigger if not all posts are loaded and not currently loading
     if (
-      (window.innerHeight + window.scrollY >= document.body.offsetHeight && 
-      !this.isLoading && 
-      !this.isAllPostsLoaded && !(this.getStateFilter() === 'SavedPosts') && !(this.getStateFilter() === 'CommentedPosts') && !(this.getStateFilter() === 'ReactedPosts'))
+      (window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+        !this.isLoading &&
+        !this.isAllPostsLoaded && !(this.getStateFilter() === 'SavedPosts') && !(this.getStateFilter() === 'CommentedPosts') && !(this.getStateFilter() === 'ReactedPosts'))
     ) {
       this.getPosts();
     }
@@ -214,7 +225,6 @@ export class UserProfileComponent {
     if (this.getStateFilter() === 'SavedPosts' || this.getStateFilter() === 'CommentedPosts' || this.getStateFilter() === 'ReactedPosts') {
       this.resetPostLoading();
     }
-
 
     this.isLoading = true;
     this._userStateService.setStateFilter('All')
@@ -246,7 +256,7 @@ export class UserProfileComponent {
             userId: this.isCheckingUserLoggedIn ? this.userLoggedIn.id : this.user.id
           };
         }
-        
+
         this.loadingPosts = [];
       }
     });
@@ -282,7 +292,7 @@ export class UserProfileComponent {
     });
   }
 
-  createNewPost () {
+  createNewPost() {
 
     const data = { title: 'Create Post' };
     this.dialogs.open(
@@ -293,7 +303,7 @@ export class UserProfileComponent {
       }
     ).subscribe({
       next: (data: any) => {
-        this.posts.push(data);
+        this.posts.unshift(data);
       },
       error: (error) => {
         console.error(error);
@@ -313,7 +323,6 @@ export class UserProfileComponent {
   filterReactedPost() {
     this.isAllPostsLoaded = true;
     this.posts = [];
-
     this._userStateService.setStateFilter('ReactedPosts')
   }
 
@@ -323,6 +332,103 @@ export class UserProfileComponent {
 
   backToTop() {
     window.scrollTo(0, 0);
+  }
+
+  async getUserFollowers() {
+    const userId = this.isCheckingUserLoggedIn ? this.userLoggedIn.id : this.user.id;
+    this.isLoading = true
+    this._userService.getUserFollowers(userId).subscribe({
+      next: (res) => {
+        if (res) {
+          this.userFollowers = res?.result || [];
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    })
+  }
+
+  async getUserFollowing() {
+    const userId = this.isCheckingUserLoggedIn ? this.userLoggedIn.id : this.user.id;
+    this.isLoading = true;
+    this._userService.getUserFollowings(userId).subscribe({
+      next: (res) => {
+        if (res) {
+          this.userFollowings = res?.result || [];
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    })
+  }
+
+  unFollowAction() {
+    const dataSending: UserFollowModel = {
+      followerId: this.userLoggedIn.id,
+      followedId: this.user.id
+    }
+
+    this.isFollowing = true;
+    this._userService.unFollowUser(dataSending).subscribe({
+      next: (res) => {
+        if (res?.result) {
+          this.user.isFollowing = false;
+          this.alertService.showSuccess('UnFollowed successfully', "Success");
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isFollowing = false;
+        this.alertService.showError('Failed to UnFollowed', "Error");
+      },
+      complete: () => {
+        this.getUserFollowers();
+        this.isFollowing = false;
+      },
+    })
+  }
+
+  followAction() {
+    const dataSending: UserFollowModel = {
+      followerId: this.userLoggedIn.id,
+      followedId: this.user.id
+    }
+    this.isFollowing = true;
+    this._userService.followUser(dataSending).subscribe({
+      next: (res) => {
+        if (res?.result) {
+          this.user.isFollowing = true;
+          this.alertService.showSuccess('Followed successfully', "Success");
+          this.isFollowing = false;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+        this.isFollowing = false;
+        this.alertService.showError('Failed to follow', "Error");
+      },
+      complete: () => {
+        this.getUserFollowers();
+        this.isFollowing = false;
+      },
+    })
+  }
+
+  chatWithUser() {
+    this.router.navigate([`/chat/${this.user?.id}`]);
   }
 
 

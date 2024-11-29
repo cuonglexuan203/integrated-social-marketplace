@@ -1,163 +1,112 @@
 <ng-container>
-    <form [formGroup]="form">
-    <div class="header-profile">
-        <div class="d-flex flex-row align-items-center gap-3">
-            <div class="avatar-container">
-
-                <tui-avatar *ngIf="f['profilePictureUrl']?.value" [size]="'xl'"
-                    [src]="f['profilePictureUrl'].value"
-                ></tui-avatar>
-                <tui-avatar *ngIf="!f['profilePictureUrl']?.value" [size]="'xl'">
-                    {{f['fullName'].value.charAt(0) | uppercase}}
-                </tui-avatar>
-                <div class="avatar-edit-icon" (click)="editAvatar()">
-                  <tui-icon icon="@tui.pencil" size="m"></tui-icon>
+    <form [formGroup]="form" class="profile-form">
+        <div class="header-profile">
+            <div class="user-profile-section">
+                <div class="avatar-container">
+                    <tui-avatar *ngIf="f['profilePictureUrl']?.value" [size]="'xl'"
+                        [src]="f['profilePictureUrl'].value"
+                        class="profile-avatar">
+                    </tui-avatar>
+                    <tui-avatar *ngIf="!f['profilePictureUrl']?.value" [size]="'xl'" class="profile-avatar">
+                        {{f['fullName'].value.charAt(0) | uppercase}}
+                    </tui-avatar>
+                    <div class="avatar-edit-button" (click)="editAvatar()">
+                        <tui-icon icon="@tui.pencil" size="m"></tui-icon>
+                    </div>
                 </div>
-              </div>
-            <div class="user-info d-flex flex-column">
-                <h4 *ngIf="f['fullName']?.value">
-                    {{f['fullName'].value}}
-                </h4>
-                <div *ngIf="f['email']?.value" class="d-flex align-items-center gap-2" style="color: gray">
-                    <tui-icon class="font-14" icon="@tui.mail" size="s"></tui-icon>
-                    <span>
-                        {{f['email'].value}}
-                    </span>
+                <div class="user-info">
+                    <h4 *ngIf="f['fullName']?.value" class="user-name">
+                        {{f['fullName'].value}}
+                    </h4>
+                    <div *ngIf="f['email']?.value" class="user-email">
+                        <tui-icon class="email-icon" icon="@tui.mail" size="s"></tui-icon>
+                        <span>{{f['email'].value}}</span>
+                    </div>
                 </div>
             </div>
+            <button class="save-profile-button" tuiButton type="button" (click)="saveProfile()">
+                Save
+            </button>
         </div>
-        <button
-            class="save-button"
-            tuiButton
-            type="button"
-            (click)="saveProfile()"
-            >
-            Save
-        </button>
-    </div>
-    <div class="divider"></div>
-    <div class="content-profile">
-        <div  class="d-flex justify-content-center">
-    
-            <div class="d-flex flex-column gap-3" style="width: 80%;">
-                <!-- bio -->
-                <div class="d-flex gap-3 flex-row"> 
-                    <!-- Country  -->
-                        <tui-input
-                            tuiHintContent="A tooltip"
-                            class="w-100"
-                            formControlName="country"
-                            [tuiSkeleton]="isLoading"
-                        >
+
+        <div class="divider"></div>
+
+        <div class="profile-content">
+            <div class="form-container">
+                <div class="form-row">
+                    <tui-input
+                        class="form-field"
+                        formControlName="country"
+                        [tuiSkeleton]="isLoading">
                         Country
-                            <input
-                                placeholder="Enter your phone number"
-                                tuiTextfieldLegacy
-                            />
-                        </tui-input>
+                        <input tuiTextfieldLegacy placeholder="Enter your country"/>
+                    </tui-input>
 
-                        <!-- City -->
-                        <tui-input
-                            tuiHintContent="A tooltip"
-                            class="w-100"
-                            formControlName="city"
-                            [tuiSkeleton]="isLoading"
-
-                        >
+                    <tui-input
+                        class="form-field"
+                        formControlName="city"
+                        [tuiSkeleton]="isLoading">
                         City
-                            <input
-                                placeholder="Enter your phone number"
-                                tuiTextfieldLegacy
-                            />
-                        </tui-input>
+                        <input tuiTextfieldLegacy placeholder="Enter your city"/>
+                    </tui-input>
                 </div>
 
-                <div class="d-flex gap-3 flex-row"> 
-                <!-- full name -->
+                <div class="form-row">
                     <tui-input
-                        tuiHintContent="A tooltip"
-                        class="w-100"
+                        class="form-field"
                         formControlName="fullName"
-                        [tuiSkeleton]="isLoading"
-                    >
-                    Full Name
-                        <input
-                            placeholder="Enter your full name"
-                            tuiTextfieldLegacy
-                        />
+                        [tuiSkeleton]="isLoading">
+                        Full Name
+                        <input tuiTextfieldLegacy placeholder="Enter your full name"/>
                     </tui-input>
-                <!-- phone number  -->
+
                     <tui-input
-                        tuiHintContent="A tooltip"
-                        class="w-100"
+                        class="form-field"
                         formControlName="phoneNumber"
-                        [tuiSkeleton]="isLoading"
-                    >
-                    Phone Number
-                        <input
-                            placeholder="Enter your phone number"
-                            tuiTextfieldLegacy
-                        />
+                        [tuiSkeleton]="isLoading">
+                        Phone Number
+                        <input tuiTextfieldLegacy placeholder="Enter your phone number"/>
                     </tui-input>
                 </div>
 
-                <div class="d-flex gap-3 flex-row"> 
-                    <!-- Email -->
+                <div class="form-row">
                     <tui-input
-                    tuiHintContent="A tooltip"
-                    class="w-100"
-                    formControlName="email"
-                    [tuiSkeleton]="isLoading"
-                    >
-                    Email
-                        <input
-                            placeholder="Enter your email address"
-                            tuiTextfieldLegacy
-                        />
+                        class="form-field"
+                        formControlName="email"
+                        [tuiSkeleton]="isLoading">
+                        Email
+                        <input tuiTextfieldLegacy placeholder="Enter your email address"/>
                     </tui-input>
-                    <!-- Birthday  -->
-                        <tui-input-date
-                            tuiHintContent="A tooltip"
-                            class="w-100"
-                            formControlName="dateOfBirth"
-                            [tuiSkeleton]="isLoading"
-                        >
+
+                    <tui-input-date
+                        class="form-field"
+                        formControlName="dateOfBirth"
+                        [tuiSkeleton]="isLoading">
                         Birthday
-                            <input
-                                placeholder="Choose your Birthday"
-                                tuiTextfieldLegacy
-                            />
-                        </tui-input-date>
+                        <input tuiTextfieldLegacy placeholder="Choose your Birthday"/>
+                    </tui-input-date>
                 </div>
 
-                <div class="d-flex gap-3 flex-row"> 
+                <div class="form-row">
                     <tui-input-tag
-                        class="w-100"
+                        class="form-field"
                         formControlName="interests"
                         [tuiTextfieldLabelOutside]="true"
-                        [tuiSkeleton]="isLoading"
-                        >
-                        <i>interests</i>
+                        [tuiSkeleton]="isLoading">
+                        <i>Interests</i>
                     </tui-input-tag>
 
                     <tui-combo-box
-                        class="w-100"
+                        class="form-field"
                         formControlName="gender"
-                        [tuiSkeleton]="isLoading"
-                        >
-                        Search by gender
-                        
+                        [tuiSkeleton]="isLoading">
+                        Gender
                         <tui-data-list-wrapper
                             *tuiDataList
-                            [items]="genders"
-                        />
+                            [items]="genders"/>
                     </tui-combo-box>
-                </div>     
-               
+                </div>
             </div>
         </div>
-
-    </div>
     </form>
-
 </ng-container>

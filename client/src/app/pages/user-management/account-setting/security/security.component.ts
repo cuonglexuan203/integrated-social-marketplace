@@ -62,6 +62,7 @@ export class SecurityComponent {
         },
         error: (err) => {
           console.log(err);
+          this.alertService.showError(err?.error?.detail || 'Something went wrong', 'Error');
           this.isLoading = false;
         },
         complete: () => {
