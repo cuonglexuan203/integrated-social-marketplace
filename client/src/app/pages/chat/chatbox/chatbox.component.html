@@ -23,28 +23,48 @@
             <div class="messages-container">
                 <ng-container *ngIf="messages$ | async as messages">
                     <div *ngFor="let message of messages" class="message" [ngClass]="{'sent': message.senderId !== userId, 'received': message.senderId === userId}">
-                        <div class="message-content">
+                        <div *ngIf="message.attachedPosts">
+                            <div *ngFor="let post of message.attachedPosts" class="attached-post">
+                                <img *ngIf="post.media && post.media.length > 0" [src]="post.media[0].thumbnailUrl || post.media[0].url" alt="Thumbnail" class="thumbnail">
+                                <div class="content-text">{{ post.contentText }}</div>
+                            </div>
+                        </div>
+                        <div *ngIf="message.contentText" class="message-content">
                             {{ message.contentText }}
                         </div>
                     </div>
-                    <div *ngIf="!messages.length" class="message">
-                        <div class="message-item font-14">
+                    <div *ngIf="!messages.length" class="no-messages">
+                        <div class="message-item font-14 d-flex flex-column align-items-center">
                             <tui-icon icon="@tui.message-square-text" class="comment-icon"
-                            [style.width.px]="'48'"
-                            [style.height.px]="'48'"
+                                [style.width.px]="'48'"
+                                [style.height.px]="'48'"
                             ></tui-icon>
-                            <span>Leave the first message
-                            </span>
-                        </div> 
+                            <span class="no-messages-text">Leave the first message</span>
+                        </div>
                     </div>
                 </ng-container>
             </div>
         </div>
         <div class="chatbox-footer">
             <div class="d-flex gap-3">
-                <tui-icon class="primary-color" icon="@tui.message-circle-plus">
+                <tui-icon 
+                    tuiDropdownOpen
+                    [tuiDropdown]="content"
+                    class="primary-color" icon="@tui.message-circle-plus">
                 </tui-icon>
             </div>
+            <ng-template #content>
+                <div class="dropdown">
+                        <tui-input
+                        class="form-field"
+                        [(ngModel)]="postUrl"
+                        style="width: 300px;"
+                        >
+                        Post URL
+                        <input tuiTextfieldLegacy placeholder="Enter your post URL"/>
+                    </tui-input>
+                </div>
+            </ng-template>
             <input (keydown.enter)="sendMessage()" [(ngModel)]="newMessage" #inputChat class="input-chat" style="border: none; flex: 1; width: 100%;" placeholder="Write a message"
                 type="search">
             <div>

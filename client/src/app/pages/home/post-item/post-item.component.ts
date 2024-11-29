@@ -21,6 +21,8 @@ import { FirstLetterWordPipe } from '../../../core/pipes/first-letter-word/first
 import { CommentService } from '../../../core/services/comment/comment.service';
 import { TuiTagModule } from '@taiga-ui/legacy';
 import { UserPostDialogComponent } from '../../../shared/components/user-post-dialog/user-post-dialog.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+
 
 @Component({
   selector: 'app-post-item',
@@ -41,7 +43,8 @@ import { UserPostDialogComponent } from '../../../shared/components/user-post-di
     TuiSkeleton,
     FirstLetterWordPipe,
     TuiTagModule,
-    UserPostDialogComponent
+    UserPostDialogComponent,
+    ClipboardModule 
   ],
   templateUrl: './post-item.component.html',
   styleUrl: './post-item.component.css'
@@ -135,7 +138,7 @@ export class PostItemComponent {
   }
   getReactionReacted(event: any) {
     console.log(event);
-    
+
     if (this.isReacted && event === this.reactionType) {
       this.onRemoveReaction();
     }
@@ -231,6 +234,10 @@ export class PostItemComponent {
       .subscribe((data) => {
         console.log(data);
       });
+  }
+
+  onCopy() {
+    this.alertService.showSuccess('The link has been copied to your clipboard', 'Success');
   }
 
 

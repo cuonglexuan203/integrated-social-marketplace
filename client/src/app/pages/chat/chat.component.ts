@@ -72,8 +72,8 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.userId = token?.getPayload()?.userId;
 
         await this.chatHubService.connectToHub(this.userId);
-        this.loadUserRooms();
         await this.joinRoom();
+        this.loadUserRooms();
       }
     });
   }
@@ -84,6 +84,9 @@ export class ChatComponent implements OnInit, OnDestroy {
 
       if (rooms.length > 0 && !this.receiverId) {
         this.selectRoom(rooms[0]);
+      }
+      if (this.receiverId) {
+        this.handleSelectRoom();  
       }
     });
   }

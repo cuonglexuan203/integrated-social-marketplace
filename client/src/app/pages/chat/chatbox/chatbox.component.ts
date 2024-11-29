@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TuiDropdown, TuiDropdownOpen, TuiIcon, TuiTextfield } from '@taiga-ui/core';
 import { TuiAvatar, TuiBadgedContent, TuiSwitch } from '@taiga-ui/kit';
 import { TuiCell, TuiSearch } from '@taiga-ui/layout';
 import { ChatBoxHeaderData } from '../../../core/data/chatbox-header-data';
@@ -30,7 +30,9 @@ import { OrderByPipe } from '../../../core/pipes/order-by/orderby.pipe';
     FormsModule,
     ReactiveFormsModule,
     TuiInputModule,
-    OrderByPipe
+    OrderByPipe,
+    TuiDropdown,
+    TuiDropdownOpen,
   ],
   templateUrl: './chatbox.component.html',
   styleUrl: './chatbox.component.css'
@@ -51,6 +53,8 @@ export class ChatboxComponent {
   userReceiver: UserResponseModel;
   userId: string;
   isSent: boolean = false;
+
+  postUrl: string;
   constructor(private chatHubService: ChatHubService) {
     this.messages$ = this.chatHubService.messages$;
     console.log(this.messages$);
@@ -83,7 +87,7 @@ export class ChatboxComponent {
       contentText: this.newMessage,
       roomId: this.selectedRoom?.id,
       senderId: this.chatHubService.userId,
-      // attachedPostIds:,
+      attachedPostIds: this.postUrl ? [this.postUrl] : [],
       // media:,
     };
 
