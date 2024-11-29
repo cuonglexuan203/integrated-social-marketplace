@@ -8,10 +8,9 @@ namespace Feed.Infrastructure.Configurations
         public string PostsCollection { get; set; }
         public string CommentsCollection { get; set; }
         public string SavedPostsCollection { get; set; }
-        public string InteractionsCollection { get; set; }
         public string ReportsCollection { get; set; }
         public string UserReactionsCollection { get; set; }
-        public string UserShareCollection { get; set; }
+        public string UserSharesCollection { get; set; }
         public string UserCommentsCollection { get; set; }
     }
 }

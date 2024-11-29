@@ -27,7 +27,7 @@ namespace Feed.Infrastructure.Persistence.DbContext
             Reports = database.GetCollection<Report>(dbOptions.Value.ReportsCollection);
             UserComments = database.GetCollection<UserComment>(dbOptions.Value.UserCommentsCollection);
             UserReactions = database.GetCollection<UserReaction>(dbOptions.Value.UserReactionsCollection);
-            UserShares = database.GetCollection<UserShare>(dbOptions.Value.UserShareCollection);
+            UserShares = database.GetCollection<UserShare>(dbOptions.Value.UserSharesCollection);
             #endregion
 
             #region populate seed data
