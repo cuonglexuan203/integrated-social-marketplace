@@ -13,5 +13,6 @@ namespace Chat.Application.Dtos
         public ICollection<MessageReadInfoDto> MessageReadInfo { get; set; }
         public ICollection<PostReferenceDto> AttachedPosts { get; set; }
         public MessageStatus Status { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
     }
 }
