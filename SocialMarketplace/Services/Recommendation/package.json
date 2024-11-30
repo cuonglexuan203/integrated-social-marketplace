@@ -1,10 +1,10 @@
 {
   "name": "recommendation",
   "version": "1.0.0",
-  "main": "index3.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index3.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
