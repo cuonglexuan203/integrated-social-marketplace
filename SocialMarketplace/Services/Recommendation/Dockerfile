@@ -1,9 +1,15 @@
 FROM node:18-alpine
 
 WORKDIR /app
-COPY package*.json ./
-RUN npm install --production
-COPY . .
 
+# Copy all files from the specific service directory to the working directory
+COPY ./Services/Recommendation/ ./
+
+# Install dependencies
+RUN npm install
+
+# Expose the application port
 EXPOSE 3000
-CMD ["node", "index.js"]
+
+# Run the application
+CMD ["npm", "start"]

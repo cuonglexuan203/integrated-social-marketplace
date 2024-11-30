@@ -25,5 +25,11 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             return await _userReactions.CountDocumentsAsync(_ => _.UserId == userId);
         }
+
+        public async Task<UserReaction> CreateUserReactionAsync(UserReaction userReaction)
+        {
+            await _userReactions.InsertOneAsync(userReaction);
+            return userReaction;
+        }
     }
 }

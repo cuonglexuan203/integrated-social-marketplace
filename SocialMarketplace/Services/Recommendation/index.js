@@ -129,10 +129,10 @@ class RecommendationService {
      */
     async loadInitialPosts() {
         try {
-            if (await this.posts.length()) return;
+            // if (await this.posts.length()) return;
             const response = await axios.get(`${process.env.FEED_SERVICE}/api/v1/Post/GetPosts?pageSize=1000`);
             const posts = response.data.result?.data;
-            // console.log(posts.result.data)
+            console.log(posts)
             for (const post of posts) {
                 await this.upsertPostVector(post);
             }
@@ -306,7 +306,7 @@ app.listen(port, async () => {
 
     await recommendationService.initializeWeaviateSchema();
     recommendationService.initCollections();
-    await recommendationService.loadInitialPosts();
+    // await recommendationService.loadInitialPosts();
 });
 
 export default RecommendationService;
