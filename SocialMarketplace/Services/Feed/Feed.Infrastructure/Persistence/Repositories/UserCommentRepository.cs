@@ -30,5 +30,10 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             return await _userComments.Find(x => x.PostId == postId).ToListAsync();
         }
+        public async Task<UserComment> CreateUserCommentAsync(UserComment userComment)
+        {
+            await _userComments.InsertOneAsync(userComment);
+            return userComment;
+        }
     }
 }

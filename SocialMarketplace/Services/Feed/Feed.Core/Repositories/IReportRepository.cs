@@ -10,5 +10,6 @@ namespace Feed.Core.Repositories
         Task<long> CountValidReportsByUserIdAsync(string userId);
         Task<long> CountInvalidReportsByUserIdAsync(string userId);
         Task<IEnumerable<Report>> GetReportsByPostIdAsync(string postId);
+        Task<Report> CreateReportAsync(Report report);
     }
 }

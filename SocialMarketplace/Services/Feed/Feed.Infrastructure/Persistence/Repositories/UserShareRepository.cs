@@ -25,5 +25,11 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             return await _userShares.CountDocumentsAsync(_ => _.UserId == userId);
         }
+
+        public async Task<UserShare> CreateUserShareAsync(UserShare userShare)
+        {
+            await _userShares.InsertOneAsync(userShare);
+            return userShare;
+        }
     }
 }

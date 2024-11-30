@@ -42,5 +42,11 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             return await _reports.Find(x => x.PostId == postId).ToListAsync();
         }
+
+        public async Task<Report> CreateReportAsync(Report report)
+        {
+            await _reports.InsertOneAsync(report);
+            return report;
+        }
     }
 }

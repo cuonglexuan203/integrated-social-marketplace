@@ -7,5 +7,6 @@ namespace Feed.Core.Repositories
         Task<long> CountTotalCommentsByUserIdAsync(string userId);
         Task<long> CountTotalCommentsByPostIdAsync(string postId);
         Task<IEnumerable<UserComment>> GetUserCommentsByPostId(string postId);
+        Task<UserComment> CreateUserCommentAsync(UserComment userComment);
     }
 }
