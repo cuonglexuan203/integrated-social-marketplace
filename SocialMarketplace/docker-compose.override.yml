@@ -3,12 +3,47 @@ services:
     container_name: portainer
     restart: always
     ports:
-      - 8080:8000
+      - 8081:8000
       - 9090:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
   
+  weaviate:
+    container_name: weaviate
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    ports:
+    - 8080:8080
+    - 50051:50051
+    volumes:
+    - weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-ollama'
+      ENABLE_API_BASED_MODULES: 'true'
+      ENABLE_MODULES: 'text2vec-ollama'
+      CLUSTER_HOSTNAME: 'node1'
+
+  metabase:
+    container_name: metabase
+    restart: always
+    hostname: metabase
+    ports:
+      - 9002:3000
+    depends_on:
+      - feeddb
+    volumes:
+      - metabase_data:/metabase-data
+
   identitydb:
     container_name: identitydb
     environment:
@@ -35,6 +70,22 @@ services:
       - 27018:27017
     volumes:
       - chat_mongo_data:/data/db
+  
+  recommendation.api:
+    container_name: recommendation.api
+    restart: always
+    ports:
+      - 9003:3000
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - WEAVIATE_HOST=weaviate
+      - WEAVIATE_PORT=8080
+      - EMBEDDING_MODEL_URL=http://localhost:11434
+      - FEED_SERVICE=http://feed.api
+      - GOOGLE_API_KEY=AIzaSyC_TIXs1O6Xi-bi6WRGISvrlcAxxl46Cgo
+    depends_on:
+      - weaviate
 
   identity.api:
     container_name: identity.api

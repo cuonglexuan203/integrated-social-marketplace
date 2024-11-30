@@ -2,6 +2,7 @@
 using Feed.Application.DTOs;
 using Feed.Application.Interfaces.HttpClients;
 using Feed.Application.Mappers;
+using Feed.Core.Entities;
 using Feed.Core.Enums;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;
@@ -16,12 +17,15 @@ namespace Feed.Application.Handlers
         private readonly ILogger<AddReactionToPostCommand> _logger;
         private readonly IPostRepository _postRepo;
         private readonly IIdentityService _identityService;
+        private readonly IUserReactionRepository _userReactionRepository;
 
-        public AddReactionToPostHandler(ILogger<AddReactionToPostCommand> logger, IPostRepository postRepo, IIdentityService identityService)
+        public AddReactionToPostHandler(ILogger<AddReactionToPostCommand> logger, IPostRepository postRepo, IIdentityService identityService,
+            IUserReactionRepository userReactionRepository)
         {
             _logger = logger;
             _postRepo = postRepo;
             _identityService = identityService;
+            _userReactionRepository = userReactionRepository;
         }
         public async Task<ReactionDto> Handle(AddReactionToPostCommand request, CancellationToken cancellationToken)
         {
@@ -35,6 +39,19 @@ namespace Feed.Application.Handlers
             };
 
             var result = await _postRepo.AddReacionToPostAsync(request.PostId, reaction);
+            try
+            {
+                var userReaction = new UserReaction
+                {
+                    PostId = request.PostId,
+                    UserId = request.UserId,
+                };
+                await _userReactionRepository.CreateUserReactionAsync(userReaction);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error in creating the user reaction: {msg}", ex.Message);
+            }
             return FeedMapper.Mapper.Map<ReactionDto>(result);
         }
     }

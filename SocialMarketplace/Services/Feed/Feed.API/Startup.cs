@@ -109,10 +109,17 @@ namespace Feed.API
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<ISavedPostRepository, SavedPostRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IUserReactionRepository, UserReactionRepository>();
+            services.AddScoped<IUserCommentsRepository, UserCommentRepository>();
+            services.AddScoped<IUserShareRepository, UserShareRepository>();
+            services.AddScoped<IPostScoringService, PostScoringService>();
+            services.AddScoped<IUserCredibilityUpdateService, UserCredibilityUpdateService>();
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IPostMappingService, PostMappingService>();
             services.AddHttpContextAccessor();
             services.AddHttpClient<IIdentityService, IdentityService>();
+            services.AddHttpClient<IRecommendationService, RecommendationService>();
             services.AddScoped<IMongoIdValidator, MongoIdValidator>();
             #endregion
 

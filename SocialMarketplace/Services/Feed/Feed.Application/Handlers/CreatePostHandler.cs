@@ -19,15 +19,17 @@ namespace Feed.Application.Handlers
         private readonly ICloudinaryService _cloudinaryService;
         private readonly ILogger<CreatePostHandler> _logger;
         private readonly IPostMappingService _postMappingService;
+        private readonly IUserShareRepository _userShareRepository;
 
         public CreatePostHandler(IIdentityService identityService, IPostRepository postRepository, ICloudinaryService cloudinaryService, 
-            ILogger<CreatePostHandler> logger, IPostMappingService postMappingService)
+            ILogger<CreatePostHandler> logger, IPostMappingService postMappingService, IUserShareRepository userShareRepository)
         {
             _identityService = identityService;
             _postRepo = postRepository;
             _cloudinaryService = cloudinaryService;
             _logger = logger;
             _postMappingService = postMappingService;
+            _userShareRepository = userShareRepository;
         }
 
         public async Task<PostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
@@ -60,6 +62,23 @@ namespace Feed.Application.Handlers
                 
                 var result = await _postRepo.CreatePostAsync(post);
                 var postDto = await _postMappingService.MapToDtoAsync(result);
+                //
+                if(request.SharedPostId != null)
+                {
+                    try
+                    {
+                        var userShare = new UserShare
+                        {
+                            PostId = request.SharedPostId,
+                            UserId = request.UserId,
+                        };
+                        await _userShareRepository.CreateUserShareAsync(userShare);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError("Error in creating the user share: {msg}", ex.Message);
+                    }
+                }
                 return postDto;
             }
             catch (Exception ex) {

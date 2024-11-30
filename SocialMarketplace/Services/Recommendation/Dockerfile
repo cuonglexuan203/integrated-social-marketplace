@@ -1,7 +1,15 @@
-FROM node:16
+FROM node:18-alpine
+
 WORKDIR /app
-COPY package*.json ./
+
+# Copy all files from the specific service directory to the working directory
+COPY ./Services/Recommendation/ ./
+
+# Install dependencies
 RUN npm install
-COPY . .
+
+# Expose the application port
 EXPOSE 3000
-CMD ["node", "-r", "esm", "index.js"]
+
+# Run the application
+CMD ["npm", "start"]

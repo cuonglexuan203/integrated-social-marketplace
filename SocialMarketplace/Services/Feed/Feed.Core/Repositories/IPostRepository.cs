@@ -24,6 +24,7 @@ namespace Feed.Core.Repositories
         Task<IEnumerable<Post>> GetAllUserPostsAsync(string userId, CancellationToken cancellationToken = default);
         Task<Pagination<Post>> GetPostsReactedByUserIdAsync(string userId, ReactionSpecParams reactionParams, CancellationToken token = default);
         Task<Post> GetPostByCommentId(string commentId, CancellationToken token = default);
+        Task<long> CountPostsByUserIdAsync(string userId, CancellationToken cancellationToken = default);
 
     }
 }

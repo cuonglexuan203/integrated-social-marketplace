@@ -18,13 +18,18 @@ namespace Feed.Application.Handlers
         private readonly IPostRepository _postRepo;
         private readonly IIdentityService _identityService;
         private readonly ICloudinaryService _cloudinaryService;
+        private readonly IRecommendationService _recommendationService;
+        private readonly IUserCommentsRepository _userCommentsRepository;
 
-        public CreateCommentHandler(ILogger<CreateCommentHandler> logger, IPostRepository postRepo, IIdentityService identityService, ICloudinaryService cloudinaryService)
+        public CreateCommentHandler(ILogger<CreateCommentHandler> logger, IPostRepository postRepo, IIdentityService identityService, 
+            ICloudinaryService cloudinaryService, IRecommendationService recommendationService, IUserCommentsRepository userCommentsRepository)
         {
             _logger = logger;
             _postRepo = postRepo;
             _identityService = identityService;
             _cloudinaryService = cloudinaryService;
+            _recommendationService = recommendationService;
+            _userCommentsRepository = userCommentsRepository;
         }
         public async Task<CommentDto> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
         {
@@ -47,6 +52,22 @@ namespace Feed.Application.Handlers
             }
 
             var result = await _postRepo.AddCommentToPostAsync(comment);
+            var sentitmentScore = await _recommendationService.GetSentimentAnalysisScoreAsync(request.CommentText);
+
+            try
+            {
+                var userComment = new UserComment
+                {
+                    PostId = request.PostId,
+                    UserId = request.UserId,
+                    SentimentScore = sentitmentScore
+                };
+                await _userCommentsRepository.CreateUserCommentAsync(userComment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error in creating the user comment: {msg}", ex.Message);
+            }
 
             return FeedMapper.Mapper.Map<CommentDto>(result);
         }

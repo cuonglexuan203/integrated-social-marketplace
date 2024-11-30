@@ -14,6 +14,7 @@ namespace Feed.Application.Mappers
                 cfg.AddProfile<CommentMappingProfile>();
                 cfg.AddProfile<UserMappingProfile>();
                 cfg.AddProfile<SavedPostMappingProfile>();
+                cfg.AddProfile<ReportMappingProfile>();
             });
             var mapper = config.CreateMapper();
             return mapper;

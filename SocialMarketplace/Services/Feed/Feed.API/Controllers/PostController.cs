@@ -124,5 +124,13 @@ namespace Feed.API.Controllers
             result.Result = await _mediator.Send(new GetPostsReactedByUserQuery(reactionParams));
             return Ok(result);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> CreateReport(CreateReportCommand command)
+        {
+            ReturnResult<ReportDto> result = new();
+            result.Result= await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

@@ -12,6 +12,9 @@ namespace Identity.Infrastructure.Identity
         public IList<string> Interests { get; set; } = new List<string>();
         public string? City { get; set; }
         public string? Country { get; set; }
+        // Credibility
+        public float BaseCredibility { get; set; } = 50;
+        public float CredibilityScore { get; set; } = 50;
         public virtual ICollection<UserFollow> Followers { get; set; } = new List<UserFollow>();
         public virtual ICollection<UserFollow> Following { get; set; } = new List<UserFollow>();
     }

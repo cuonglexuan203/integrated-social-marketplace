@@ -313,5 +313,9 @@ namespace Feed.Infrastructure.Persistence.Repositories
                                .FirstOrDefaultAsync(token);
         }
 
+        public async Task<long> CountPostsByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+        {
+            return await _posts.CountDocumentsAsync(_ => _.User.Id == userId, cancellationToken: cancellationToken);
+        }
     }
 }

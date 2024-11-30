@@ -2,6 +2,12 @@ services:
   portainer:
     image: portainer/portainer-ce
 
+  weaviate:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.27.5
+
+  metabase:
+    image: metabase/metabase:latest
+
   identitydb:
     image: mcr.microsoft.com/mssql/server:2022-latest
 
@@ -11,6 +17,11 @@ services:
   chatdb:
     image: mongo
   
+  recommendation.api:
+    build:
+      context: .
+      dockerfile: Services/Recommendation/Dockerfile
+
   identity.api:
     image: ${DOCKER_REGISTRY-}identityapi
     build:
@@ -39,4 +50,6 @@ volumes:
   chat_mongo_data:
   mongo_data:
   sqlserver_data:
-  portainer_data:  
+  portainer_data:
+  metabase_data:
+  weaviate_data:  
