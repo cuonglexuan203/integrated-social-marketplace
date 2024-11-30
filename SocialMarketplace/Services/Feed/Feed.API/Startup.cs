@@ -119,6 +119,7 @@ namespace Feed.API
             services.AddScoped<IPostMappingService, PostMappingService>();
             services.AddHttpContextAccessor();
             services.AddHttpClient<IIdentityService, IdentityService>();
+            services.AddHttpClient<IRecommendationService, RecommendationService>();
             services.AddScoped<IMongoIdValidator, MongoIdValidator>();
             #endregion
 
