@@ -4,7 +4,7 @@ services:
 
   weaviate:
     image: cr.weaviate.io/semitechnologies/weaviate:1.27.5
-
+  
   metabase:
     image: metabase/metabase:latest
 
@@ -16,8 +16,15 @@ services:
   
   chatdb:
     image: mongo
+
+  embeddingmodel:
+    image: ${DOCKER_REGISTRY-}embeddingmodel
+    build:
+      context: .
+      dockerfile: Services/Recommendation/EmbeddingModel/Dockerfile
   
-  recommendation.api:
+  recommedation.api:
+    image: ${DOCKER_REGISTRY-}recommendationapi
     build:
       context: .
       dockerfile: Services/Recommendation/Dockerfile

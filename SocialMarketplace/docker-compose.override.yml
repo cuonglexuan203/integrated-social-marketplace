@@ -12,17 +12,17 @@ services:
   weaviate:
     container_name: weaviate
     command:
-    - --host
-    - 0.0.0.0
-    - --port
-    - '8080'
-    - --scheme
-    - http
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8080'
+      - --scheme
+      - http
     ports:
-    - 8080:8080
-    - 50051:50051
+      - 8080:8080
+      - 50051:50051
     volumes:
-    - weaviate_data:/var/lib/weaviate
+      - weaviate_data:/var/lib/weaviate
     restart: on-failure:0
     environment:
       QUERY_DEFAULTS_LIMIT: 25
@@ -71,8 +71,14 @@ services:
     volumes:
       - chat_mongo_data:/data/db
   
-  recommendation.api:
-    container_name: recommendation.api
+  embeddingmodel:
+    container_name: embeddingmodel
+    restart: always
+    ports:
+      - 11435:11434
+
+  recommedation.api:
+    container_name: recommedation.api
     restart: always
     ports:
       - 9003:3000
@@ -81,11 +87,12 @@ services:
       - PORT=3000
       - WEAVIATE_HOST=weaviate
       - WEAVIATE_PORT=8080
-      - EMBEDDING_MODEL_URL=http://localhost:11434
+      - EMBEDDING_MODEL_URL=http://embeddingmodel:11434
       - FEED_SERVICE=http://feed.api
       - GOOGLE_API_KEY=AIzaSyC_TIXs1O6Xi-bi6WRGISvrlcAxxl46Cgo
     depends_on:
       - weaviate
+      - embeddingmodel
 
   identity.api:
     container_name: identity.api

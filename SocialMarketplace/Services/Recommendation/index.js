@@ -2,12 +2,13 @@ import weaviate, { vectorizer, dataType } from 'weaviate-client';
 import axios from 'axios';
 import dotenv from 'dotenv';
 import express from 'express';
-import ollama from 'ollama';
+import { Ollama } from 'ollama';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 dotenv.config();
 
 class RecommendationService {
     constructor() {
+
     }
 
     async connectWeaviate() {
@@ -21,7 +22,7 @@ class RecommendationService {
     /**
      * Initialize Weaviate schema
      */
-    async initializeWeaviateSchema() {
+    async initWeaviateSchema() {
 
         const schema = {
             name: 'Post',
@@ -49,18 +50,24 @@ class RecommendationService {
         this.posts = this.weaviateClient.collections.get("Post");
     }
 
+    initEmbeddingModel() {
+        this.ollama = new Ollama({
+            host: process.env.EMBEDDING_MODEL_URL,
+        })
+    }
+
     /**
      * Generate embedding using nomic-embed-text
      */
     async generateEmbedding(text) {
         try {
-            const response = await ollama.embeddings({
+            const response = await this.ollama.embeddings({
                 model: 'nomic-embed-text',
                 prompt: text,
             });
             return response.embedding;
         } catch (error) {
-            console.error('Error generating embedding:', error);
+            console.error('Error generating embedding:', error.message);
             return null;
         }
     }
@@ -88,13 +95,15 @@ class RecommendationService {
     async upsertPostVector(post) {
         try {
             const vector = await this.generateVectorEmbedding(post);
-            if (!vector) return;
+            if (!vector) {
+                throw new Error(`No vector generated for post ID: ${post.id}`);
+            }
 
             // Upsert post vector to database
             const postVectorId = await this.posts.data.insert({
                 metadata: post.id,
                 properties: {
-                    contenText: post.contentText,
+                    contentText: post.contentText,
                     tags: post.tags,
                     category: post.category,
                     postId: post.id
@@ -106,7 +115,8 @@ class RecommendationService {
 
             return postVectorId;
         } catch (error) {
-            console.error('Error upserting post vector:', error);
+            console.error('Error upserting post vector:', error.message);
+            throw error;
         }
     }
 
@@ -129,33 +139,71 @@ class RecommendationService {
      */
     async loadInitialPosts() {
         try {
-            // if (await this.posts.length()) return;
+            if (await this.posts.length()) return;
             const response = await axios.get(`${process.env.FEED_SERVICE}/api/v1/Post/GetPosts?pageSize=1000`);
             const posts = response.data.result?.data;
-            console.log(posts)
+            console.log(`Fetched posts count: ${(posts.length)}`);
+
             for (const post of posts) {
-                await this.upsertPostVector(post);
+                let retryCount = 0;
+                const MAX_RETRIES = 6;
+
+                while (retryCount < MAX_RETRIES) {
+                    try {
+                        await this.upsertPostVector(post);
+                        break; // Successfully upserted, exit the retry loop
+                    } catch (upsertError) {
+                        retryCount++;
+
+                        if (retryCount >= MAX_RETRIES) {
+                            console.error(`Failed to upsert post ${post.id} after ${MAX_RETRIES} attempts.`, upsertError);
+                            // Optionally log to an error tracking system or handle critical failure
+                            break;
+                        }
+
+                        console.error(`Attempt ${retryCount}: Failed to upsert post ${post.id}. Retrying in 30 seconds...`, upsertError);
+
+                        // Wait for 30 seconds before retrying
+                        await new Promise(resolve => setTimeout(resolve, 30000));
+                    }
+                }
             }
         } catch (error) {
             console.error('Error loading initial posts:', error);
         }
     }
 
-    async getRelevantPosts(post, limit = 10) {
-        const postVector = await this.generateVectorEmbedding(post);
-        if (!postVector) return [];
+    async getRelevantPosts(postId, limit = 10, offset = 0) {
+        const existingPosts = await this.posts.query.fetchObjects({
+            filters: this.posts.filter.byProperty("postId").equal(postId),
+            includeVector: true,
+            limit: 1,
+        });
+
+        if (existingPosts?.objects?.length === 0) {
+            return null;
+        }
+
+        const postVector = existingPosts.objects.at(0).vectors.default;
         const relevantPosts = await this.posts.query.nearVector(postVector, {
             limit,
+            offset
         });
-        return relevantPosts?.objects?.map(p => p.properties.postId) ?? [];
+
+        // return relevantPosts?.objects?.map(p => p.properties.postId) ?? [];
+
+        return relevantPosts?.objects ?? [];
     }
 
-    async searchPosts(keyword, limit = 10) {
+    async searchPosts(keyword, limit = 10, offset = 0) {
         const result = await this.posts.query.nearVector(await this.generateEmbedding(keyword), {
             // alpha: 0.25,
-            limit
+            limit,
+            offset,
         })
-        return result?.objects?.map(p => p.properties.postId) ?? [];
+        // return result?.objects?.map(p => p.properties.postId) ?? [];
+
+        return result?.objects ?? [];
     }
 }
 
@@ -198,12 +246,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post('/search-relavant-posts', async (req, res) => {
     try {
-        const { keyword } = req.body;
+        const { keyword, limit, offset } = req.body;
 
         if (!keyword) {
             return res.status(400).json({ error: 'Keyword is required' });
         }
-        const relavantPosts = await recommendationService.searchPosts(keyword);
+        const relavantPosts = await recommendationService.searchPosts(keyword, limit, offset);
         res.json({
             keyword,
             relavantPosts
@@ -216,16 +264,24 @@ app.post('/search-relavant-posts', async (req, res) => {
     }
 })
 
-app.post('/get-relavant-posts', async (req, res) => {
+app.get('/get-relavant-posts', async (req, res, next) => {
     try {
-        const post = req.body;
+        const { postId, limit, offset } = req.query;
 
-        if (!post) {
-            return res.status(400).json({ error: 'Post is required' });
+        if (!postId) {
+            return res.status(400).json({ error: 'Post ID is required' });
         }
-        const relavantPosts = await recommendationService.getRelevantPosts(post);
+
+        const relavantPosts = await recommendationService.getRelevantPosts(postId, limit, offset);
+
+        if (!relavantPosts) {
+            const error = new Error(`Post not found: post id ${postId}`);
+            error.status = 404;
+            return next(error);
+        }
+
         res.json({
-            basePost: post,
+            basePostId: postId,
             relavantPosts
         });
     } catch (error) {
@@ -277,7 +333,7 @@ app.post("/upsert-post", async (req, res) => {
     }
 })
 
-app.get("/delete-post/:postId", async (req, res) => {
+app.delete("/delete-post/:postId", async (req, res) => {
     try {
         const postId = req.params.postId;
 
@@ -296,6 +352,21 @@ app.get("/delete-post/:postId", async (req, res) => {
     }
 })
 
+app.use((req, res, next) => {
+    const error = new Error("Not found");
+    error.status = 404;
+    next(error);
+})
+
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({
+        error: {
+            message: err.message,
+        },
+    });
+})
+
+
 // Initialize Weaviate and load initial posts
 app.listen(port, async () => {
     console.log(`Recommendation service listening at http://localhost:${port}`);
@@ -304,9 +375,10 @@ app.listen(port, async () => {
     let clientReadiness = await recommendationService.weaviateClient.isReady();
     console.log(`Weaviate client ready: ${clientReadiness}`);
 
-    await recommendationService.initializeWeaviateSchema();
+    await recommendationService.initWeaviateSchema();
     recommendationService.initCollections();
-    // await recommendationService.loadInitialPosts();
+    recommendationService.initEmbeddingModel();
+    await recommendationService.loadInitialPosts();
 });
 
 export default RecommendationService;
