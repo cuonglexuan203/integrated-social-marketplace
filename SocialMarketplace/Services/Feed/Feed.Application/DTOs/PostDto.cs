@@ -12,6 +12,7 @@
         public string? SharedPostId { get; set; }
         public PostDto? SharedPost { get; set; }
         public List<string> Tags { get; set; }
+        public string Category { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }
         public DateTimeOffset? ModifiedAt { get; set; }
     }

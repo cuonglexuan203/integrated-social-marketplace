@@ -168,6 +168,7 @@ class RecommendationService {
                     }
                 }
             }
+            console.info("✅ Loading initial posts successfully!")
         } catch (error) {
             console.error('Error loading initial posts:', error);
         }

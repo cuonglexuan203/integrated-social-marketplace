@@ -18,6 +18,7 @@ namespace Feed.Core.Entities
         public string Link { get => Id; }
         public string? SharedPostId { get; set; }
         public ICollection<string> Tags { get; set; } = new List<string>();
+        public string Category { get; set; }
         public float FinalPostScore { get; set; }
     }
 }
