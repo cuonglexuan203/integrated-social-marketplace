@@ -67,7 +67,7 @@ class RecommendationService {
             });
             return response.embedding;
         } catch (error) {
-            console.error('Error generating embedding:', error);
+            console.error('Error generating embedding:', error.message);
             return null;
         }
     }
@@ -95,7 +95,9 @@ class RecommendationService {
     async upsertPostVector(post) {
         try {
             const vector = await this.generateVectorEmbedding(post);
-            if (!vector) return;
+            if (!vector) {
+                throw new Error(`No vector generated for post ID: ${post.id}`);
+            }
 
             // Upsert post vector to database
             const postVectorId = await this.posts.data.insert({
@@ -113,7 +115,8 @@ class RecommendationService {
 
             return postVectorId;
         } catch (error) {
-            console.error('Error upserting post vector:', error);
+            console.error('Error upserting post vector:', error.message);
+            throw error;
         }
     }
 
@@ -139,9 +142,31 @@ class RecommendationService {
             if (await this.posts.length()) return;
             const response = await axios.get(`${process.env.FEED_SERVICE}/api/v1/Post/GetPosts?pageSize=1000`);
             const posts = response.data.result?.data;
-            console.log(posts)
+            console.log(`Fetched posts count: ${(posts.length)}`);
+
             for (const post of posts) {
-                await this.upsertPostVector(post);
+                let retryCount = 0;
+                const MAX_RETRIES = 6;
+
+                while (retryCount < MAX_RETRIES) {
+                    try {
+                        await this.upsertPostVector(post);
+                        break; // Successfully upserted, exit the retry loop
+                    } catch (upsertError) {
+                        retryCount++;
+
+                        if (retryCount >= MAX_RETRIES) {
+                            console.error(`Failed to upsert post ${post.id} after ${MAX_RETRIES} attempts.`, upsertError);
+                            // Optionally log to an error tracking system or handle critical failure
+                            break;
+                        }
+
+                        console.error(`Attempt ${retryCount}: Failed to upsert post ${post.id}. Retrying in 30 seconds...`, upsertError);
+
+                        // Wait for 30 seconds before retrying
+                        await new Promise(resolve => setTimeout(resolve, 30000));
+                    }
+                }
             }
         } catch (error) {
             console.error('Error loading initial posts:', error);
