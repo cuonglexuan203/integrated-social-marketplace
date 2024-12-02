@@ -45,7 +45,7 @@ import { CommentStateService } from '../../../core/services/state/comment-state/
     FirstLetterWordPipe,
     TuiTagModule,
     UserPostDialogComponent,
-    ClipboardModule 
+    ClipboardModule
   ],
   templateUrl: './post-item.component.html',
   styleUrl: './post-item.component.css'
@@ -66,11 +66,12 @@ export class PostItemComponent {
   reactionsType = reactions;
 
   dropdownHideDelay = 200;
+  isInitial = false;
   constructor(
     private _feedService: FeedService,
     private alertService: AlertService,
     private _commentService: CommentService,
-
+    private _commentStateService: CommentStateService
   ) { }
 
   ngOnInit() {
@@ -78,13 +79,8 @@ export class PostItemComponent {
   }
 
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['post'] && !changes['post'].isFirstChange()) {
-      this.initializePostState();
-    }
-  }
-
   initializePostState() {
+    this.isInitial = true;
     // Reset state for the new post
     this.comments = [];
     this.isReacted = false;
@@ -96,6 +92,9 @@ export class PostItemComponent {
       this.onCheckedReaction();
     }
   }
+
+
+
 
 
   getCommentsPost() {
@@ -204,7 +203,7 @@ export class PostItemComponent {
   }
 
   onShare() {
-    const data = { title: 'Share', listSelection: ['On my wall', 'In a private message'] };
+    const data = { title: 'Share', listSelection: ['On my wall', 'In a private message'], post: this.post };
 
     this.dialogs
       .open(
@@ -213,7 +212,7 @@ export class PostItemComponent {
           data: data,
           dismissible: false,
         }
-    )
+      )
       .subscribe((data) => {
         console.log(data);
       });
@@ -229,12 +228,18 @@ export class PostItemComponent {
           dismissible: false,
           size: 'auto',
           data: data,
-          appearance: 'comment-dialog',
         }
-      )
-      .subscribe((data) => {
-        console.log(data);
-      });
+      ).subscribe({
+        next: (data) => {
+          console.log(data);
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+        }
+      })
+      ;
   }
 
   onCopy() {

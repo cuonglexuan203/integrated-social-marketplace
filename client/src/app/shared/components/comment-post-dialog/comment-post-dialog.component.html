@@ -2,36 +2,67 @@
     <div class="d-flex p-3 container">
         <div style="width: 70%;" class="post-media-url">
             @if (post.media) {
+                @if(currentIndex != 0) {
+                    <button
+                    *ngIf="post.media.length > 1"
+                    iconStart="@tui.chevron-left"
+                    tuiIconButton
+                    class="prev-button"
+                    type="button"
+                    size="s"
+                    (click)="carousel.prev()"
+                    >
+                    Previous
+                </button>
+                   
+                }
                 <tui-carousel
                     #carousel
                     class="carousel"
                     (indexChange)="onCarouselChange($event)"
                     [style.--tui-carousel-padding]="0"
+                    [style.align-items]="'center'"
                     [(index)]="currentIndex"
                 >   
-                    
                     <ng-container class="media" *ngFor="let item of post.media">
-                        @if(item?.contentType === 'image') {
-                            <img 
-                                *tuiItem 
-                                [src]="item?.url" 
-                                [width]="item?.width"
-                                [height]="item?.height"
-                                class="carousel-image"
-                            >
-                        }
-                        @if(item?.contentType === 'video') {
-                            <video 
-                                *tuiItem 
-                                [src]="item?.url" 
-                                controls 
-                                class="carousel-video"
-                            >
-                                Your browser does not support the video tag.
-                            </video>
-                        }
+
+                        <div
+                        *tuiItem 
+                        class="d-flex justify-content-center align-items-center"
+                        >
+                            @if(item?.contentType === 'image') {
+                                <img 
+                                    [src]="item?.url" 
+                                    [width]="item?.width"
+                                    [height]="item?.height"
+                                    class="carousel-image"
+                                >
+                            }
+                            @if(item?.contentType === 'video') {
+                                <video 
+                                    [src]="item?.url" 
+                                    controls 
+                                    class="carousel-video"
+                                >
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+                        </div>
                     </ng-container>
                 </tui-carousel>
+                @if (currentIndex != post.media.length - 1) {
+                    <button
+                    iconEnd="@tui.chevron-right"
+                    tuiIconButton
+                    type="button"
+                    class="next-button"
+                    size="s"
+                    (click)="carousel.next()"
+                    *ngIf="post.media.length > 1"
+                    >
+                    Next
+                </button>
+                }
             }
         </div>
        

@@ -59,7 +59,7 @@
         </div>
         <div class="post-description">
             <span
-        
+                class="content-text"
             >
                 {{post.contentText}}
             </span>
@@ -99,27 +99,32 @@
                     [style.--tui-carousel-padding]="0"
                     (indexChange)="onCarouselChange($event)"
                 >
+                <ng-container class="d-flex justify-content-center align-items-center">
                 @for (item of post.media; track $index) {
-                    @if(item?.contentType === 'image') {
-                        <img 
-                            *tuiItem 
-                            src="{{ item?.url }}" 
-                            class="carousel-image"
-                        >
+                    <div
+                    *tuiItem 
+                    class="d-flex justify-content-center align-items-center w-100 h-100"
+                    >
+                            @if(item?.contentType === 'image') {
+                                <img 
+                                    src="{{ item?.url }}" 
+                                    class="carousel-image"
+                                >
+                            }
+                            @if(item?.contentType === 'video') {
+                                <video 
+                                    [width]="'500'" 
+                                    [height]="'500'" 
+                                    src="{{ item?.url }}" 
+                                    controls 
+                                    class="carousel-video"
+                                >
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+                        </div>
                     }
-                    @if(item?.contentType === 'video') {
-                        <video 
-                            [width]="'500'" 
-                            [height]="'500'" 
-                            *tuiItem 
-                            src="{{ item?.url }}" 
-                            controls 
-                            class="carousel-video"
-                        >
-                            Your browser does not support the video tag.
-                        </video>
-                    }
-                }
+                </ng-container>
                 </tui-carousel>
                 
                 @if (currentIndex != post.media.length - 1) {
