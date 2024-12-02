@@ -1,4 +1,5 @@
 ﻿using Feed.Core.Entities;
+using Feed.Core.ValueObjects;
 
 namespace Feed.Core.Repositories
 {
@@ -8,5 +9,7 @@ namespace Feed.Core.Repositories
         Task<long> CountTotalCommentsByPostIdAsync(string postId);
         Task<IEnumerable<UserComment>> GetUserCommentsByPostId(string postId);
         Task<UserComment> CreateUserCommentAsync(UserComment userComment);
+        Task<IEnumerable<GroupedUserComment>> GroupUserCommentByUserIdAsync(string userId);
+
     }
 }

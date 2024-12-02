@@ -1,5 +1,6 @@
 ﻿using Feed.Core.Entities;
 using Feed.Core.Repositories;
+using Feed.Core.ValueObjects;
 using Feed.Infrastructure.Persistence.DbContext;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -35,5 +36,20 @@ namespace Feed.Infrastructure.Persistence.Repositories
             await _userComments.InsertOneAsync(userComment);
             return userComment;
         }
+        public async Task<IEnumerable<GroupedUserComment>> GroupUserCommentByUserIdAsync(string userId)
+        {
+            var query = _userComments.AsQueryable()
+                                       .GroupBy(x => new { x.UserId, x.PostId })
+                                       .Select(g => new GroupedUserComment
+                                       {
+                                           UserId = g.Key.UserId,
+                                           PostId = g.Key.PostId,
+                                           TotalSentimentScore = g.Sum(x => x.SentimentScore),
+                                           Count = g.Count()
+                                       });
+
+            return await Task.FromResult(query.ToList());
+        }
+
     }
 }

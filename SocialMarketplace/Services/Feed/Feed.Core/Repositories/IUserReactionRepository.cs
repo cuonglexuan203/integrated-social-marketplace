@@ -1,4 +1,6 @@
-﻿using Feed.Core.Entities;
+﻿using Feed.Core.;
+using Feed.Core.Entities;
+using Feed.Core.ValueObjects;
 
 namespace Feed.Core.Repositories
 {
@@ -7,5 +9,6 @@ namespace Feed.Core.Repositories
         Task<long> CountTotalReactionsByUserIdAsync(string userId);
         Task<long> CountTotalReactionsByPostIdAsync(string postId);
         Task<UserReaction> CreateUserReactionAsync(UserReaction userReaction);
+        Task<IEnumerable<GroupedUserReaction>> GroupUserReactionByUserIdAsync(string userId);
     }
 }

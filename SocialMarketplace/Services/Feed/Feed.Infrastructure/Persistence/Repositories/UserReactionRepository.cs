@@ -1,5 +1,7 @@
-﻿using Feed.Core.Entities;
+﻿using Feed.Application.DTOs;
+using Feed.Core.Entities;
 using Feed.Core.Repositories;
+using Feed.Core.ValueObjects;
 using Feed.Infrastructure.Persistence.DbContext;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -30,6 +32,20 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             await _userReactions.InsertOneAsync(userReaction);
             return userReaction;
+        }
+
+        public async Task<IEnumerable<GroupedUserReaction>> GroupUserReactionByUserIdAsync(string userId)
+        {
+            var query = _userReactions.AsQueryable()
+                                       .GroupBy(x => new { x.UserId, x.PostId })
+                                       .Select(g => new GroupedUserReaction
+                                       {
+                                           UserId = g.Key.UserId,
+                                           PostId = g.Key.PostId,
+                                           Count = g.Count()
+                                       });
+
+            return await Task.FromResult(query.ToList());
         }
     }
 }
