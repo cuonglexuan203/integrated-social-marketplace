@@ -26,16 +26,13 @@ namespace Identity.Infrastructure.Persistence.DbContext
             if (!context.Users.Any())
             {
                 var userSeeds = GetUserSeeds();
-                foreach (var user in userSeeds)
-                {
-                    await identityService.CreateUserAsync(user);
-                }
+                await identityService.PopulateUserData(userSeeds);
                 logger.LogInformation($"Identity Database {typeof(IdentityContext).Name} seeded with {userSeeds.Count()} users.");
             }
         }
 
         #region seed data
-        private static IEnumerable<CreateUserCommand> GetUserSeeds()
+        private static IEnumerable<LoadExistingUserCommand> GetUserSeeds()
         {
             // run by docker compose
             var path = Path.Combine("Persistence", "SeedData", "users.json");
@@ -43,28 +40,32 @@ namespace Identity.Infrastructure.Persistence.DbContext
             //var path = "../Identity.Infrastructure/Persistence/SeedData/users.json";
 
             var userDataStr = File.ReadAllText(path);
-            var userData = JsonConvert.DeserializeObject<List<CreateUserCommand>>(userDataStr);
+            var userData = JsonConvert.DeserializeObject<List<LoadExistingUserCommand>>(userDataStr);
             #region default users
-            var systemUser = new List<CreateUserCommand>
+            var systemUser = new List<LoadExistingUserCommand>
             {
-                 new CreateUserCommand(){
+                 new LoadExistingUserCommand(){
+                Id = "lxca7cdd-e81f-482d-ba63-f896ccf22b6a",
                 UserName = "admin",
                 Password = "adminadmin",
                 ConfirmationPassword = "adminadmin",
                 Email = "admin@gmail.com",
                 FullName = "Admin",
                 Roles = [SMRole.admin.ToString()],
+                ProfileUrl = "lxca7cdd-e81f-482d-ba63-f896ccf22b6a",
                 Gender = 0,
                 City = "Ho Chi Minh City",
                 Country = "Viet Nam",
                 DateOfBirth = new DateTime(2000,1,1)
             },
-            new CreateUserCommand(){
+            new LoadExistingUserCommand(){
+                Id = "dqta7cdd-e81f-482d-ba63-f896ccf22b6a",
                 UserName = "user",
                 Password = "useruser",
                 ConfirmationPassword = "useruser",
                 Email = "user@gmail.com",
                 FullName = "User",
+                ProfileUrl = "dqta7cdd-e81f-482d-ba63-f896ccf22b6a",
                 Roles = [SMRole.user.ToString()],
                 Gender = 1,
                 City = "Ho Chi Minh City",

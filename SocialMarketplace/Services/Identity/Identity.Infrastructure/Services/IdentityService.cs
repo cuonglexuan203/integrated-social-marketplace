@@ -7,6 +7,7 @@ using Identity.Core.Enums;
 using Identity.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace Identity.Infrastructure.Services
@@ -16,12 +17,15 @@ namespace Identity.Infrastructure.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly ILogger<IdentityService> _logger;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
+        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
+            RoleManager<ApplicationRole> roleManager, ILogger<IdentityService> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _logger = logger;
         }
 
         public async Task<bool> AssignUserToRole(string userName, IList<string> roles)
@@ -78,6 +82,62 @@ namespace Identity.Infrastructure.Services
                 throw new CustomValidationException(addUserRole.Errors);
             }
             return (result.Succeeded, user.Id);
+        }
+
+        public async Task PopulateUserData(IEnumerable<LoadExistingUserCommand> commands)
+        {
+            foreach (var command in commands)
+            {
+                try
+                {
+                    foreach (var role in command.Roles)
+                    {
+                        if (!await _roleManager.RoleExistsAsync(role))
+                        {
+                            throw new NotFoundException($"Role {role} not found");
+                        }
+                    }
+
+                    // Create user with optional properties
+                    var user = new ApplicationUser
+                    {
+                        Id = command.Id,
+                        FullName = command.FullName,
+                        UserName = command.UserName,
+                        Email = command.Email,
+                        PhoneNumber = command.PhoneNumber,
+                        ProfileUrl = command.ProfileUrl,
+                        Gender = command.Gender.HasValue ? (Gender)command.Gender.Value : Gender.Unknown,
+                        DateOfBirth = command.DateOfBirth,
+                        Interests = command.Interests?.ToList() ?? new List<string>(),
+                        City = command.City,
+                        Country = command.Country
+                    };
+
+                    if (command.ProfilePictureUrl != null)
+                    {
+                        user.ProfilePictureUrl = command.ProfilePictureUrl;
+                    }
+
+                    // Create user
+                    var result = await _userManager.CreateAsync(user, command.Password);
+                    if (!result.Succeeded)
+                    {
+                        throw new CustomValidationException(result.Errors);
+                    }
+
+                    // Add user to roles
+                    var addUserRole = await _userManager.AddToRolesAsync(user, command.Roles);
+                    if (!addUserRole.Succeeded)
+                    {
+                        throw new CustomValidationException(addUserRole.Errors);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("(Populate User Data stage) Error in loading existing user {userId}: {errorMsg}", command.Id, ex.Message);
+                }
+            }
         }
 
         public async Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserCommand command)

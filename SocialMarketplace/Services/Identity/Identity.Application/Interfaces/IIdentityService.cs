@@ -7,6 +7,8 @@ namespace Identity.Application.Interfaces
 {
     public interface IIdentityService
     {
+        // Populate data
+        Task PopulateUserData(IEnumerable<LoadExistingUserCommand> commands);
         // User section
         Task<(bool isSucceed, string userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles);
         Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserCommand user);
