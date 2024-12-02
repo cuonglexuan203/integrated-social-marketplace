@@ -181,11 +181,20 @@ export class ChatboxComponent {
     if (changes['selectedRoom']) {
       const currentRoom = changes['selectedRoom'].currentValue;
       const previousRoom = changes['selectedRoom'].previousValue;
-
-      if (currentRoom && currentRoom !== previousRoom) {
+      console.log(currentRoom, "currentRoom");
+      console.log(previousRoom, "previousRoom");
+      
+      
+      if (currentRoom && currentRoom?.id !== previousRoom?.id) {
+        console.log("currentRoom?.id !== previousRoom?.id");
+        
         this.newMessage = '';
         this.selectedFiles = [];
         this.filePreviewUrls = [];
+        this.searchValue = '';
+        this.messages$ = this.chatHubService.messages$.pipe(
+          map(messages => messages.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+        );
         this.scrollToBottom(); // Ensures proper scrolling on room change
         this.getUserReceiver(); // Update receiver info for the new room
       }

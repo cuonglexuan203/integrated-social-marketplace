@@ -10,6 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 import { UserResponseModel } from '../../core/models/user/user.model';
 import { UserService } from '../../core/services/user/user.service';
 import { TuiSkeleton } from '@taiga-ui/kit';
+import { TuiButton, TuiIcon, TuiNotification } from '@taiga-ui/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-chat',
@@ -17,7 +19,10 @@ import { TuiSkeleton } from '@taiga-ui/kit';
   imports: [
     SidebarChatComponent,
     ChatboxComponent,
-    TuiSkeleton
+    TuiSkeleton,
+    TuiNotification,
+    TuiButton,
+    CommonModule
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
@@ -31,6 +36,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   selectedRoom: ChatRoom | null = null;
 
   isLoading: boolean = false;
+  showWarning: boolean = true;
 
   private tokenSubscription: Subscription;
   private roomSubscription: Subscription;
@@ -40,11 +46,18 @@ export class ChatComponent implements OnInit, OnDestroy {
     private chatHubService: ChatHubService,
     private authService: NbAuthService,
     private activatedRoute: ActivatedRoute,
-    private _userService: UserService
+    private _userService: UserService,
+    
   ) { }
 
   ngOnInit(): void {
     this.setupData();
+  }
+
+  turnOffWarning() {
+    console.log('turn off warning');
+    
+    this.showWarning = false;
   }
 
   async setupData
@@ -130,6 +143,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   selectRoom(room: ChatRoom) {
+  
     // If we're selecting a different room, leave the current room
     if (this.selectedRoom && this.selectedRoom.id !== room.id) {
       // Leave the previous room
@@ -138,7 +152,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 
     // Set the selected room
     this.selectedRoom = room;
-
     // Join the new room
     const otherUser = room.participants?.filter(p => p.id != this.userId);
     this.chatHubService.joinRoom(this.userId, otherUser?.[0]?.id);

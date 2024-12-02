@@ -4,6 +4,7 @@
     <tui-radio-list
       [(ngModel)]="selectedItem"     
       size="m"
+      (change)="onSelectionChange()"
       [items]="listSelection"
       [style.flex-direction]="'column'"
       [style.width]="'max-content'"

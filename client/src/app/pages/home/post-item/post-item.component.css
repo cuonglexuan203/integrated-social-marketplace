@@ -136,5 +136,10 @@ tui-dialog[data-appearance='comment-dialog'] .t-content {
     font-weight: bold !important;
   }
 
+.content-text {
+    font-size: 20px;
+    color: #000;
+    line-height: 1.5;
+}
 
 

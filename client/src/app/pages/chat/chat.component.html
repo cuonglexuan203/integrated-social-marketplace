@@ -1,10 +1,25 @@
+<tui-notification *ngIf="showWarning"  class="d-flex flex-row align-items-center justify-content-center" style="margin-bottom: 5px;" status="warning" appearance="warning"
+    size="m">
+        <strong>Warning:</strong> This chat may include scammers or fake messages. Please be cautious.
+        <button
+            (click)="turnOffWarning()"
+            iconStart="@tui.x"
+            tuiIconButton
+            type="button"
+            >
+            Close
+        </button>
+    </tui-notification>
 <div class="w-100 d-flex border chat-container">
+   
     <div class="w-30">
         <app-sidebar-chat [tuiSkeleton]="isLoading" (selectedRoomFromSidebar)="selectRoom($event)" [selectedRoom]="selectedRoom" [rooms]="rooms">
 
         </app-sidebar-chat>
     </div>
     <div class="w-70">
+        
+
         <app-chatbox  [tuiSkeleton]="isLoading" [selectedRoom]="selectedRoom">
 
         </app-chatbox>

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, NgZone, INJECTOR, inject, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone, INJECTOR, inject, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild, Output, EventEmitter, Renderer2 } from '@angular/core';
 import { TuiButton, TuiDialogContext, TuiDialogService, TuiIcon, TuiLink, TuiLoader } from '@taiga-ui/core';
 import { injectContext, PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { FeedPost } from '../../../core/models/feed/feed.model';
@@ -19,6 +19,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { EnlargeImageComponentComponent } from '../enlarge-image-component/enlarge-image-component.component';
 import { Comment } from '../../../core/models/comment/comment.model';
 import { BehaviorSubject } from 'rxjs';
+import { CommentStateService } from '../../../core/services/state/comment-state/comment-state.service';
+import e from 'cors';
 
 @Component({
   selector: 'app-comment-post-dialog',
@@ -48,6 +50,7 @@ export class CommentPostDialogComponent {
 
   private readonly injector = inject(INJECTOR);
   private readonly dialogs = inject(TuiDialogService);
+  public readonly context = injectContext<TuiDialogContext<any>>();
 
 
   data: any;
@@ -70,7 +73,7 @@ export class CommentPostDialogComponent {
   typeLocal = 'local';
 
   pendingComments: Comment[] = [];
-  public readonly context = injectContext<TuiDialogContext<any>>();
+  buttonClose: any;
 
   @ViewChild('commentContainer') commentContainer!: ElementRef;
 
@@ -79,19 +82,52 @@ export class CommentPostDialogComponent {
     private _commentService: CommentService,
     private alertService: AlertService,
     private sanitizer: DomSanitizer,
+    private _commentStateService: CommentStateService,
+    private renderer: Renderer2,
 
   ) {
     this.data = this.context.data;
     this.user = Helper.getUserFromLocalStorage();
     this.form = this.formBuilder.formGroup(CommentRequestModel, {});
+
+    document.getElementsByClassName('t-item ng-star-inserted')
   }
 
   ngOnInit() {
     this.post = this.data.post;
     this.getCommentsPost();
-    // this.handleMedia();
+    this.handleButtonClose();
   }
 
+
+
+  handleButtonClose() {
+    const buttonCloseCollection = document.getElementsByClassName('t-close');
+  
+    if (buttonCloseCollection.length > 0) {
+      Array.from(buttonCloseCollection).forEach((buttonClose) => {
+        const buttonElement = buttonClose as HTMLElement;
+  
+        buttonElement.addEventListener('click', () => {
+          console.log('Button clicked');
+          console.log('Context:', this.context);
+          console.log('Comments:', this.comments);
+  
+          // Ensure context and comments are valid
+          if (this.context && this.comments) {
+            this.context.completeWith(this.comments);
+          } else {
+            console.error('Unable to complete dialog: Context or comments are invalid');
+          }
+        });
+      });
+    } else {
+      console.log("No elements found with the class 't-close'");
+    }
+  }
+  
+  
+  
   handleMedia() {
     if (this.post?.media && this.post.media.length > 0) {
       this.post.media.map((media) => {
@@ -115,8 +151,8 @@ export class CommentPostDialogComponent {
       next: (res) => {
         if (res) {
           this.comments = res.result;
-          if (this.comments)
-            this.comments = this.comments.sort(this.sortComments);
+          this.comments = this.comments?.sort(this.sortComments);
+          this._commentStateService.setComments(this.comments);
           this.isLoading = false;
         }
       },
@@ -136,6 +172,10 @@ export class CommentPostDialogComponent {
     this.scrollToBottom();
   }
 
+  ngOnChanges() {
+
+  }
+
 
   onCarouselChange(index: number) {
     this.currentIndex = index;
@@ -143,6 +183,8 @@ export class CommentPostDialogComponent {
       this.currentImage = this.post.media[index];
     }
   }
+
+
 
   autoResize(event: any): void {
     const textarea = event.target;
@@ -201,6 +243,7 @@ export class CommentPostDialogComponent {
         next: (res) => {
           if (res) {
             this.comments.push(res.result);
+            this._commentStateService.setComments(this.comments);
             this.scrollToBottom();
             this.isLoading = false;
           } else {
@@ -220,6 +263,7 @@ export class CommentPostDialogComponent {
       });
     }
   }
+
 
   scrollToBottom(): void {
     if (this.commentContainer) {

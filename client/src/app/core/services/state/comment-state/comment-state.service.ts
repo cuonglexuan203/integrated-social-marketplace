@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Comment } from '../../../models/comment/comment.model';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentStateService {
-  private commentsSubject = new BehaviorSubject<Comment[]>([]);
-  comments$ = this.commentsSubject.asObservable();
+   constructor(
+   ) { }
 
-  constructor() { }
+  private comments: Comment[] = [];
 
-  updateComments(comments: Comment[]) {
-    this.commentsSubject.next(comments);
-  }
+   getComments(): Comment[] {
+    return this.comments;
+   }
 
-  addComment(newComment: Comment) {
-    const currentComments = this.commentsSubject.getValue();
-    this.commentsSubject.next([...currentComments, newComment]);
-  }
+    setComments(comments: Comment[]): void {
+      this.comments = comments;
+    }
+  
 }
