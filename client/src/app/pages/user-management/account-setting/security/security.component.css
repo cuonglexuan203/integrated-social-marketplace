@@ -1,32 +1,99 @@
-/* .user-security-container {
-    border: 1px solid #e8e1e1;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 20px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  } */
+/* security.component.css */
 
-  .tui-input-password {
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    padding: 8px 12px;
-    font-size: 14px;
-  }
-  
-  .tui-input-password:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
 
-  .save-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
+.user-security-container {
+  margin-top: 2rem;
+}
 
 .loader {
-    display: flex;
-    inline-size: fit-content;
-    margin: 1rem 0;
+  margin: 0 1rem;
+}
+
+.save-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-button:hover:not(:disabled) {
+  background-color: #2980b9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.save-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+:host ::ng-deep {
+  .tui-input-password {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .t-input {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      padding: 1rem;
+    }
+
+    .t-placeholder {
+      color: #6c757d;
+    }
+  }
+
+  .success {
+    color: #2ecc71;
+  }
+
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.3s ease;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .user-security-container {
+    margin-top: 1rem;
+  }
+
+  .w-50 {
+    width: 100% !important;
+  }
 }

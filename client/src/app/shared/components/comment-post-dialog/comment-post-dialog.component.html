@@ -9,6 +9,7 @@
                     [style.--tui-carousel-padding]="0"
                     [(index)]="currentIndex"
                 >   
+                    
                     <ng-container class="media" *ngFor="let item of post.media">
                         @if(item?.contentType === 'image') {
                             <img 
@@ -128,12 +129,15 @@
                       class="uploaded-file"
                       *ngIf="uploadedFile && isImage(uploadedFile)"
                       [src]="getFileUrl(uploadedFile)"
+                        (click)="enlargeMedia(uploadedFile, typeLocal)"
                       alt="Uploaded Image"
                     />
                     <video
                       class="uploaded-file"
                       *ngIf="uploadedFile && isVideo(uploadedFile)"
                       [src]="getFileUrl(uploadedFile)"
+                      (click)="enlargeMedia(uploadedFile, typeLocal)"
+
                       controls
                     ></video>
                     <button *ngIf="uploadedFile" type="button" (click)="removeFile()" class="remove-file-button">

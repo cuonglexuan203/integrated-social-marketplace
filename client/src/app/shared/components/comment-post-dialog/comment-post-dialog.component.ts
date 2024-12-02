@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, NgZone, INJECTOR, inject, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone, INJECTOR, inject, ViewEncapsulation, ChangeDetectionStrategy, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { TuiButton, TuiDialogContext, TuiDialogService, TuiIcon, TuiLink, TuiLoader } from '@taiga-ui/core';
 import { injectContext, PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { FeedPost } from '../../../core/models/feed/feed.model';
@@ -18,6 +18,7 @@ import { CommentService } from '../../../core/services/comment/comment.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { EnlargeImageComponentComponent } from '../enlarge-image-component/enlarge-image-component.component';
 import { Comment } from '../../../core/models/comment/comment.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-comment-post-dialog',
@@ -44,8 +45,10 @@ import { Comment } from '../../../core/models/comment/comment.model';
 
 })
 export class CommentPostDialogComponent {
+
   private readonly injector = inject(INJECTOR);
   private readonly dialogs = inject(TuiDialogService);
+
 
   data: any;
   post: FeedPost;
@@ -86,7 +89,17 @@ export class CommentPostDialogComponent {
   ngOnInit() {
     this.post = this.data.post;
     this.getCommentsPost();
+    // this.handleMedia();
   }
+
+  handleMedia() {
+    if (this.post?.media && this.post.media.length > 0) {
+      this.post.media.map((media) => {
+        this.handleUrlLargeMedia(media.url);
+      });
+    }
+  }
+
 
   sortComments(a: any, b: any): number {
     const dateA = new Date(a.createdAt).getTime();
@@ -177,7 +190,7 @@ export class CommentPostDialogComponent {
     this.showFileInput = false;
   }
 
-  
+
 
   onSubmit(event: any) {
     event.preventDefault();
@@ -187,9 +200,7 @@ export class CommentPostDialogComponent {
       this._commentService.createComment(this.formData).subscribe({
         next: (res) => {
           if (res) {
-            this.alertService.showSuccess('Comment created successfully', 'Comment');
             this.comments.push(res.result);
-
             this.scrollToBottom();
             this.isLoading = false;
           } else {
@@ -256,22 +267,54 @@ export class CommentPostDialogComponent {
     return this.sanitizer.bypassSecurityTrustUrl(objectUrl);
   }
 
-  enlargeMedia(media: MediaModel, type: string) {
-    this.dialogs
-      .open(
-        new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
-        {
-          data: { media, type },
-          size: 'auto',
-          appearance: 'lorem-ipsum',
-        }
-      )
-      .subscribe((data) => {
-        console.log(data);
-      });
+  enlargeMedia(mediaLarge: any, type: string) {
+    if (type === 'cloudinary') {
+      const media = mediaLarge as MediaModel;
+      this.dialogs
+        .open(
+          new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+          {
+            data: { media, type },
+            size: 'auto',
+            appearance: 'lorem-ipsum',
+          }
+        )
+        .subscribe((data) => {
+          console.log(data);
+        });
+    }
+    else {
+      let media: MediaModel = {
+        publicId: '',
+        url: '',
+        contentType: mediaLarge.type.split('/')[0],
+        thumbnailUrl: '',
+        duration: 0,
+        width: 0,
+        height: 0,
+        fileSize: 0,
+        format: '',
+      }
+      const fileUrl = URL.createObjectURL(mediaLarge);
+      media.url = fileUrl as any;
+      this.dialogs
+        .open(
+          new PolymorpheusComponent(EnlargeImageComponentComponent, this.injector),
+          {
+            data: { media, type },
+            size: 'auto',
+            appearance: 'lorem-ipsum',
+
+          }
+        )
+        .subscribe((data) => {
+          console.log(data);
+        });
+    }
+
   }
 
   handleUrlLargeMedia(url: string): string {
-    return url.replace('/upload/', '/upload/w_800/');
+    return url.replace('/upload/', '/upload/w_1000/');
   }
 }

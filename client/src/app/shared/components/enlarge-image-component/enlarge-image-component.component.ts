@@ -35,6 +35,9 @@ export class EnlargeImageComponentComponent {
         url: this.handleUrlLargeMedia(media.url)
       }
     }
+
+    console.log(this.media);
+    
     this.isLoading = false;
   }
 

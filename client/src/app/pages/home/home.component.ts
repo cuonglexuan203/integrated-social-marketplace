@@ -94,10 +94,4 @@ export class HomeComponent {
     });
   }
 
-  
-
-
-
-
-
 }
