@@ -1,5 +1,4 @@
-﻿using Feed.Core.;
-using Feed.Core.Entities;
+﻿using Feed.Core.Entities;
 using Feed.Core.ValueObjects;
 
 namespace Feed.Core.Repositories

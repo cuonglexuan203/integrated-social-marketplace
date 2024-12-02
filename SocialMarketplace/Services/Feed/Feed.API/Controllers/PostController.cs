@@ -129,7 +129,16 @@ namespace Feed.API.Controllers
         public async Task<IActionResult> CreateReport(CreateReportCommand command)
         {
             ReturnResult<ReportDto> result = new();
-            result.Result= await _mediator.Send(command);
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> SearchPosts([FromQuery] PostSpecParams postSpecParams)
+        {
+            ReturnResult<IEnumerable<PostDto>> result = new();
+            var command = new SearchPostsCommand(postSpecParams);
+            result.Result = await _mediator.Send(command);
             return Ok(result);
         }
     }

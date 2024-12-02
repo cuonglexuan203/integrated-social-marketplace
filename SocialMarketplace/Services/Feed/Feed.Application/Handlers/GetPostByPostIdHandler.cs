@@ -1,7 +1,6 @@
 ﻿
 using Feed.Application.DTOs;
 using Feed.Application.Interfaces.Services;
-using Feed.Application.Mappers;
 using Feed.Application.Queries;
 using Feed.Core.Exceptions;
 using Feed.Core.Repositories;

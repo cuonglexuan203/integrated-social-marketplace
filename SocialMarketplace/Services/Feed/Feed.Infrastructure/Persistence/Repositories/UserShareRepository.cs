@@ -35,6 +35,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<GroupedUserShare>> GroupUserShareByUserIdAsync(string userId)
         {
             var query = _userShares.AsQueryable()
+                                       .Where(x => x.UserId == userId)
                                        .GroupBy(x => new { x.UserId, x.PostId })
                                        .Select(g => new GroupedUserShare
                                        {

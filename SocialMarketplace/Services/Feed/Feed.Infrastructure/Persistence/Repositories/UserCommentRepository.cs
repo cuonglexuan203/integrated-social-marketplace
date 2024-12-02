@@ -39,6 +39,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<GroupedUserComment>> GroupUserCommentByUserIdAsync(string userId)
         {
             var query = _userComments.AsQueryable()
+                                       .Where(x => x.UserId == userId)
                                        .GroupBy(x => new { x.UserId, x.PostId })
                                        .Select(g => new GroupedUserComment
                                        {

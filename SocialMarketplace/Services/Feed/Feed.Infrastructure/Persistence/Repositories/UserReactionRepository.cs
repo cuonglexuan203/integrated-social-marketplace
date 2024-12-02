@@ -1,5 +1,4 @@
-﻿using Feed.Application.DTOs;
-using Feed.Core.Entities;
+﻿using Feed.Core.Entities;
 using Feed.Core.Repositories;
 using Feed.Core.ValueObjects;
 using Feed.Infrastructure.Persistence.DbContext;
@@ -37,6 +36,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
         public async Task<IEnumerable<GroupedUserReaction>> GroupUserReactionByUserIdAsync(string userId)
         {
             var query = _userReactions.AsQueryable()
+                                       .Where(x => x.UserId == userId)
                                        .GroupBy(x => new { x.UserId, x.PostId })
                                        .Select(g => new GroupedUserReaction
                                        {

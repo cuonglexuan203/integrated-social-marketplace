@@ -12,5 +12,6 @@ namespace Feed.Infrastructure.Persistence.DbContext
         IMongoCollection<UserComment> UserComments { get; }
         IMongoCollection<UserReaction> UserReactions { get; }
         IMongoCollection<UserShare> UserShares { get; }
+        Task InitializeAsync();
     }
 }

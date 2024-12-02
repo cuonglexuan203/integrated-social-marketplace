@@ -31,6 +31,7 @@ namespace Feed.Infrastructure.Services.HttpClients
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
             }
         }
+
         public async Task<float> GetSentimentAnalysisScoreAsync(string commentText)
         {
             try
@@ -44,6 +45,39 @@ namespace Feed.Infrastructure.Services.HttpClients
             {
                 _logger.LogError(ex, "Error in getting Sentiment Analysis Score for commentText: {commentText}", commentText);
                 return 0;
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetRelevantPostIdsAsync(string postId, int skip = 0, int take = 5)
+        {
+            try
+            {
+                var queryString = $"?postId={postId}&offset={skip}&limit={take}";
+                var response = await _httpClient.GetAsync($"get-relevant-posts{queryString}");
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadFromJsonAsync<RelevantPostsDto>();
+                return result?.RelevantPostIds ?? [];
+            }
+            catch (HttpRequestException httpEx)
+            {
+                _logger.LogError("Error in getting relevant posts of post id {postId}: {errorMsg}", postId, httpEx.Message);
+                return [];
+            }
+        }
+
+        public async Task<IEnumerable<string>> SearchPosts(string keyword, int skip = 0, int take = 10)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("search-relevant-posts", new {Keyword = keyword, Offset = skip, Limit = take});
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadFromJsonAsync<RelevantPostsDto>();
+                return result?.RelevantPostIds ?? [];
+            }
+            catch (HttpRequestException httpEx)
+            {
+                _logger.LogError("Error in searching relevant posts of keyword {keyword}: {errorMsg}", keyword, httpEx.Message);
+                return [];
             }
         }
     }
