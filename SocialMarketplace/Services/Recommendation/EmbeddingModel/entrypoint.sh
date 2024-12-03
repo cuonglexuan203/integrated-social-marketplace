@@ -6,7 +6,7 @@ ollama serve &
 pid=$!
 
 # Pause for Ollama to start.
-sleep 5
+sleep 20
 
 echo "🔴 Retrieving model..."
 ollama pull nomic-embed-text
