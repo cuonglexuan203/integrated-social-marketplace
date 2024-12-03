@@ -13,6 +13,11 @@
     flex-shrink: 1;
 }
 
+.input-post:focus {
+    outline: none;
+    box-shadow: none;
+}   
+
 
 .input-item {
     border-radius: 15px;
@@ -28,7 +33,3 @@
     width: 100%;
 }
 
-.input-post:focus {
-    outline: none;
-    box-shadow: none;
-}   

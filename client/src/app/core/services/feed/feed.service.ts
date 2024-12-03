@@ -8,6 +8,7 @@ import { CreatePostModel } from '../../models/feed/post.model';
 import { CommentRequestModel } from '../../models/comment/comment-request.model';
 import { ReactionRequestModel } from '../../models/reaction/reaction.model';
 import { Page, PageUserDetail } from '../../models/page/page.model';
+import { ReportPostModel, UpdateValidityModel } from '../../models/feed/report.model';
 
 
 @Injectable({
@@ -61,6 +62,18 @@ export class FeedService {
 
   unSavedPost(postId: string): Observable<MarketplaceResponse<any>> {
     return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/UnSavePost`, {'postId': postId});
+  }
+
+  reportPost(report: ReportPostModel): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/CreateReport`, report);
+  }
+
+  getAllReports(page: Page): Observable<MarketplaceResponse<any>> {
+    return this.http.get<MarketplaceResponse<any>>(`${this.apiBase}/GetReports?PageIndex=${page.pageIndex}`);
+  }
+
+  updateReportValidity(dataSending: UpdateValidityModel): Observable<MarketplaceResponse<any>> {
+    return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/UpdateReportValidity`, dataSending);
   }
 
 

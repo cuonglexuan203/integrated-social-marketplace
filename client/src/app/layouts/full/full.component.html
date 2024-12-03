@@ -23,7 +23,7 @@
       <app-sidebar></app-sidebar>
       <div class="sidebar-content">
         <div class="sidebar-list">
-          @for (item of navItems; track $index) {
+          @for (item of navItemsRender; track $index) {
             <app-nav-item [item]="item" [isToggle]="isToggled"></app-nav-item>
           }
         </div>

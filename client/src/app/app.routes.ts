@@ -4,13 +4,15 @@ import { AuthGuard, PermissionGuard } from './pages/authentication/auth-guard.gu
 import { BlankComponent } from './layouts/blank/blank.component';
 import { ErrorComponent } from './pages/authentication/error/error.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { UserRoleType } from './shared/roles/role.type';
 
 export const routes: Routes = [  
     {
         path: '',
         component: FullComponent,
         canActivate: [AuthGuard],
-        // canActivateChild: [PermissionGuard],
+        canActivateChild: [PermissionGuard],
         children: [
             {
                 path: '',
@@ -32,6 +34,13 @@ export const routes: Routes = [
             {
                 path: 'user',
                 loadChildren: () => import('./pages/user-management/user-management.routes').then(m => m.UserManagementRoutes),
+            },
+            {
+                path: 'admin',
+                loadChildren: () => import('./pages/admin/admin.routes').then(m => m.AdminRoutes),
+                data: {
+                    roles: [UserRoleType.Admin]
+                }
             }
         ]
     },

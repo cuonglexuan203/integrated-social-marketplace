@@ -10,15 +10,31 @@
       [style.width]="'max-content'"
       
     ></tui-radio-list>
-
+    <textarea 
+    #textArea
+    [(ngModel)]="newPostShareContent"
+    class="input-post" 
+    style="border: none; flex: 1; width: 100%;" 
+    [placeholder]="user.fullName + ', what is the most important thing you want to share?'"        
+    autofocus
+    >
+</textarea>
+  
     <button
         tuiButton
         type="button"
         class="share-button"
         size="s"
+
+        (click)="sharePost()"
     >
         <tui-icon icon="@tui.forward"></tui-icon>
         Share
+        <ng-container *ngIf="!isLoading">Post</ng-container>
+        <ng-container *ngIf="isLoading">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="visually-hidden">Loading...</span>
+        </ng-container>    
     </button>
   </div>
   

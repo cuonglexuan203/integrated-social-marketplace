@@ -36,6 +36,8 @@ export class PermissionGuard implements CanActivateChild {
   ) { }
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot,) {
     var data = childRoute.data['roles'] as string[];
+    console.log(childRoute);
+    
     if (data) {
       return this.authService.getToken().pipe(
         map(e => {

@@ -1,7 +1,7 @@
 import { CommonModule, formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TuiButton, TuiDataList, TuiIcon, TuiLoader } from '@taiga-ui/core';
+import { TuiButton, TuiDataList, TuiIcon, TuiLoader, TuiNotification } from '@taiga-ui/core';
 import {
   TuiAvatar, TuiDataListWrapper,
   TuiSkeleton,
@@ -38,13 +38,14 @@ import {TuiDay, TuiTime} from '@taiga-ui/cdk';
     TuiComboBoxModule,
     TuiSkeleton,
     TuiInputDateTimeModule,
+    TuiNotification,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
   isLoading: boolean = false;
-
+  showWarning: boolean = true;
   form!: FormGroup;
   user: UserDetailsModel;
 
@@ -63,6 +64,12 @@ export class ProfileComponent {
   }
   ngOnInit() {
     this.setupData();
+   }
+
+   turnOffWarning() {
+    console.log('turn off warning');
+    
+    this.showWarning = false;
    }
 
   setupData() {
