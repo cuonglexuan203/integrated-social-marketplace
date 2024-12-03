@@ -6,6 +6,7 @@ using Feed.Application.Interfaces.Services;
 using Feed.Application.Services;
 using Feed.Core.Repositories;
 using Feed.Infrastructure.Configurations;
+using Feed.Infrastructure.Extensions;
 using Feed.Infrastructure.Persistence.DbContext;
 using Feed.Infrastructure.Persistence.Repositories;
 using Feed.Infrastructure.Services;
@@ -47,9 +48,12 @@ namespace Feed.API
             services.AddProblemDetails();
             services.AddControllers();
             services.AddApiVersioning();
+
             services.AddHealthChecks()
                 .AddMongoDb(dbSettings.ConnectionString, "Feed MongoDB Health Check"
                 , HealthStatus.Degraded);
+            services.AddInfrastructure();
+
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
@@ -118,12 +122,12 @@ namespace Feed.API
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IPostMappingService, PostMappingService>();
             services.AddScoped<IPostRankingService, PostRankingService>();
+            services.AddScoped<IReportMappingService, ReportMappingService>();
             services.AddHttpContextAccessor();
             services.AddHttpClient<IIdentityService, IdentityService>();
             services.AddHttpClient<IRecommendationService, RecommendationService>();
             services.AddScoped<IMongoIdValidator, MongoIdValidator>();
             #endregion
-
             #region CORS registration
             services.AddCors(options =>
             {
@@ -139,7 +143,7 @@ namespace Feed.API
 
         }
 
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -163,13 +167,6 @@ namespace Feed.API
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
             });
-
-            // Initialize the database
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var feedContext = scope.ServiceProvider.GetRequiredService<IFeedContext>();
-                await feedContext.InitializeAsync();
-            }
         }
 
     }

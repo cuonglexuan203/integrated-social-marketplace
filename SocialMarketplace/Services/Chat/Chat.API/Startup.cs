@@ -176,13 +176,6 @@ namespace Chat.API
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
             });
-
-            // Initialize the database
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var chatContext = scope.ServiceProvider.GetRequiredService<IChatContext>();
-                await chatContext.InitializeAsync();
-            }
         }
     }
 }

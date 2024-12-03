@@ -50,6 +50,19 @@
       ],
       "UpstreamPathTemplate": "/api/v1/Chat/chatHub",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ]
+    },
+    // Recommendation
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 9003
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v1/Recommendation/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ]
     }
   ],
   "GlobalConfiguration": {

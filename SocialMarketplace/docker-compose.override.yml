@@ -77,14 +77,14 @@ services:
     ports:
       - 11435:11434
 
-  recommedation.api:
-    container_name: recommedation.api
+  recommendation.api:
+    container_name: recommendation.api
     restart: always
     ports:
-      - 9003:3000
+      - 9003:80
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=80
       - WEAVIATE_HOST=weaviate
       - WEAVIATE_PORT=8080
       - EMBEDDING_MODEL_URL=http://embeddingmodel:11434
@@ -113,8 +113,13 @@ services:
       - DatabaseSettings__ConnectionString=mongodb://feeddb:27017
       - DatabaseSettings__DatabaseName=FeedDb
       - DatabaseSettings__PostsCollection=Posts
-      - DatabaseSettings__CommentsCollection=Comments
+      - DatabaseSettings__SavedPostsCollection=SavedPosts
+      - DatabaseSettings__ReportsCollection=Reports
+      - DatabaseSettings__UserReactionsCollection=UserReactions
+      - DatabaseSettings__UserCommentsCollection=UserComments
+      - DatabaseSettings__UserSharesCollection=UserShares
       - Microservices__Identity__BaseUrl=http://identity.api/api/v1/
+      - Microservices__Recommendation__BaseUrl=http://recommendation.api/
     depends_on:
       - feeddb
     ports:

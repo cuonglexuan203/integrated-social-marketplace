@@ -1,3 +1,5 @@
+using Feed.API.Extensions;
+using Feed.Infrastructure.Persistence.SeedData;
 
 namespace Feed.API
 {
@@ -5,7 +7,14 @@ namespace Feed.API
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args)
+                .Build()
+                .InitializeDatabase(context =>
+                {
+                    CommentContextSeed.SeedData(context.Comments);
+                    PostContextSeed.SeedData(context.Posts);
+                })
+                .Run();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>

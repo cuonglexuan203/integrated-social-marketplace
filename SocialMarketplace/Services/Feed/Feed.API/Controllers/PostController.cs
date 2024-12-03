@@ -141,5 +141,14 @@ namespace Feed.API.Controllers
             result.Result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetReports([FromQuery] ReportSpecParams reportSpecParams)
+        {
+            ReturnResult<Pagination<ReportDto>> result = new();
+            var query = new GetReportsQuery(reportSpecParams);
+            result.Result = await _mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

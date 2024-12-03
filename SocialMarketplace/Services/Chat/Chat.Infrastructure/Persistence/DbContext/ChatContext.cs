@@ -20,10 +20,6 @@ namespace Chat.Infrastructure.Persistence.DbContext
             Rooms = db.GetCollection<ChatRoom>(dbOptions.Value.ChatRoomCollection);
             Messages = db.GetCollection<Message>(dbOptions.Value.MessageCollection);
             #endregion
-
-            #region Seed data
-
-            #endregion
         }
 
         public async Task InitializeAsync()
