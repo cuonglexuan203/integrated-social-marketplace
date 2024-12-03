@@ -191,9 +191,9 @@ class RecommendationService {
             offset
         });
 
-        // return relevantPosts?.objects?.map(p => p.properties.postId) ?? [];
+        return relevantPosts?.objects?.map(p => p.properties.postId) ?? [];
 
-        return relevantPosts?.objects ?? [];
+        // return relevantPosts?.objects ?? [];
     }
 
     async searchPosts(keyword, limit = 10, offset = 0) {
@@ -202,9 +202,9 @@ class RecommendationService {
             limit,
             offset,
         })
-        // return result?.objects?.map(p => p.properties.postId) ?? [];
+        return result?.objects?.map(p => p.properties.postId) ?? [];
 
-        return result?.objects ?? [];
+        // return result?.objects ?? [];
     }
 }
 
@@ -245,27 +245,33 @@ const recommendationService = new RecommendationService();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/search-relavant-posts', async (req, res) => {
+app.use((req, res, next) => {
+    const logMessage = `📥 Incoming request: 🛑 Method - ${req.method} 🛤️ Path - ${req.path}`;
+    console.log(logMessage);
+    next();
+});
+
+app.post('/search-relevant-posts', async (req, res) => {
     try {
         const { keyword, limit, offset } = req.body;
 
         if (!keyword) {
             return res.status(400).json({ error: 'Keyword is required' });
         }
-        const relavantPosts = await recommendationService.searchPosts(keyword, limit, offset);
+        const relevantPostIds = await recommendationService.searchPosts(keyword, limit, offset);
         res.json({
             keyword,
-            relavantPosts
+            relevantPostIds
         });
     } catch (error) {
         res.status(500).json({
-            error: 'Failed to get relavant posts',
+            error: 'Failed to get relevant posts',
             details: error.message
         });
     }
 })
 
-app.get('/get-relavant-posts', async (req, res, next) => {
+app.get('/get-relevant-posts', async (req, res, next) => {
     try {
         const { postId, limit, offset } = req.query;
 
@@ -273,9 +279,9 @@ app.get('/get-relavant-posts', async (req, res, next) => {
             return res.status(400).json({ error: 'Post ID is required' });
         }
 
-        const relavantPosts = await recommendationService.getRelevantPosts(postId, limit, offset);
+        const relevantPostIds = await recommendationService.getRelevantPosts(postId, limit, offset);
 
-        if (!relavantPosts) {
+        if (!relevantPostIds) {
             const error = new Error(`Post not found: post id ${postId}`);
             error.status = 404;
             return next(error);
@@ -283,11 +289,11 @@ app.get('/get-relavant-posts', async (req, res, next) => {
 
         res.json({
             basePostId: postId,
-            relavantPosts
+            relevantPostIds
         });
     } catch (error) {
         res.status(500).json({
-            error: 'Failed to get relavant posts',
+            error: 'Failed to get relevant posts',
             details: error.message
         });
     }
@@ -367,10 +373,9 @@ app.use((err, req, res, next) => {
     });
 })
 
-
 // Initialize Weaviate and load initial posts
 app.listen(port, async () => {
-    console.log(`Recommendation service listening at http://localhost:${port}`);
+    console.log(`🚀 Recommendation service is running on port ${port} 🌐`);
 
     await recommendationService.connectWeaviate();
     let clientReadiness = await recommendationService.weaviateClient.isReady();

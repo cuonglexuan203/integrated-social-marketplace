@@ -15,5 +15,6 @@
         public string Category { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }
         public DateTimeOffset? ModifiedAt { get; set; }
+        public float FinalPostScore { get; set; }
     }
 }

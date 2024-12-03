@@ -317,5 +317,35 @@ namespace Feed.Infrastructure.Persistence.Repositories
         {
             return await _posts.CountDocumentsAsync(_ => _.User.Id == userId, cancellationToken: cancellationToken);
         }
+
+        public async Task<IEnumerable<string>> GetTopPostIdsByScoreAsync(int take = 10)
+        {
+            var sort = Builders<Post>.Sort.Descending(x => x.FinalPostScore)
+                                          .Descending(x => x.CreatedAt);
+            var result = await _posts.Find(GetNonDeletedFilter())
+                               .Project(x => x.Id)
+                               .Sort(sort)
+                               .Limit(take)
+                               .ToListAsync();
+            return result;
+        }
+
+        public async Task<long> CountPostAsync()
+        {
+            return await _posts.CountDocumentsAsync(x => true);
+        }
+
+        public async Task<IEnumerable<Post>> SearchPostsByUserIdAsync(string userId, string keyword, CancellationToken cancellationToken = default)
+        {
+            var filter = Builders<Post>.Filter.And(
+                Builders<Post>.Filter.Eq(x => x.User.Id, userId),
+                Builders<Post>.Filter.Text(keyword));
+            var sort = Builders<Post>.Sort.Descending(x => x.ModifiedAt);
+
+            var result = await _posts.Find(filter)
+                                     .Sort(sort)
+                                     .ToListAsync();
+            return result;
+        }
     }
 }

@@ -35,5 +35,29 @@ namespace Feed.Infrastructure.Persistence.DbContext
             PostContextSeed.SeedData(Posts);
             #endregion
         }
+
+        public async Task InitializeAsync()
+        {
+            await CreatePostContentTextIndexAsync();
+        }
+
+        public async Task CreatePostContentTextIndexAsync()
+        {
+            var indexes = await Posts.Indexes.ListAsync();
+            var existingIndexes = await indexes.ToListAsync();
+
+            bool indexExists = existingIndexes.Any(index =>
+            {
+                var definition = index["key"].AsBsonDocument;
+                return definition.Contains(nameof(Post.ContentText)) && definition[nameof(Post.ContentText)].ToString() == "text";
+            });
+
+            if (!indexExists)
+            {
+                var indexKeys = Builders<Post>.IndexKeys.Text(p => p.ContentText);
+                var indexModel = new CreateIndexModel<Post>(indexKeys);
+                await Posts.Indexes.CreateOneAsync(indexModel);
+            }
+        }
     }
 }

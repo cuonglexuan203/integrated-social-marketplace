@@ -1,5 +1,4 @@
-﻿using Chat.Application.Dtos;
-using Chat.Application.Interfaces.Services;
+﻿using Chat.Application.Interfaces.Services;
 using Chat.Core.Common.Constants;
 using Chat.Core.Entities;
 using Chat.Core.Specs;
@@ -73,7 +72,7 @@ namespace Chat.Infrastructure.Services
             Builders<Message>.Filter.Eq(msg => msg.RoomId, roomId),
             Builders<Message>.Filter.Text(keyword)
             );
-
+            var sort = Builders<Message>.Sort.Descending(msg => msg.CreatedAt);
             var messages = await _messages.Find(filter).ToListAsync();
             return messages;
         }
