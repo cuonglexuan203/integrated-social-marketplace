@@ -282,6 +282,7 @@ namespace Identity.Infrastructure.Services
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
+                //Gender = user.Gender,
                 Roles = roles,
                 ProfilePictureUrl = user.ProfilePictureUrl,
                 ProfileUrl = user.ProfileUrl,
@@ -289,6 +290,7 @@ namespace Identity.Infrastructure.Services
                 Interests = user.Interests,
                 City = user.City,
                 Country = user.Country,
+                CredibilityScore = user.CredibilityScore,
             };
         }
 
@@ -314,6 +316,7 @@ namespace Identity.Infrastructure.Services
                 Interests = user.Interests,
                 City = user.City,
                 Country = user.Country,
+                CredibilityScore = user.CredibilityScore,
             };
         }
 

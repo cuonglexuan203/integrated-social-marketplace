@@ -122,6 +122,7 @@ namespace Feed.API
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IPostMappingService, PostMappingService>();
             services.AddScoped<IPostRankingService, PostRankingService>();
+            services.AddScoped<IReportMappingService, ReportMappingService>();
             services.AddHttpContextAccessor();
             services.AddHttpClient<IIdentityService, IdentityService>();
             services.AddHttpClient<IRecommendationService, RecommendationService>();
@@ -142,7 +143,7 @@ namespace Feed.API
 
         }
 
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -166,13 +167,6 @@ namespace Feed.API
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
             });
-
-            // Initialize the database
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var feedContext = scope.ServiceProvider.GetRequiredService<IFeedContext>();
-                await feedContext.InitializeAsync();
-            }
         }
 
     }

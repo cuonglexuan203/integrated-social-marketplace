@@ -29,11 +29,6 @@ namespace Feed.Infrastructure.Persistence.DbContext
             UserReactions = database.GetCollection<UserReaction>(dbOptions.Value.UserReactionsCollection);
             UserShares = database.GetCollection<UserShare>(dbOptions.Value.UserSharesCollection);
             #endregion
-
-            #region populate seed data
-            CommentContextSeed.SeedData(Comments);
-            PostContextSeed.SeedData(Posts);
-            #endregion
         }
 
         public async Task InitializeAsync()
