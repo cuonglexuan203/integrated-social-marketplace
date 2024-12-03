@@ -1,3 +1,16 @@
+
+<tui-notification *ngIf="!user?.phoneNumber && showWarning"  class="d-flex flex-row align-items-center justify-content-center" style="margin: 5px 5px;" status="warning" appearance="warning"
+    size="m">
+        <strong>Warning:</strong> Please add a phone number to your profile to enhance your credibility.
+        <button
+            (click)="turnOffWarning()"
+            iconStart="@tui.x"
+            tuiIconButton
+            type="button"
+            >
+            Close
+        </button>
+</tui-notification>
 <ng-container>
     <form [formGroup]="form" class="profile-form">
         <div class="header-profile">

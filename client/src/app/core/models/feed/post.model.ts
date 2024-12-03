@@ -3,11 +3,13 @@ import { prop, required, file } from "@rxweb/reactive-form-validators";
 export class CreatePostModel {
     @required()
     userId: string;
-    @required()
+    @prop()
     contentText: string;
-    @required()
+    @prop()
     @file({maxFiles: 5})
     files: File[] | null;
-    @required()
-    tags: string[];
+    @prop()
+    tags: string[] | null;
+    @prop()
+    sharedPostId: string;
 }

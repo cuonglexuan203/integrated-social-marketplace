@@ -6,6 +6,9 @@ import { FeedPost } from '../../../core/models/feed/feed.model';
 import { AlertService } from '../../../core/services/alert/alert.service';
 import { UserStateService } from '../../../core/services/state/user-state/user-state.service';
 import { PostStateService } from '../../../core/services/state/post-state/post-state.service';
+import { ReportPostModel } from '../../../core/models/feed/report.model';
+import { UserResponseModel } from '../../../core/models/user/user.model';
+import { Helper } from '../../../core/utils/helper';
 
 @Component({
   selector: 'app-more-dialog',
@@ -19,7 +22,7 @@ export class MoreDialogComponent {
   moreDialogData = MoreDialogData;
   moreDialogStateFilter = MoreDialogStateFilter
   stateFilter: string;
-
+  user: UserResponseModel;
   constructor(
     private _feedService: FeedService,
     private alertService: AlertService,
@@ -29,6 +32,8 @@ export class MoreDialogComponent {
 
   ngOnInit() {
     this.getUserStateFilter()
+    this.user = Helper.getUserFromLocalStorage();
+
   }
 
   getUserStateFilter() {
@@ -46,7 +51,7 @@ export class MoreDialogComponent {
           this.addBookmark();
           break;
         case 'report':
-          console.log('Report');
+          this.reportPost();
           break;
         case 'notInteresting':
           break;
@@ -87,6 +92,28 @@ export class MoreDialogComponent {
         if (res?.result) {
           this.handleAfterRemovingSavedPost();
           this.alertService.showSuccess('Post removed from bookmarks', 'Success');
+        }
+      },
+      error: (err: any) => {
+        console.log(err);
+        this.alertService.showError(err?.error?.detail, 'Error');
+      }
+    })
+  }
+
+  reportPost() {
+    const dataSending: ReportPostModel = {
+      postId: this.post?.id,
+      reporterId: this.user?.id,
+      targetUserId: this.post?.user?.id,
+      contentText: 'No Commenet',
+      reportType: 0,
+      reporterCredibilityScore: 0,
+    }
+    this._feedService.reportPost(dataSending).subscribe({
+      next: (res) => {
+        if (res?.result) {
+          this.alertService.showSuccess('Post reported', 'Success');
         }
       },
       error: (err: any) => {

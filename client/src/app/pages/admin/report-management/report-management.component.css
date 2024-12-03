@@ -1,0 +1,106 @@
+/* report-management.component.css */
+.primary-color {
+    color: #71AAEB !important;
+}
+
+.report-management-container {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+    h2 {
+        margin-bottom: 0px !important;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    border: 1px solid #71AAEB;
+}
+
+table th, table td {
+    border: 1px solid #71AAEB;
+    padding: 8px;
+    text-align: left;
+}
+
+table thead {
+    background-color: #F0F4F8;
+    color: #71AAEB;
+}
+
+table tr:nth-child(even) {
+    background-color: #F9FCFF;
+}
+
+table tr:hover {
+    background-color: #E0EFFC;
+}
+
+.Valid {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.Invalid {
+    color: red;
+    font-weight: bold;
+}
+
+.UnReview {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #71AAEB;
+    color: white;
+    border: 1px solid #5A91C9;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #5A91C9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    gap: 15px;
+  }
+  
+  .pagination button {
+    background-color: #71AAEB;
+    color: white;
+    border: 1px solid #5A91C9;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .pagination button:disabled {
+    background-color: #e0e0e0;
+    color: #888;
+    cursor: not-allowed;
+  }
+  
+  .pagination button:hover:not(:disabled) {
+    background-color: #5A91C9;
+  }
+
+.total-report {
+    background-color: ;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid ;
+    width: fit-content;
+    margin-top: 15px;
+}

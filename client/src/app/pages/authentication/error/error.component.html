@@ -1,1 +1,15 @@
-<p>error works!</p>
+<div class="loading-container">
+    <ng-lottie [options]="options"></ng-lottie>
+    <div class="error-text">Access denied. Please back to the previous page.</div>
+    <button 
+      tuiButton 
+      appearance="gradient" 
+      size="m" 
+      class="back-button" 
+      (click)="back()"
+    >
+      <tui-icon icon="corner-down-left"></tui-icon>
+      Back to Safety
+    </button>
+  </div>
+  
