@@ -92,6 +92,12 @@ export class NavItemComponent {
       case 'Saved Posts':
         this.router.navigate(['/user/saved-post']);
         break;
+      case 'Dashboard':
+        this.router.navigate(['/admin/dashboard']);
+        break;
+      case 'Report':
+        this.router.navigate(['/admin/report']);
+        break;
     }
   }
 

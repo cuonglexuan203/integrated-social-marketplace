@@ -1,4 +1,4 @@
-import { Component, inject, INJECTOR, Input, SimpleChanges } from '@angular/core';
+import { Component, inject, INJECTOR, Input, Output, SimpleChanges } from '@angular/core';
 import { TuiButton, TuiDialogService, TuiDropdown, TuiIcon, TuiRoot } from '@taiga-ui/core';
 import { TuiAvatar, TuiCarousel, TuiPagination, TuiSkeleton } from '@taiga-ui/kit';
 import { TuiCardLarge } from '@taiga-ui/layout';
@@ -56,6 +56,7 @@ export class PostItemComponent {
   @Input() isLoading: boolean;
   @Input() post: FeedPost;
   @Input() reactionReacted: any;
+  @Output() sharePost: FeedPost
   currentIndex: number = 0;
 
   comments: Comment[] = [];
@@ -214,7 +215,8 @@ export class PostItemComponent {
         }
       )
       .subscribe((data) => {
-        console.log(data);
+          console.log(data);
+          
       });
   }
 

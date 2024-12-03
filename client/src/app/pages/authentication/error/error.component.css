@@ -1,0 +1,48 @@
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .loading-container ng-lottie {
+    width: 200px;
+    height: 200px;
+  }
+
+  .error-text {
+    color: var(--tui-text-01);
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 200px;
+  padding: 10px 20px;
+  background-color: #71AAEB; /* Primary color */
+  color: #fff; /* White text */
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #0095FF; /* Darker shade on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly larger shadow on hover */
+}
+
+.back-button:active {
+  background-color: #004494; /* Even darker shade on click */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Smaller shadow on click */
+}
+
+.back-button svg {
+  fill: #fff; /* Ensure SVG icons are white */
+}

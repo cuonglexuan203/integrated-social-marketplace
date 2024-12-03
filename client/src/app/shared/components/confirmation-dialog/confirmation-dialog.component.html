@@ -1,1 +1,26 @@
-<p>confirmation-dialog works!</p>
+<div class="share-container">
+    <h4>{{title}}</h4>
+    <div class="divider"></div>
+    <tui-radio-list
+      [(ngModel)]="selectedItem"     
+      size="m"
+      (change)="onSelectionChange()"
+      [items]="listSelection"
+      [style.flex-direction]="'column'"
+      [style.width]="'max-content'"
+      
+    ></tui-radio-list>
+
+  
+    <button
+        tuiButton
+        type="button"
+        class="share-button"
+        size="s"
+
+        (click)="onConfirm()"
+    >
+        Confirm
+    </button>
+  </div>
+  

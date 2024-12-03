@@ -17,4 +17,19 @@
 }
 
 
+.input-post {
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    flex-shrink: 1;
+}
 
+.input-post:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.share-button .spinner-border {
+    vertical-align: middle;
+    margin-right: 5px;
+}
