@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: Services/Recommendation/EmbeddingModel/Dockerfile
   
-  recommedation.api:
+  recommendation.api:
     image: ${DOCKER_REGISTRY-}recommendationapi
     build:
       context: .
