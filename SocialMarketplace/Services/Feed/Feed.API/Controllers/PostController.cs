@@ -150,5 +150,13 @@ namespace Feed.API.Controllers
             result.Result = await _mediator.Send(query);
             return Ok(result);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UpdateReportValidity(UpdateReportValidityCommand command)
+        {
+            ReturnResult<bool> result = new();
+            result.Result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

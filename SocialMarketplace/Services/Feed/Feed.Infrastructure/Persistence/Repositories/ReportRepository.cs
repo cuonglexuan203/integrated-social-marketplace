@@ -93,7 +93,7 @@ namespace Feed.Infrastructure.Persistence.Repositories
 
             if (result.ModifiedCount == 0)
             {
-                _logger.LogError("Failed to update report validity to report {PostId}", reportId);
+                _logger.LogError("Failed to update report validity to report {reportId}", reportId);
                 throw new DatabaseException($"Failed to update report validity to report {reportId}");
             }
 

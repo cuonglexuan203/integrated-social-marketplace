@@ -167,6 +167,11 @@ class RecommendationService {
                         await new Promise(resolve => setTimeout(resolve, 30000));
                     }
                 }
+                
+                if (retryCount >= MAX_RETRIES){
+                    console.error("🔴Loading posts terminated");
+                    break;
+                }
             }
             console.info("✅ Loading initial posts successfully!")
         } catch (error) {
