@@ -6,6 +6,7 @@ using Feed.Application.Interfaces.Services;
 using Feed.Application.Services;
 using Feed.Core.Repositories;
 using Feed.Infrastructure.Configurations;
+using Feed.Infrastructure.Extensions;
 using Feed.Infrastructure.Persistence.DbContext;
 using Feed.Infrastructure.Persistence.Repositories;
 using Feed.Infrastructure.Services;
@@ -47,9 +48,12 @@ namespace Feed.API
             services.AddProblemDetails();
             services.AddControllers();
             services.AddApiVersioning();
+
             services.AddHealthChecks()
                 .AddMongoDb(dbSettings.ConnectionString, "Feed MongoDB Health Check"
                 , HealthStatus.Degraded);
+            services.AddInfrastructure();
+
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
@@ -123,7 +127,6 @@ namespace Feed.API
             services.AddHttpClient<IRecommendationService, RecommendationService>();
             services.AddScoped<IMongoIdValidator, MongoIdValidator>();
             #endregion
-
             #region CORS registration
             services.AddCors(options =>
             {
