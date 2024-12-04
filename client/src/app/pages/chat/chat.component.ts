@@ -6,7 +6,7 @@ import { ChatRoom } from '../../core/models/chat/chat-room.model';
 import { NbAuthService } from '@nebular/auth';
 import { Subscription } from 'rxjs';
 import { ChatHubService } from '../../core/services/chat-hub/chat-hub.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserResponseModel } from '../../core/models/user/user.model';
 import { UserService } from '../../core/services/user/user.service';
 import { TuiSkeleton } from '@taiga-ui/kit';
@@ -47,6 +47,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private authService: NbAuthService,
     private activatedRoute: ActivatedRoute,
     private _userService: UserService,
+    private router: Router
     
   ) { }
 
@@ -100,7 +101,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.roomSubscription = this.chatService.getUserRooms(this.userId).subscribe({
       next: (res) => {
         if (res) {
-          this.rooms = res
+          this.rooms = res.reverse();
           if (this.rooms.length > 0 && !this.receiverId) {
             this.selectRoom(this.rooms[0]);
           }
@@ -126,9 +127,13 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (this.userId && this.receiverId) {
       await this.chatHubService.joinRoom(this.userId, this.receiverId).finally(() => {
         this.handleSelectRoom();
-
       });
     }
+  }
+
+  async getSelectedUser(event: any) {
+      this.router.navigate(['/chat', event?.id]);
+      this.setupData()
   }
 
 
