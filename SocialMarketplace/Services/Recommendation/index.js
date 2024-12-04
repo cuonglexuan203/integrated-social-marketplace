@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { Ollama } from 'ollama';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import cors from "cors";
 dotenv.config();
 
 class RecommendationService {
@@ -246,6 +247,12 @@ const app = express();
 const port = process.env.PORT || 3000;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 const recommendationService = new RecommendationService();
+
+app.use(cors({
+    origin: '*', // Allows any origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allowed headers
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
