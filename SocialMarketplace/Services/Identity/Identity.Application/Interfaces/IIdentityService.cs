@@ -10,7 +10,7 @@ namespace Identity.Application.Interfaces
     {
         // Populate data
         Task PopulateUserData(IEnumerable<LoadExistingUserCommand> commands);
-        Task<Pagination<UserDetailsResponseDTO>> SearchUserFullName(UserSpecParams userSpecParams);
+        Task<Pagination<UserDetailsResponseDTO>> SearchUserFullNameAsync(UserSpecParams userSpecParams);
         // User section
         Task<(bool isSucceed, string userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles);
         Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserCommand user);

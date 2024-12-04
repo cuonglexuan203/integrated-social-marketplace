@@ -203,12 +203,11 @@ class RecommendationService {
     }
 
     async searchPosts(keyword, limit = 10, offset = 0) {
-        const result = await this.posts.query.nearVector(await this.generateEmbedding(keyword), {
-            // alpha: 0.25,
+        const result = await this.posts.query.bm25(keyword, {
             limit,
             offset,
         })
-        return result?.objects?.map(p => p.properties.postId) ?? [];
+        return result?.objects  ?? [];
 
         // return result?.objects ?? [];
     }
