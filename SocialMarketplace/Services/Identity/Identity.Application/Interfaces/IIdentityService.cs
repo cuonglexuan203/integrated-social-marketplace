@@ -1,6 +1,7 @@
 ﻿using Identity.Application.Commands.User.Create;
 using Identity.Application.Commands.User.Update;
 using Identity.Application.DTOs;
+using Identity.Core.Specs;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Interfaces
@@ -9,6 +10,7 @@ namespace Identity.Application.Interfaces
     {
         // Populate data
         Task PopulateUserData(IEnumerable<LoadExistingUserCommand> commands);
+        Task<Pagination<UserDetailsResponseDTO>> SearchUserFullName(UserSpecParams userSpecParams);
         // User section
         Task<(bool isSucceed, string userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles);
         Task<(bool isSucceed, string userId)> CreateUserAsync(CreateUserCommand user);

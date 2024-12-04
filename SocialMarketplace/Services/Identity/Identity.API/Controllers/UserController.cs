@@ -5,6 +5,7 @@ using Identity.Application.Common.Models;
 using Identity.Application.DTOs;
 using Identity.Application.Queries;
 using Identity.Application.Queries.User;
+using Identity.Core.Specs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -147,6 +148,15 @@ namespace Identity.API.Controllers
         {
             ReturnResult<bool> result = new();
             result.Result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SearchUserFullName([FromQuery] UserSpecParams userSpecParams)
+        {
+            ReturnResult<Pagination<UserDetailsResponseDTO>> result = new();
+            result.Result = await _mediator.Send(new SearchUserFullNameQuery(userSpecParams));
             return Ok(result);
         }
     }
