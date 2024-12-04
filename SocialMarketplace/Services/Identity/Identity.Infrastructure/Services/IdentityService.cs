@@ -515,7 +515,7 @@ namespace Identity.Infrastructure.Services
 
         }
 
-        public async Task<Pagination<UserDetailsResponseDTO>> SearchUserFullName(UserSpecParams userSpecParams)
+        public async Task<Pagination<UserDetailsResponseDTO>> SearchUserFullNameAsync(UserSpecParams userSpecParams)
         {
             var users = await _userManager.Users
                                      .AsNoTracking()
