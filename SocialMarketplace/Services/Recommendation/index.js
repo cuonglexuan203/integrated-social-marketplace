@@ -207,7 +207,7 @@ class RecommendationService {
             limit,
             offset,
         })
-        return result?.objects?.map(p => p.properties.postId)  ?? [];
+        return result?.objects  ?? [];
 
         // return result?.objects ?? [];
     }
