@@ -6,6 +6,7 @@ import { ErrorComponent } from './pages/authentication/error/error.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { UserRoleType } from './shared/roles/role.type';
+import { SearchResultComponent } from './pages/search-result/search-result.component';
 
 export const routes: Routes = [  
     {
@@ -34,6 +35,10 @@ export const routes: Routes = [
             {
                 path: 'user',
                 loadChildren: () => import('./pages/user-management/user-management.routes').then(m => m.UserManagementRoutes),
+            },
+            {
+                path: 'search',
+                component: SearchResultComponent
             },
             {
                 path: 'admin',

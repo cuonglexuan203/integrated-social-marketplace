@@ -11,6 +11,7 @@ export class UserResponseModel {
     dateOfBirth: string | null;
     phoneNumber: string | null;
     isFollowing?: boolean;
+    
 }
 
 export class CreateUserModel {

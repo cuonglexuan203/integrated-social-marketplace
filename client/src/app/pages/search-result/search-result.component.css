@@ -1,0 +1,8 @@
+.post-container {
+    width: 700px;
+    border: 1px solid #e8e1e1;
+    border-radius: 10px;
+    gap: 10px;
+    background-color: white;
+    gap: 10px;
+  }
