@@ -4,6 +4,7 @@ using Identity.Application.DTOs;
 using Identity.Application.Exceptions;
 using Identity.Application.Interfaces;
 using Identity.Core.Enums;
+using Identity.Core.Specs;
 using Identity.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -512,6 +513,39 @@ namespace Identity.Infrastructure.Services
 
             return (result, userDetailsDto);
 
+        }
+
+        public async Task<Pagination<UserDetailsResponseDTO>> SearchUserFullName(UserSpecParams userSpecParams)
+        {
+            var users = await _userManager.Users
+                                     .AsNoTracking()
+                                     .Where(u => u.FullName.Contains(userSpecParams.Search))
+                                     .OrderByDescending(u => u.CredibilityScore)
+                                     .Skip((userSpecParams.PageIndex - 1) * userSpecParams.PageSize)
+                                     .Take(userSpecParams.PageSize)
+                                     .ToListAsync();
+
+            var count = await _userManager.Users.AsNoTracking().CountAsync();
+
+
+            var userDtos = users.Select(user => new UserDetailsResponseDTO()
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                //Roles = roles,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                ProfileUrl = user.ProfileUrl,
+                DateOfBirth = user.DateOfBirth,
+                Interests = user.Interests,
+                City = user.City,
+                Country = user.Country,
+                CredibilityScore = user.CredibilityScore,
+            });
+
+            return new Pagination<UserDetailsResponseDTO>(userSpecParams.PageIndex, userSpecParams.PageSize, count, userDtos.ToList());
         }
     }
 }
