@@ -17,11 +17,68 @@
     </div>
     <div class="search-bar">
         <tui-icon class="p-3 mx-3 primary-color" 
-            (click)="focusSearchInput()" icon="@tui.search"
-            
+            icon="@tui.chevron-down"
+            tuiDropdownOpen
+            [tuiDropdown]="searchDialog" 
             >
         </tui-icon>
-        <input #inputSearch class="input-search"  style="border: none; flex: 1;" [placeholder]="placeholder.search" type="search">
+        <ng-template class="search-dialog-container" #searchDialog>
+            <div *ngFor="let item of listSelectionSearch; let $index = index" 
+                 class="search-dialog-item"
+                    [ngClass]="{'selected': selectedSearch.value === item.value}"
+                 (click)="onSelectedSearch(item)">
+                 <span>
+                     {{item.label}}
+                 </span>
+            </div>
+        </ng-template>
+        <div class="search-bar-container">
+            <div class="search-bar">
+                <input 
+                    #inputSearch
+                    [(ngModel)]="searchValue"
+                    (keydown.enter)="onSearch()"
+                    (input)="onSearchTyping()"
+                    class="input-search"
+                    [placeholder]="placeholder.search + ' ' + selectedSearch.label"
+                    type="search"
+                />
+        
+                <tui-icon 
+                    class="p-3 mx-3 primary-color" 
+                    (click)="focusSearchInput()" 
+                    icon="@tui.search">
+                </tui-icon>
+            </div>
+        
+            <!-- Dropdown for Search Values -->
+            <ng-container *ngIf="dropdownSearchValue && dropdownSearchValue.length > 0">
+                <div class="dropdown-search-container">
+                    <div 
+                        [tuiSkeleton]="isLoading"
+                        class="dropdown-search-item"
+                        *ngFor="let item of dropdownSearchValue; let index = index"
+                        (click)="onSelectedDropdownSearch(item)">
+                        <span class="text-truncate">{{item?.contentText}}</span>
+                    </div>
+                </div>
+            </ng-container>
+        
+            <!-- Dropdown for User Values -->
+            <ng-container *ngIf="dropdownSearchValueUser && dropdownSearchValueUser.length > 0">
+                <div class="dropdown-search-container">
+                    <div 
+                        [tuiSkeleton]="isLoading"
+                        class="dropdown-search-item"
+                        *ngFor="let item of dropdownSearchValueUser; let index = index"
+                        (click)="onSelectedDropdownSearch(item)">
+                        <span class="text-truncate">{{item?.fullName}}</span>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        
+        
     </div>
     <div class="d-flex justify-content-center align-items-center gap-3">
         @if(user) {

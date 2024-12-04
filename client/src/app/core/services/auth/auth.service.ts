@@ -28,4 +28,6 @@ export class AuthService {
   changePassword(data: UserSecurityModel): Observable<MarketplaceResponse<any>> {
     return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/ChangePassword`, data);
   }
+
+  
 }

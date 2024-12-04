@@ -52,4 +52,8 @@ export class UserService {
     return this.http.get<MarketplaceResponse<UserResponseModel[]>>(`${this.apiBase}/GetUserFollowings/${userId}`);
   }
 
+  searchUserFullName(searchValue: string): Observable<any> {
+    return this.http.get<any>(`${this.apiBase}/SearchUserFullName?Search=${searchValue}`);
+  }
+
 }

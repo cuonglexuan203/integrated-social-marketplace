@@ -76,6 +76,10 @@ export class FeedService {
     return this.http.post<MarketplaceResponse<any>>(`${this.apiBase}/UpdateReportValidity`, dataSending);
   }
 
+  searchPosts(searchValue: string): Observable<MarketplaceResponse<any>> {
+    return this.http.get<MarketplaceResponse<any>>(`${this.apiBase}/SearchPosts?Search=${searchValue}`);
+  }
+
 
 
 }
