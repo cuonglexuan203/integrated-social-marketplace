@@ -25,7 +25,7 @@ namespace Identity.Application.Queries.User
         }
         public async Task<Pagination<UserDetailsResponseDTO>> Handle(SearchUserFullNameQuery request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.SearchUserFullName(request.UserSpecParams);
+            var result = await _identityService.SearchUserFullNameAsync(request.UserSpecParams);
             return result;
         }
     }
