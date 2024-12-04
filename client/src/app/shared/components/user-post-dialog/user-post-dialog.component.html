@@ -23,6 +23,9 @@
                   <h5 *ngIf="user.fullName" (click)="getUserProfile()" class="user-name primary-color">
                     {{ user.fullName }}
                   </h5>
+                  <button class="credibility" *ngIf="!isCheckedUserLoggedIn">
+                    <span> Credibility: {{user?.credibilityScore}}</span>
+                  </button>
                   <div *ngIf="isCheckedUserLoggedIn" class="user-details">
                     <div *ngIf="userLoggedIn.city" class="user-detail">
                       <span class="detail-label">City:</span>

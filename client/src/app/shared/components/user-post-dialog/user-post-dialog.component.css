@@ -97,3 +97,19 @@
   .primary-color {
     color: #007bff;
   }
+
+
+  .credibility {
+    display: inline-block;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  .credibility span {
+    font-weight: bold;
+  }
