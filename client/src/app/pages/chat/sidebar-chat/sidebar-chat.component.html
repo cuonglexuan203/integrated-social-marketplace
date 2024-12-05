@@ -18,15 +18,44 @@
         </div>
     </div>
     <fieldset tuiTextfieldSize="m">
-
         <tui-textfield iconStart="@tui.search" class="search-conversation">
             <input
                 placeholder="Search"
                 tuiTextfield
+                [(ngModel)]="searchValue"
+                (input)="onSearchTyping()"
             />
         </tui-textfield>
     </fieldset>
-    <div class="sidebar-chat-content">
+    <div class="sidebar-chat-content" [tuiSkeleton]="isLoading" *ngIf="userSearchValue && searchValue">
+        <ng-container *ngFor="let participant of userSearchValue">
+        <label tuiCell
+            (click)="selectUser(participant)"
+        >
+            <tui-avatar
+                *ngIf="participant.id !== userId"
+                size="l"
+                [src]="participant.profilePictureUrl"
+                class="tui-avatar-user">
+            </tui-avatar>
+            <div *ngIf="participant.id !== userId">
+                <div tuiTitle>{{ participant?.fullName }}</div>
+            </div>
+        </label>
+        </ng-container>
+    </div>
+    <div class="sidebar-chat-content" [tuiSkeleton]="isLoading" *ngIf="!userSearchValue.length && searchValue">
+        <div class="d-flex gap-3 align-items-center justify-content-center">
+            <tui-avatar
+                size="l"
+                src="@tui.search"
+                class="tui-avatar-user">
+            </tui-avatar>
+            <h4>No users found !</h4>
+        </div>
+    </div>
+
+    <div [tuiSkeleton]="isLoading"  *ngIf="!searchValue" class="sidebar-chat-content">
         @for (room of rooms; track $index) {
             <div class="label-container"
             >
@@ -55,6 +84,7 @@
             </div>
         }
     </div>
+   
     <div class="divider"></div>
     <div class="sidebar-chat-footer">
         <label tuiCell>

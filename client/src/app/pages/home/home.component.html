@@ -13,11 +13,8 @@
             </div>   
         }
         <div *ngIf="loadingPosts" class="d-flex justify-content-center align-items-center loading-container">
-            <div *ngIf="loadingPosts.length">
                 <div class="spinner"></div>
                 <span>Loading...</span>
-            </div>
-  
         </div>
         <div *ngIf="!loadingPosts.length && !posts.length">
             <span>No posts found</span>

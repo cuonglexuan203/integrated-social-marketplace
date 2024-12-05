@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { Ollama } from 'ollama';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import cors from "cors";
 dotenv.config();
 
 class RecommendationService {
@@ -202,12 +203,11 @@ class RecommendationService {
     }
 
     async searchPosts(keyword, limit = 10, offset = 0) {
-        const result = await this.posts.query.nearVector(await this.generateEmbedding(keyword), {
-            // alpha: 0.25,
+        const result = await this.posts.query.bm25(keyword, {
             limit,
             offset,
         })
-        return result?.objects?.map(p => p.properties.postId) ?? [];
+        return result?.objects  ?? [];
 
         // return result?.objects ?? [];
     }
@@ -246,6 +246,12 @@ const app = express();
 const port = process.env.PORT || 3000;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 const recommendationService = new RecommendationService();
+
+app.use(cors({
+    origin: '*', // Allows any origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allowed headers
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

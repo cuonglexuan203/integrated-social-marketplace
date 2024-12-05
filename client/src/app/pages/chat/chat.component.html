@@ -13,7 +13,7 @@
 <div class="w-100 d-flex border chat-container">
    
     <div class="w-30">
-        <app-sidebar-chat [tuiSkeleton]="isLoading" (selectedRoomFromSidebar)="selectRoom($event)" [selectedRoom]="selectedRoom" [rooms]="rooms">
+        <app-sidebar-chat (selectedUser)="getSelectedUser($event)" [tuiSkeleton]="isLoading" (selectedRoomFromSidebar)="selectRoom($event)" [selectedRoom]="selectedRoom" [rooms]="rooms">
 
         </app-sidebar-chat>
     </div>

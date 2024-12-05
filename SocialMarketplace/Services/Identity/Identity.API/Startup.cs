@@ -101,7 +101,7 @@ namespace Identity.API
             {
                 options.AddPolicy("sm-web-policy", builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200")
+                    builder.SetIsOriginAllowed(_ => true)
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();
